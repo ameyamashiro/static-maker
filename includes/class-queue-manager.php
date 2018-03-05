@@ -26,8 +26,9 @@ class QueueManager {
         dbDelta( $sql );
     }
 
-    public function get_all_queues() {
-
+    public function get_queues() {
+        global $wpdb;
+        return $wpdb->get_results( "SELECT * FROM $this->table_name" );
     }
 
     public function queue_all() {
@@ -48,4 +49,9 @@ class QueueManager {
         );
     }
 
+}
+
+function get_queues() {
+    $queueManager = new QueueManager();
+    return $queueManager->get_queues();
 }

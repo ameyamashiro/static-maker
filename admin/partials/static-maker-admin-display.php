@@ -18,7 +18,26 @@
 
     <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
-    <h2 class="nav-tab-wrapper">Clean up</h2>
+    <table class="wp-list-table widefat fixed striped">
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>time</td>
+                <td>type</td>
+                <td>url</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach( get_queues() as $queue ): ?>
+            <tr>
+                <th><?php echo $queue->id ?></th>
+                <td><?php echo $queue->time ?></td>
+                <td><?php echo $queue->type ?></td>
+                <td><?php echo $queue->url ?></td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
 
     <form method="post" name="cleanup_options" action="options.php">
 
