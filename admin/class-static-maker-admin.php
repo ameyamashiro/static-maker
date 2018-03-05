@@ -181,7 +181,7 @@ class Static_Maker_Admin {
 
         $queueManager = new QueueManager();
 
-        $queueManager->queueByPostId( $post_id );
+        $queueManager->queue_by_post_id( $post_id );
     }
 
 }

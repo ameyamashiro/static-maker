@@ -26,10 +26,14 @@ class QueueManager {
         dbDelta( $sql );
     }
 
-    public function queueAll() {
+    public function get_all_queues() {
+
     }
 
-    public function queueByPostId( $post_id ) {
+    public function queue_all() {
+    }
+
+    public function queue_by_post_id( $post_id ) {
         global $wpdb;
 
         $url = get_permalink( $post_id );
