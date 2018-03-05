@@ -32,6 +32,7 @@ class Static_Maker_Activator {
 	public static function activate() {
 	    $qManager = new QueueManager();
 	    $qManager->createTable();
+	    $qManager->set_cron_schedule();
 	}
 
 }

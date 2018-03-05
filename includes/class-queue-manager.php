@@ -19,6 +19,7 @@ class QueueManager {
           time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
           type varchar(20) NOT NULL,
           url varchar(55) DEFAULT '' NOT NULL,
+          status varchar(20) DEFAULT 'waiting' NOT NULL,
           PRIMARY KEY (id)
         ) $charset_collate";
 
@@ -49,6 +50,72 @@ class QueueManager {
         );
     }
 
+    public function dequeue_all() {
+        global $wpdb;
+
+//        $queues = $wpdb->get_results( "SELECT * FROM $this->table_name WHERE status = 'waiting'" );
+        $queues = $wpdb->get_results( "SELECT * FROM $this->table_name" );
+        foreach ( $queues as $queue ) {
+            $this->dequeue( $queue );
+        }
+    }
+
+    public function dequeue( $queue ) {
+        $this->markQueueAsCompleted( $queue->id );
+    }
+
+    public function set_cron_schedule() {
+        add_filter( 'cron_schedules', 'example_add_cron_interval' );
+
+        function example_add_cron_interval( $schedules ) {
+            $schedules['five_seconds'] = array(
+                'interval' => 5,
+                'display'  => esc_html__( 'Every Five Seconds' ),
+            );
+
+            return $schedules;
+        }
+
+        if ( !wp_next_scheduled( 'static_maker_dequeue' ) ) {
+            wp_schedule_event( time(), 'five_seconds', 'static_maker_dequeue' );
+        }
+    }
+
+    public function dequeue_task() {
+    }
+
+
+    private function markQueueAsCompleted( $id ) {
+        global $wpdb;
+
+        $wpdb->update(
+            $this->table_name,
+            array(
+                'status' => 'completed',
+            ),
+            array( 'id' => $id ),
+            array(
+                '%s',
+            ),
+            array( '%d' )
+        );
+    }
+
+    private function markQueueAsFailed( $id ) {
+        global $wpdb;
+
+        $wpdb->update(
+            $this->table_name,
+            array(
+                'status' => 'failed',
+            ),
+            array( 'id' => $id ),
+            array(
+                '%s',
+            ),
+            array( '%d' )
+        );
+    }
 }
 
 function get_queues() {

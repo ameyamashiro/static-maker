@@ -25,6 +25,7 @@
                 <td>time</td>
                 <td>type</td>
                 <td>url</td>
+                <td>status</td>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
                 <td><?php echo $queue->time ?></td>
                 <td><?php echo $queue->type ?></td>
                 <td><?php echo $queue->url ?></td>
+                <td><?php echo $queue->status ?></td>
             </tr>
         <?php endforeach ?>
         </tbody>

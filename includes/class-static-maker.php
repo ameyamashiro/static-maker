@@ -168,6 +168,8 @@ class Static_Maker {
 
         $this->loader->add_action( 'save_post', $plugin_admin, 'every_post_update', 10, 3 );
 
+        $queue_manager = new QueueManager();
+        $this->loader->add_action( 'static_maker_dequeue', $queue_manager, 'dequeue_task' );
 	}
 
 	/**
