@@ -174,18 +174,14 @@ class Static_Maker_Admin {
     }
 
 
-    public function every_post_update( $post_id, $post_after, $post_before ) {
+    public function every_post_update( $post_id ) {
 
         if ( wp_is_post_revision( $post_id ) )
             return;
 
-        echo '<pre>';
-        var_dump(get_permalink( $post_id ));
-        var_dump($post_after);
-        var_dump($post_before);
-        var_dump($post_id);
-        echo '</pre>';
-        exit();
+        $queueManager = new QueueManager();
+
+        $queueManager->queueByPostId( $post_id );
     }
 
 }
