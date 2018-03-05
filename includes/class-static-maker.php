@@ -166,6 +166,8 @@ class Static_Maker {
 
         $this->loader->add_action('admin_init', $plugin_admin, 'options_update');
 
+        $this->loader->add_action( 'save_post', $plugin_admin, 'every_post_update', 10, 3 );
+
 	}
 
 	/**

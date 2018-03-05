@@ -101,6 +101,7 @@ class Static_Maker_Admin {
 	}
 
 
+
     /**
      * Register the administration menu for this plugin into the WordPress Dashboard menu.
      *
@@ -172,5 +173,19 @@ class Static_Maker_Admin {
         return $valid;
     }
 
+
+    public function every_post_update( $post_id, $post_after, $post_before ) {
+
+        if ( wp_is_post_revision( $post_id ) )
+            return;
+
+        echo '<pre>';
+        var_dump(get_permalink( $post_id ));
+        var_dump($post_after);
+        var_dump($post_before);
+        var_dump($post_id);
+        echo '</pre>';
+        exit();
+    }
 
 }
