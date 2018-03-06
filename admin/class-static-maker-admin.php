@@ -174,10 +174,14 @@ class Static_Maker_Admin {
     }
 
 
-    public function every_post_update( $post_id ) {
+    public function every_post_update( $post_id, $post ) {
 
         if ( wp_is_post_revision( $post_id ) )
             return;
+
+        if ( $post->post_status !== 'publish' ) {
+            return;
+        }
 
         $queueManager = new QueueManager();
 
