@@ -16,6 +16,7 @@ class QueueManager {
 
         $sql = "CREATE TABLE $this->table_name (
           id mediumint(9) NOT NULL AUTO_INCREMENT,
+          post_id mediumint(9) NOT NULL,
           time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
           type varchar(20) NOT NULL,
           url varchar(55) DEFAULT '' NOT NULL,
@@ -43,6 +44,7 @@ class QueueManager {
         $wpdb->insert(
             $this->table_name,
             array(
+                'post_id' => $post_id,
                 'time' => current_time( 'mysql' ),
                 'type' => 'individual',
                 'url' => $url,

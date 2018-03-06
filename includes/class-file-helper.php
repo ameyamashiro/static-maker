@@ -2,7 +2,10 @@
 
 class FileHelper {
 
-    public function test_hook() {
+    /**
+     * called from wp_ajax action
+     */
+    public function fetch_html_action() {
         check_ajax_referer( 'file_get_content' );
 
         if ( !isset($_POST[ 'url' ]) ) {
@@ -10,7 +13,10 @@ class FileHelper {
         }
 
         $url = $_POST[ 'url' ];
-        echo $this->file_get_content( $url );
+        $content = $this->file_get_content( $url ) or wp_die(500);
+        $dir = str_replace(get_home_url(), '', $url);
+
+        $this->file_put_content( $content, 'index.html', $dir ) or wp_die(500);
 
         wp_die();
     }
@@ -23,5 +29,17 @@ class FileHelper {
         ));
 
         return file_get_contents( $url, false, $context );
+    }
+
+    public function file_put_content( $content, $file_name = 'index.html', $subdir = '' ) {
+        $export_path = wp_upload_dir()[ 'path' ];
+
+        if (!empty($subdir) && !is_dir( $export_path . $subdir )) {
+            if (!mkdir( $export_path . $subdir, 0700, true )) {
+                wp_die(500);
+            }
+        }
+
+        return file_put_contents( $export_path . $subdir . $file_name, $content );
     }
 }

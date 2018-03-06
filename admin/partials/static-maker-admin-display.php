@@ -43,7 +43,7 @@ function static_maker_javascript() { ?>
     <table class="wp-list-table widefat fixed striped">
         <thead>
             <tr>
-                <td>id</td>
+                <td>Post ID</td>
                 <td>url</td>
                 <td>time</td>
                 <td>type</td>
@@ -53,12 +53,13 @@ function static_maker_javascript() { ?>
         <tbody>
         <?php foreach( get_queues() as $queue ): ?>
             <tr>
-                <th><?php echo $queue->id ?></th>
+                <th><?php echo $queue->post_id ?></th>
                 <td>
-                    <?php echo $queue->url ?>
+                    <?php $url = get_the_permalink( $queue->post_id ) ?>
+                    <?php echo $url ?>
                     <div class="row-actions">
                         <span class="export-individual">
-                            <a href="" class="trigger-individual" data-url="<?php echo $queue->url ?>">書き出し</a></span>
+                            <a href="" class="trigger-individual" data-url="<?php echo $queue->url ?>">再書き出し</a></span>
                     </div>
                 </td>
                 <td><?php echo $queue->time ?></td>
