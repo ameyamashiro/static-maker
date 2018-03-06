@@ -170,6 +170,9 @@ class Static_Maker {
 
         $queue_manager = new QueueManager();
         $this->loader->add_action( 'static_maker_dequeue', $queue_manager, 'dequeue_task' );
+
+        $file_helper = new FileHelper();
+        $this->loader->add_action( 'wp_ajax_file_get_content', $file_helper, 'test_hook', 10, 1 );
 	}
 
 	/**

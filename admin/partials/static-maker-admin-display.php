@@ -11,20 +11,42 @@
  * @package    Static_Maker
  * @subpackage Static_Maker/admin/partials
  */
-?>
+
+add_action( 'admin_footer', 'static_maker_javascript' );
+
+function static_maker_javascript() { ?>
+    <script>
+        jQuery('.trigger-individual').on('click', function(e) {
+            e.preventDefault();
+
+            var url = e.target.dataset.url;
+
+            jQuery.post('<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'file_get_content') // or ajaxurl in js ?>', {
+                action: 'file_get_content',
+                url: url
+            }, function(res) {
+                console.log(res);
+            })
+        });
+    </script>
+<?php } ?>
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
 
     <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
+    <h3>ファイルリスト</h3>
+
+    <h3>Queues</h3>
+
     <table class="wp-list-table widefat fixed striped">
         <thead>
             <tr>
                 <td>id</td>
+                <td>url</td>
                 <td>time</td>
                 <td>type</td>
-                <td>url</td>
                 <td>status</td>
             </tr>
         </thead>
@@ -32,14 +54,22 @@
         <?php foreach( get_queues() as $queue ): ?>
             <tr>
                 <th><?php echo $queue->id ?></th>
+                <td>
+                    <?php echo $queue->url ?>
+                    <div class="row-actions">
+                        <span class="export-individual">
+                            <a href="" class="trigger-individual" data-url="<?php echo $queue->url ?>">書き出し</a></span>
+                    </div>
+                </td>
                 <td><?php echo $queue->time ?></td>
                 <td><?php echo $queue->type ?></td>
-                <td><?php echo $queue->url ?></td>
                 <td><?php echo $queue->status ?></td>
             </tr>
         <?php endforeach ?>
         </tbody>
     </table>
+
+    <button class="button button-primary trigger-test">実行</button>
 
     <form method="post" name="cleanup_options" action="options.php">
 

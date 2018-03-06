@@ -38,6 +38,12 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 
 /**
+ *
+ */
+require plugin_dir_path( __FILE__ ) . 'includes/class-file-helper.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-queue-manager.php';
+
+/**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-static-maker-activator.php
  */
@@ -57,12 +63,6 @@ function deactivate_static_maker() {
 
 register_activation_hook( __FILE__, 'activate_static_maker' );
 register_deactivation_hook( __FILE__, 'deactivate_static_maker' );
-
-/**
- *
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-queue-manager.php';
-
 
 /**
  * The core plugin class that is used to define internationalization,
