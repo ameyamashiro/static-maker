@@ -41,6 +41,7 @@ define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 /**
  *
  */
+require plugin_dir_path( __FILE__ ) . 'includes/models/class-page-list.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-file-helper.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-post-helper.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-queue-manager.php';
@@ -63,8 +64,8 @@ function deactivate_static_maker() {
 	Static_Maker_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_static_maker' );
-register_deactivation_hook( __FILE__, 'deactivate_static_maker' );
+register_activation_hook( __FILE__, 'Static_Maker\activate_static_maker' );
+register_deactivation_hook( __FILE__, 'Static_Maker\deactivate_static_maker' );
 
 /**
  * The core plugin class that is used to define internationalization,

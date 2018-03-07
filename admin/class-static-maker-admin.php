@@ -119,8 +119,14 @@ class Static_Maker_Admin {
          *        Administration Menus: http://codex.wordpress.org/Administration_Menus
          *
          */
-        add_options_page( 'Static Maker ...', 'Static Maker', 'manage_options', $this->plugin_name, array($this, 'display_plugin_setup_page')
-        );
+        $cap = 'manage_options';
+        $slug = $this->plugin_name;
+
+        add_menu_page( 'Static Maker', 'Static Maker', $cap, $slug, false, 'dashicons-welcome-widgets-menus', '80.050' );
+
+        add_submenu_page( $this->plugin_name, '管理対象ページ一覧', '管理ページ一覧', $cap, $slug, array($this, 'display_plugin_page_list_page') );
+        add_submenu_page( $this->plugin_name, '管理対象ページの追加', '管理ページ追加', 'manage_options', $this->plugin_name . '_page_add', array($this, 'display_plugin_add_page') );
+        add_submenu_page( $this->plugin_name, 'Preferences', '設定', 'manage_options', $this->plugin_name . '_preferences', array($this, 'display_plugin_setup_page') );
     }
 
     /**
@@ -147,7 +153,15 @@ class Static_Maker_Admin {
      */
 
     public function display_plugin_setup_page() {
-        include_once( 'partials/static-maker-admin-display.php' );
+        include_once( 'partials/static-maker-admin-display-setup.php' );
+    }
+
+    public function display_plugin_page_list_page() {
+        include_once( 'partials/static-maker-admin-display-page-list.php' );
+    }
+
+    public function display_plugin_add_page() {
+        include_once( 'partials/static-maker-admin-display-add.php' );
     }
 
     public function options_update() {

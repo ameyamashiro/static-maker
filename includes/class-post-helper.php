@@ -9,7 +9,7 @@ class PostHelper {
         foreach ( $types as $key => $type ) {
             if ( in_array( $key, $excludes ) ) { continue; }
             if ( $type->_builtin && !$type->public ) { continue; }
-            $post_types[] = $key;
+            $post_types[$key] = $type->label;
         }
         return $post_types;
     }
