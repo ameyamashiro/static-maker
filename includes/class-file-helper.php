@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 class FileHelper {
 
@@ -42,4 +43,5 @@ class FileHelper {
 
         return file_put_contents( $export_path . $subdir . $file_name, $content );
     }
+
 }

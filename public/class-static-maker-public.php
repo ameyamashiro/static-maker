@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * The public-facing functionality of the plugin.

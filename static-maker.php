@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * The plugin bootstrap file
@@ -41,6 +42,7 @@ define( 'PLUGIN_NAME_VERSION', '1.0.0' );
  *
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-file-helper.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-post-helper.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-queue-manager.php';
 
 /**
@@ -81,7 +83,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-static-maker.php';
  */
 function run_static_maker() {
 
-	$plugin = new Static_Maker();
+	$plugin = new Static_Maker_Class();
 	$plugin->run();
 
 }

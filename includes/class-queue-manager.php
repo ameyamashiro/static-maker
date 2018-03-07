@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 class QueueManager {
 

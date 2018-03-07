@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * The admin-specific functionality of the plugin.

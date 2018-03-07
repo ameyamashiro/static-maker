@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * Register all actions and filters for the plugin

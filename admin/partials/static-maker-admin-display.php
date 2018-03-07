@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * Provide a admin area view for the plugin
@@ -12,7 +13,7 @@
  * @subpackage Static_Maker/admin/partials
  */
 
-add_action( 'admin_footer', 'static_maker_javascript' );
+add_action( 'admin_footer', 'Static_Maker\static_maker_javascript' );
 
 function static_maker_javascript() { ?>
     <script>
@@ -37,6 +38,15 @@ function static_maker_javascript() { ?>
     <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
     <h3>ファイルリスト</h3>
+
+    <pre style="display: block;">
+        <?php $post_types = PostHelper::get_post_types() ?>
+
+        <?php foreach( PostHelper::get_posts() as $post ) {
+            echo '----------';
+            echo $post[ 'ID' ] . ' ' . $post[ 'post_title' ] . ' ' . $post[ 'post_type' ] . '<br>';
+        } ?>
+    </pre>
 
     <h3>Queues</h3>
 

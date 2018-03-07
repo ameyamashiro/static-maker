@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * Fired during plugin activation
@@ -33,6 +34,8 @@ class Static_Maker_Activator {
 	    $qManager = new QueueManager();
 	    $qManager->createTable();
 	    $qManager->set_cron_schedule();
+
+	    PageList::create_table();
 	}
 
 }

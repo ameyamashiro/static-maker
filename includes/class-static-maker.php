@@ -1,4 +1,5 @@
 <?php
+namespace Static_Maker;
 
 /**
  * The file that defines the core plugin class
@@ -27,7 +28,7 @@
  * @subpackage Static_Maker/includes
  * @author     ameyamashiro <ameyamashiro@example.com>
  */
-class Static_Maker {
+class Static_Maker_Class {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
