@@ -25,7 +25,7 @@ class Page {
 
         $sql = "CREATE TABLE $table_name (
           id int(20) NOT NULL AUTO_INCREMENT,
-          post_id int(20) NOT NULL UNIQUE,
+          post_id int(20) UNIQUE,
           post_type varchar(20) NOT NULL,
           permalink varchar(255) DEFAULT '' NOT NULL,
           active tinyint(1) DEFAULT 1 NOT NULL,
@@ -80,7 +80,33 @@ class Page {
 
     public function save() {
         global $wpdb;
-        return $wpdb->replace( self::table_name(), $this->data );
+        $table_name = self::table_name();
+
+        $is_manual_type = $this->data[ 'post_type' ] === 'static-maker-manual';
+        $permalink = $this->data[ 'permalink' ];
+        $post_id = $this->data[ 'post_id' ];
+
+        if ( $is_manual_type ) {
+            $exists_query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE permalink = %s)", $permalink );
+        } else {
+            $exists_query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id = %s)", $post_id );
+        }
+
+        if ( $wpdb->get_var( $exists_query ) === '1' ) { // have
+
+            if ( $is_manual_type ) {
+                return $wpdb->update( $table_name, $this->data, array( 'permalink' => $permalink ) );
+            } else {
+                return $wpdb->update( $table_name, $this->data, array( 'post_id' => $post_id ) );
+            }
+
+        } else {
+            if ( $is_manual_type ) {
+                return $wpdb->insert( $table_name, $this->data );
+            } else {
+                return $wpdb->insert( $table_name, $this->data );
+            }
+        }
     }
 
 }

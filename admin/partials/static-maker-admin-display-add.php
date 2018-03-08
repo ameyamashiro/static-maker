@@ -46,19 +46,18 @@ namespace Static_Maker;
             <h3>個別追加</h3>
             <div class="inside">
                 <p>URL を指定して手動で管理対象のページを追加できます。</p>
-                <form action="">
+                <form class="add-page-by-url">
                     <input type="text" name="url" class="regular-text">
                     <div class="submit">
                         <button class="button button-primary">追加</button>
                     </div>
                 </form>
+                <p class="url-based-message"></p>
             </div>
         </div>
     </div>
 
-    <seciton>
-        <p class="error"></p>
-    </seciton>
+    <p class="error"></p>
 </div>
 
 <?php
@@ -73,10 +72,10 @@ namespace Static_Maker;
 
             if (postType.length) {
                 jQuery.post(url, {
-                    action: 'add_pages_by_post_type',
+                    action: 'static-maker-add_pages_by_post_type',
                     post_type: postType
                 }, function(res, status) {
-                    $postType = jQuery('.post-type-message');
+                    var $postType = jQuery('.post-type-message');
                     console.log(res);
 
                     if (status === 'success') {
@@ -84,12 +83,38 @@ namespace Static_Maker;
                     } else {
                         $postType.empty().html('登録に失敗しました。');
 
-                        $error = jQuery('.error');
+                        var $error = jQuery('.error');
                         $error.empty();
                         $error.html(res);
                     }
                 });
             }
         });
+
+        jQuery('.add-page-by-url').on('submit', function(e) {
+            e.preventDefault();
+            var $msg = jQuery('.url-based-message');
+            var actionUrl = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'add_page_by_url') ?>';
+            var urlValue = jQuery('[name=url]').val();
+
+            if (urlValue.length) {
+                jQuery.ajax({
+                    type: 'post',
+                    url: actionUrl,
+                    data: {
+                        action: 'static-maker-add_page_by_url',
+                        url: urlValue
+                    },
+                    success: function(res) {
+                        console.log(res);
+
+                        $msg.empty().html('登録に成功しました。');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $msg.empty().html('登録に失敗しました。<br>' + jqXHR.responseText);
+                    }
+                });
+            }
+        })
     </script>
 <?php }

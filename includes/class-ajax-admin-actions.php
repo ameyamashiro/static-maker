@@ -39,10 +39,31 @@ class Ajax_Admin_Actions {
                 'active' => 1,
             ) );
 
-            if (!$post->save()) {
+            if ($post->save() === false) {
                 wp_die('', '', 500);
                 break;
             }
+        }
+
+        wp_die();
+    }
+
+    static public function add_page_by_url() {
+        check_ajax_referer( 'add_page_by_url' );
+
+        if ( !isset($_POST[ 'url' ]) || !filter_var( $_POST[ 'url' ], FILTER_VALIDATE_URL ) ) {
+            wp_die('URL を正しく入力してください', '', 422);
+        }
+
+        $post = new Page( array(
+            'post_type' => 'static-maker-manual',
+            'permalink' => $_POST[ 'url' ],
+            'active' => 1,
+        ) );
+
+        if ($post->save() === false) {
+            wp_die('', '', 500);
+            return;
         }
 
         wp_die();
