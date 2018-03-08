@@ -45,13 +45,13 @@ class Queue {
         return $wpdb->get_results( "SELECT * FROM $table_name" );
     }
 
-    public static function queue_by_post_id( $post_id ) {
+    public static function enqueue_by_post_id( $post_id ) {
         global $wpdb;
         $table_name = self::table_name();
 
         $url = get_permalink( $post_id );
 
-        $wpdb->insert(
+        return $wpdb->insert(
             $table_name,
             array(
                 'post_id' => $post_id,
@@ -62,7 +62,22 @@ class Queue {
         );
     }
 
+    public static function enqueue_by_id( $post_id ) {
+        global $wpdb;
+        $table_name = self::table_name();
 
+        $url = get_permalink( $post_id );
+
+        return $wpdb->insert(
+            $table_name,
+            array(
+                'post_id' => $post_id,
+                'time' => current_time( 'mysql' ),
+                'type' => 'individual',
+                'url' => $url,
+            )
+        );
+    }
 
     public function __construct( $columns ) {
         foreach ( $columns as $key => $value ) {
@@ -119,9 +134,4 @@ class Queue {
             array( '%d' )
         );
     }
-}
-
-function get_queues() {
-    $queueManager = new QueueManager();
-    return $queueManager->get_queues();
 }

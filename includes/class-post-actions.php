@@ -10,6 +10,6 @@ class Post_Actions {
             return;
         }
 
-        Queue::queue_by_post_id( $post_id );
+        Queue::enqueue_by_post_id( $post_id );
     }
 }

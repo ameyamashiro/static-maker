@@ -3,6 +3,31 @@ namespace Static_Maker;
 
 class Ajax_Admin_Actions {
 
+    static public function enqueue_single_by_id() {
+        check_ajax_referer( 'enqueue_single_by_id' );
+
+        if ( !isset( $_POST[ 'post_id' ] ) && !isset( $_POST[ 'id' ] ) ) {
+            wp_die('ID を指定してください', '', 422);
+        }
+
+        if ( isset( $_POST[ 'post_id' ] ) ) {
+            $result = Queue::enqueue_by_post_id( $_POST[ 'post_id' ] );
+        }
+
+        if ( isset( $_POST[ 'id' ] ) ) {
+            $result = Queue::enqueue_by_id( $_POST[ 'id' ] );
+        }
+
+        if ( $result === false ) {
+            wp_die('', '', 500);
+        }
+
+        wp_die();
+    }
+
+    /**
+     * Export html immediately
+     */
     static public function fetch_single_html() {
         check_ajax_referer( 'single_file_get_content' );
 

@@ -60,6 +60,15 @@ class Page {
         return new self( $row );
     }
 
+    public static function get_page_by_post_id( $id ) {
+        global $wpdb;
+        $table_name = self::table_name();
+
+        $query = "SELECT * FROM $table_name WHERE post_id = %d LIMIT 1";
+        $row = $wpdb->get_results($wpdb->prepare( $query, $id ), ARRAY_A)[0];
+        return new self( $row );
+    }
+
     public function __construct( $columns ) {
         foreach ( $columns as $key => $value ) {
             $this->$key = $value;

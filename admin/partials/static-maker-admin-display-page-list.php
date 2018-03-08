@@ -49,7 +49,18 @@ namespace Static_Maker;
                     <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo $page->permalink ?></a>
                     <div class="row-actions">
                         <span class="export-individual">
-                            <a href="" class="trigger-individual" data-url="<?php echo $page->permalink ?>">書き出し</a></span>
+                            <a
+                                href=""
+                                class="trigger-individual"
+                                <?php if ($page->post_id): ?>
+                                data-post-id="<?php echo $page->post_id ?>"
+                                <?php else: ?>
+                                data-id="<?php echo $page->id ?>"
+                                <?php endif; ?>
+                            >
+                                書き出し
+                            </a>
+                        </span>
                     </div>
                 </td>
                 <td><?php echo $page->active === '1' ? '有効' : '無効' ?></td>
@@ -80,10 +91,6 @@ namespace Static_Maker;
                 <td>
                     <?php $url = get_the_permalink( $queue->post_id ) ?>
                     <?php echo $url ?>
-                    <div class="row-actions">
-                        <span class="export-individual">
-                            <a href="" class="trigger-individual" data-url="<?php echo $queue->url ?>">再書き出し</a></span>
-                    </div>
                 </td>
                 <td><?php echo $queue->time ?></td>
                 <td><?php echo $queue->type ?></td>
@@ -102,13 +109,21 @@ namespace Static_Maker;
     <script>
         jQuery('.trigger-individual').on('click', function(e) {
             e.preventDefault();
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_single_by_id') ?>';
+            var $target = jQuery(e.target);
+            var postId = $target.data('post-id');
 
-            var url = e.target.dataset.url;
+            var data = {
+                action: 'static-maker-enqueue_single_by_id'
+            };
 
-            jQuery.post('<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'single_file_get_content') // or ajaxurl in js ?>', {
-                action: 'static-maker-single_file_get_content',
-                url: url
-            }, function(res) {
+            if ( postId ) {
+                data.post_id = postId;
+            } else {
+                data.id = $target.data('id');
+            }
+
+            jQuery.post(url, data, function(res) {
                 console.log(res);
             });
         });
