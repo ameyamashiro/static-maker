@@ -14,10 +14,14 @@ class PostUtil {
         return $post_types;
     }
 
-    static function get_posts() {
+    static function get_posts( $post_type ) {
         $posts = array();
 
-        $post_types = self::get_post_types();
+        if ($post_type) {
+            $post_types = array( $post_type );
+        } else {
+            $post_types = self::get_post_types();
+        }
 
         foreach( $post_types as $post_type ) {
             $opts = array(

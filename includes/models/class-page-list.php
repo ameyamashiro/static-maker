@@ -25,7 +25,7 @@ class Page {
 
         $sql = "CREATE TABLE $table_name (
           id int(20) NOT NULL AUTO_INCREMENT,
-          post_id int(20) NOT NULL,
+          post_id int(20) NOT NULL UNIQUE,
           post_type varchar(20) NOT NULL,
           permalink varchar(255) DEFAULT '' NOT NULL,
           active tinyint(1) DEFAULT 1 NOT NULL,
@@ -80,7 +80,7 @@ class Page {
 
     public function save() {
         global $wpdb;
-        $wpdb->replace( self::table_name(), $this->data );
+        return $wpdb->replace( self::table_name(), $this->data );
     }
 
 }

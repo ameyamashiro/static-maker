@@ -46,9 +46,9 @@ namespace Static_Maker;
             <tr>
                 <th><?php echo $page->post_id ?></th>
                 <td>
-                    <?php echo $page->permalink ?>
+                    <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo $page->permalink ?></a>
                 </td>
-                <td><?php echo $page->active === 1 ? '有効' : '無効' ?></td>
+                <td><?php echo $page->active === '1' ? '有効' : '無効' ?></td>
             </tr>
         <?php endforeach ?>
         </tbody>

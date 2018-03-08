@@ -36,6 +36,7 @@ namespace Static_Maker;
                         <button class="button button-primary">一括追加</button>
                     </div>
                 </form>
+                <p class="post-type-message"></p>
             </div>
         </div>
     </div>
@@ -54,6 +55,10 @@ namespace Static_Maker;
             </div>
         </div>
     </div>
+
+    <seciton>
+        <p class="error"></p>
+    </seciton>
 </div>
 
 <?php
@@ -61,11 +66,29 @@ namespace Static_Maker;
 
     function static_maker_javascript() { ?>
     <script>
-        jQuery('.add-pages-by-post-type').on('click', function(e) {
+        jQuery('.add-pages-by-post-type').on('submit', function(e) {
             e.preventDefault();
             var postType = jQuery('[name=post-type-select]').val();
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'add_pages_by_post_type') ?>';
 
             if (postType.length) {
+                jQuery.post(url, {
+                    action: 'add_pages_by_post_type',
+                    post_type: postType
+                }, function(res, status) {
+                    $postType = jQuery('.post-type-message');
+                    console.log(res);
+
+                    if (status === 'success') {
+                        $postType.empty().html('登録に成功しました。');
+                    } else {
+                        $postType.empty().html('登録に失敗しました。');
+
+                        $error = jQuery('.error');
+                        $error.empty();
+                        $error.html(res);
+                    }
+                });
             }
         });
     </script>

@@ -176,6 +176,7 @@ class Static_Maker_Class {
         $ajax_actions = new Ajax_Admin_Actions();
 
         $this->loader->add_action( 'wp_ajax_single_file_get_content', $ajax_actions, 'fetch_single_html', 10, 1 );
+        $this->loader->add_action( 'wp_ajax_add_pages_by_post_type', $ajax_actions, 'add_pages_by_post_type', 10, 1 );
 	}
 
 	/**

@@ -33,6 +33,6 @@ class Static_Maker_Activator {
 	public static function activate() {
 	    Queue::create_table();
 	    Page::create_table();
-	}
+    }
 
 }
