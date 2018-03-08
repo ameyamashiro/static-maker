@@ -6,16 +6,11 @@ class Ajax_Admin_Actions {
     static public function fetch_single_html() {
         check_ajax_referer( 'single_file_get_content' );
 
-        if ( !isset($_POST[ 'url' ]) ) {
-            wp_die('', '', 422);
+        if ( !isset($_POST[ 'url' ]) || !filter_var( $_POST[ 'url' ], FILTER_VALIDATE_URL ) ) {
+            wp_die('URL を正しく入力してください', '', 422);
         }
 
-        $url = $_POST[ 'url' ];
-        $content = FileUtil::file_get_content( $url ) or wp_die('', '', 500);
-        $url_parsed = parse_url( $url );
-        $dir = $url_parsed[ 'path' ];
-
-        FileUtil::file_put_content( $content, 'index.html', $dir ) or wp_die('', '', 500);
+        FileUtil::export_single_file( $_POST[ 'url' ] ) or wp_die('', '', 500);
 
         wp_die();
     }
