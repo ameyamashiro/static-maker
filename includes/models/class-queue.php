@@ -41,7 +41,7 @@ class Queue {
         global $wpdb;
         $table_name = self::table_name();
 
-        $queues = $wpdb->get_results( "SELECT * FROM $table_name WHERE status = 'waiting'" );
+        $queues = $wpdb->get_results( "SELECT * FROM $table_name WHERE status = 'waiting' LIMIT 10" );
         $instances = array();
 
         foreach( $queues as $queue ) {
