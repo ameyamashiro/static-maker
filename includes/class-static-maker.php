@@ -167,13 +167,15 @@ class Static_Maker_Class {
 
         $this->loader->add_action('admin_init', $plugin_admin, 'options_update');
 
-        $this->loader->add_action( 'publish_post', $plugin_admin, 'every_post_update', 10, 3 );
+        $post_actions = new Post_Actions();
+        $this->loader->add_action( 'publish_post', $post_actions, 'every_post_update', 10, 3 );
 
-        $queue_manager = new QueueManager();
-        $this->loader->add_action( 'static_maker_dequeue', $queue_manager, 'dequeue_task' );
+        $queue_actions = new Queue_Actions();
+        $this->loader->add_action( 'static_maker_dequeue', $queue_actions, 'dequeue_task' );
 
-        $file_helper = new FileHelper();
-        $this->loader->add_action( 'wp_ajax_file_get_content', $file_helper, 'fetch_html_action', 10, 1 );
+        $ajax_actions = new Ajax_Admin_Actions();
+
+        $this->loader->add_action( 'wp_ajax_single_file_get_content', $ajax_actions, 'fetch_single_html', 10, 1 );
 	}
 
 	/**

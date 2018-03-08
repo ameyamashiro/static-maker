@@ -42,7 +42,7 @@ namespace Static_Maker;
             <td>状態</td>
         </thead>
         <tbody>
-        <?php foreach( PageList::get_pages() as $page ): ?>
+        <?php foreach( Page::get_pages() as $page ): ?>
             <tr>
                 <th><?php echo $page->post_id ?></th>
                 <td>
@@ -70,7 +70,7 @@ namespace Static_Maker;
             </tr>
         </thead>
         <tbody>
-        <?php foreach( get_queues() as $queue ): ?>
+        <?php foreach( Queue::get_queues() as $queue ): ?>
             <tr>
                 <th><?php echo $queue->post_id ?></th>
                 <td>
@@ -101,8 +101,8 @@ namespace Static_Maker;
 
             var url = e.target.dataset.url;
 
-            jQuery.post('<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'file_get_content') // or ajaxurl in js ?>', {
-                action: 'file_get_content',
+            jQuery.post('<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'single_file_get_content') // or ajaxurl in js ?>', {
+                action: 'single_file_get_content',
                 url: url
             }, function(res) {
                 console.log(res);

@@ -28,7 +28,7 @@ namespace Static_Maker;
                     <select name="post-type-select" id="">
                         <option value="">投稿タイプを選択</option>
 
-                        <?php foreach( PostHelper::get_post_types() as $type => $label ): ?>
+                        <?php foreach( PostUtil::get_post_types() as $type => $label ): ?>
                             <option value="<?php echo $type ?>"><?php echo $label ?></option>
                         <?php endforeach; ?>
                     </select>

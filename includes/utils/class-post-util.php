@@ -1,7 +1,7 @@
 <?php
 namespace Static_Maker;
 
-class PostHelper {
+class PostUtil {
     static function get_post_types() {
         $types = get_post_types(array(), 'objects');
         $excludes = array( 'attachment', 'acf-field-group', 'acf-field' );

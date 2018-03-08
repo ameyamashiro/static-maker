@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class PageList {
+class Page {
 
-    protected static $table_name = 'static_makerpage_pages';
+    protected static $table_name = 'staticmaker_pages';
 
     protected static $columns = array();
     protected $data = array();
@@ -83,7 +83,4 @@ class PageList {
         $wpdb->replace( self::table_name(), $this->data );
     }
 
-    public function exists() {
-
-    }
 }

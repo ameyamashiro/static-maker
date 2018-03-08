@@ -42,9 +42,15 @@ define( 'PLUGIN_NAME_VERSION', '1.0.0' );
  *
  */
 require plugin_dir_path( __FILE__ ) . 'includes/models/class-page-list.php';
-require plugin_dir_path( __FILE__ ) . 'includes/class-file-helper.php';
-require plugin_dir_path( __FILE__ ) . 'includes/class-post-helper.php';
-require plugin_dir_path( __FILE__ ) . 'includes/class-queue-manager.php';
+require plugin_dir_path( __FILE__ ) . 'includes/models/class-queue.php';
+
+require plugin_dir_path( __FILE__ ) . 'includes/utils/class-file-util.php';
+require plugin_dir_path( __FILE__ ) . 'includes/utils/class-post-util.php';
+
+require plugin_dir_path( __FILE__ ) . 'includes/class-ajax-admin-actions.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-post-actions.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-queue-actions.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-cron-actions.php';
 
 /**
  * The code that runs during plugin activation.
