@@ -179,6 +179,7 @@ class Static_Maker_Class {
         $this->loader->add_action( 'wp_ajax_static-maker-enqueue_single_by_id', $ajax_actions, 'enqueue_single_by_id', 10, 1 );
         $this->loader->add_action( 'wp_ajax_static-maker-add_pages_by_post_type', $ajax_actions, 'add_pages_by_post_type', 10, 1 );
         $this->loader->add_action( 'wp_ajax_static-maker-add_page_by_url', $ajax_actions, 'add_page_by_url', 10, 1 );
+        $this->loader->add_action( 'wp_ajax_static-maker-process_queue_all', $ajax_actions, 'process_queue_all', 10, 1 );
 	}
 
 	/**

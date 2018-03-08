@@ -37,6 +37,20 @@ class Queue {
         dbDelta( $sql );
     }
 
+    public static function receive_unprocessed_queues() {
+        global $wpdb;
+        $table_name = self::table_name();
+
+        $queues = $wpdb->get_results( "SELECT * FROM $table_name WHERE status = 'waiting'" );
+        $instances = array();
+
+        foreach( $queues as $queue ) {
+            $instances[] = new self( $queue );
+        }
+
+        return $instances;
+    }
+
     // TODO: 自身をインスタンス化
     public static function get_queues() {
         global $wpdb;
@@ -132,5 +146,19 @@ class Queue {
             ),
             array( '%d' )
         );
+    }
+
+    public function save() {
+        global $wpdb;
+        $table_name = self::table_name();
+        $id = $this->data[ 'id' ];
+
+        $exists_query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE id = %d)", $id );
+
+        if ( $wpdb->get_var( $exists_query ) === '1' ) { // have
+            return $wpdb->update( $table_name, $this->data, array( 'id' => $id ) );
+        } else {
+            return $wpdb->insert( $table_name, $this->data );
+        }
     }
 }

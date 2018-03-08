@@ -100,6 +100,10 @@ namespace Static_Maker;
         </tbody>
     </table>
 
+    <div class="bottom-actions">
+        <button class="process-all button button-primary">Process All Queues</button>
+    </div>
+
 </div>
 
 <?php
@@ -125,6 +129,23 @@ namespace Static_Maker;
 
             jQuery.post(url, data, function(res) {
                 console.log(res);
+            });
+        });
+
+        jQuery('.process-all').on('click', function(e) {
+            e.preventDefault();
+
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'process_queue_all') ?>';
+
+            jQuery.ajax({
+                type: 'post',
+                url: url,
+                data: {
+                    action: 'static-maker-process_queue_all'
+                },
+                success: function(res) {
+                    console.log(res);
+                }
             });
         });
     </script>

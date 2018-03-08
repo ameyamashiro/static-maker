@@ -3,6 +3,14 @@ namespace Static_Maker;
 
 class Ajax_Admin_Actions {
 
+    static public function process_queue_all() {
+        check_ajax_referer( 'process_queue_all' );
+
+        Queue_Actions::dequeue_all();
+
+        wp_die();
+    }
+
     static public function enqueue_single_by_id() {
         check_ajax_referer( 'enqueue_single_by_id' );
 
