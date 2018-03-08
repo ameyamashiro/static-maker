@@ -45,16 +45,15 @@ class Queue {
         return $wpdb->get_results( "SELECT * FROM $table_name" );
     }
 
-    public static function enqueue_by_post_id( $post_id ) {
+    public static function enqueue_by_id( $id ) {
         global $wpdb;
         $table_name = self::table_name();
 
-        $url = get_permalink( $post_id );
+        $url = Page::get_page( $id )->permalink;
 
         return $wpdb->insert(
             $table_name,
             array(
-                'post_id' => $post_id,
                 'time' => current_time( 'mysql' ),
                 'type' => 'individual',
                 'url' => $url,
@@ -62,7 +61,7 @@ class Queue {
         );
     }
 
-    public static function enqueue_by_id( $post_id ) {
+    public static function enqueue_by_post_id( $post_id ) {
         global $wpdb;
         $table_name = self::table_name();
 
