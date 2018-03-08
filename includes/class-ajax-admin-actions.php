@@ -12,7 +12,8 @@ class Ajax_Admin_Actions {
 
         $url = $_POST[ 'url' ];
         $content = FileUtil::file_get_content( $url ) or wp_die('', '', 500);
-        $dir = str_replace(get_home_url(), '', $url);
+        $url_parsed = parse_url( $url );
+        $dir = $url_parsed[ 'path' ];
 
         FileUtil::file_put_content( $content, 'index.html', $dir ) or wp_die('', '', 500);
 

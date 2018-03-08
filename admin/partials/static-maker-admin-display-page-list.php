@@ -47,6 +47,10 @@ namespace Static_Maker;
                 <th><?php echo $page->post_id ?></th>
                 <td>
                     <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo $page->permalink ?></a>
+                    <div class="row-actions">
+                        <span class="export-individual">
+                            <a href="" class="trigger-individual" data-url="<?php echo $page->permalink ?>">書き出し</a></span>
+                    </div>
                 </td>
                 <td><?php echo $page->active === '1' ? '有効' : '無効' ?></td>
             </tr>
@@ -102,11 +106,11 @@ namespace Static_Maker;
             var url = e.target.dataset.url;
 
             jQuery.post('<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'single_file_get_content') // or ajaxurl in js ?>', {
-                action: 'single_file_get_content',
+                action: 'static-maker-single_file_get_content',
                 url: url
             }, function(res) {
                 console.log(res);
-            })
+            });
         });
     </script>
 <?php }
