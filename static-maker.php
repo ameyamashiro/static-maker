@@ -41,7 +41,7 @@ define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 /**
  *
  */
-require plugin_dir_path( __FILE__ ) . 'includes/models/class-page-list.php';
+require plugin_dir_path( __FILE__ ) . 'includes/models/class-page.php';
 require plugin_dir_path( __FILE__ ) . 'includes/models/class-queue.php';
 
 require plugin_dir_path( __FILE__ ) . 'includes/utils/class-file-util.php';
