@@ -69,8 +69,10 @@ namespace Static_Maker;
         </tbody>
     </table>
 
-    <pre style="display: block;">
-    </pre>
+    <div class="bottom-actions">
+        <button class="enqueue-all-pages button button-primary">Process all pages</button>
+    </div>
+
 
     <h3>Queues</h3>
 
@@ -146,6 +148,23 @@ namespace Static_Maker;
                     console.log(res);
                 }
             });
+        });
+
+        jQuery('.enqueue-all-pages').on('click', function(e) {
+            e.preventDefault();
+
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_all_pages') ?>';
+
+            jQuery.ajax({
+                type: 'post',
+                url: url,
+                data: {
+                    action: 'static-maker-enqueue_all_pages'
+                },
+                success: function(res) {
+                    console.log(res);
+                }
+            })
         });
     </script>
 <?php }

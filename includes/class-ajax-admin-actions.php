@@ -98,4 +98,30 @@ class Ajax_Admin_Actions {
 
         wp_die();
     }
+
+    static public function enqueue_all_pages() {
+        check_ajax_referer( 'enqueue_all_pages' );
+
+        $pages = Page::get_pages();
+
+        $results = array();
+
+        foreach ( $pages as $page ) {
+            if ( $page->post_type === 'static-maker-manual' ) {
+                $results[] = Queue::enqueue_by_id( $page->id );
+            } else {
+                $results[] = Queue::enqueue_by_post_id( $page->post_id );
+            }
+        }
+
+        if ( count( array_filter( $results, array( __CLASS__, 'filter_remove_true' ) ) ) !== 0 ) {
+            wp_die('全て、もしくは一部ファイルが登録できていない可能性があります。', '', 500);
+        }
+
+        wp_die();
+    }
+
+    static public function filter_remove_true($r) {
+        return !$r;
+    }
 }
