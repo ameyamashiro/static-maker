@@ -55,11 +55,28 @@ class Queue {
     }
 
     // TODO: 自身をインスタンス化
-    public static function get_queues() {
+    public static function get_queues( $args = array() ) {
         global $wpdb;
         $table_name = self::table_name();
 
-        return $wpdb->get_results( "SELECT * FROM $table_name" );
+        $query = "SELECT * FROM $table_name";
+
+        if ( isset($args[ 'desc' ]) && $args[ 'desc' ] ) {
+            $query .= ' ORDER BY id DESC';
+        }
+
+        $queues = $wpdb->get_results( $query );
+
+        if ( isset( $args[ 'output' ] ) && $args[ 'output' ] === 'original' ) {
+            return $queues;
+        }
+
+        $instances = array();
+        foreach ( $queues as $queue ) {
+            $instances[] = new self( $queue );
+        }
+
+        return $instances;
     }
 
     public static function enqueue_by_id( $id ) {

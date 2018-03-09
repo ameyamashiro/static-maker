@@ -87,7 +87,7 @@ namespace Static_Maker;
             </tr>
         </thead>
         <tbody>
-        <?php foreach( Queue::get_queues() as $queue ): ?>
+        <?php foreach( Queue::get_queues( array( 'desc' => true, 'output' => 'original' ) ) as $queue ): ?>
             <tr>
                 <th><?php echo $queue->post_id ?></th>
                 <td>
