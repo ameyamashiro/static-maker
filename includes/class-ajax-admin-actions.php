@@ -12,6 +12,7 @@ class Ajax_Admin_Actions {
     }
 
     static public function enqueue_single_by_id() {
+        global $wpdb;
         check_ajax_referer( 'enqueue_single_by_id' );
 
         if ( !isset( $_POST[ 'post_id' ] ) && !isset( $_POST[ 'id' ] ) ) {
@@ -27,7 +28,7 @@ class Ajax_Admin_Actions {
         }
 
         if ( $result === false ) {
-            wp_die('', '', 500);
+            wp_die($wpdb->print_error(), '', 500);
         }
 
         wp_die();

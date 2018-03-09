@@ -24,12 +24,15 @@ class Queue {
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (
-          id mediumint(9) NOT NULL AUTO_INCREMENT,
-          post_id mediumint(9) NOT NULL,
-          time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+          id int(20) NOT NULL AUTO_INCREMENT,
+          post_id int(20),
+          post_type varchar(255) NOT NULL,
           type varchar(20) NOT NULL,
-          url varchar(55) DEFAULT '' NOT NULL,
+          url varchar(255) DEFAULT '' NOT NULL,
           status varchar(20) DEFAULT 'waiting' NOT NULL,
+          created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+          process_started datetime,
+          process_ended datetime,
           PRIMARY KEY (id)
         ) $charset_collate";
 
@@ -63,14 +66,15 @@ class Queue {
         global $wpdb;
         $table_name = self::table_name();
 
-        $url = Page::get_page( $id )->permalink;
+        $page = Page::get_page( $id );
 
         return $wpdb->insert(
             $table_name,
             array(
-                'time' => current_time( 'mysql' ),
+                'created' => current_time( 'mysql' ),
                 'type' => 'individual',
-                'url' => $url,
+                'post_type' => $page->post_type,
+                'url' => $page->permalink
             )
         );
     }
@@ -79,14 +83,16 @@ class Queue {
         global $wpdb;
         $table_name = self::table_name();
 
+        $post = get_post( $post_id );
         $url = get_permalink( $post_id );
 
         return $wpdb->insert(
             $table_name,
             array(
                 'post_id' => $post_id,
-                'time' => current_time( 'mysql' ),
+                'created' => current_time( 'mysql' ),
                 'type' => 'individual',
+                'post_type' => $post->post_type,
                 'url' => $url,
             )
         );

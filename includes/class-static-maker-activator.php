@@ -31,7 +31,7 @@ class Static_Maker_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-	    Queue::create_table();
+        Queue::create_table();
 	    Page::create_table();
     }
 

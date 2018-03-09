@@ -79,7 +79,7 @@ namespace Static_Maker;
             <tr>
                 <td>Post ID</td>
                 <td>url</td>
-                <td>time</td>
+                <td>created</td>
                 <td>type</td>
                 <td>status</td>
             </tr>
@@ -89,10 +89,9 @@ namespace Static_Maker;
             <tr>
                 <th><?php echo $queue->post_id ?></th>
                 <td>
-                    <?php $url = get_the_permalink( $queue->post_id ) ?>
-                    <?php echo $url ?>
+                    <?php echo $queue->url ?>
                 </td>
-                <td><?php echo $queue->time ?></td>
+                <td><?php echo $queue->created ?></td>
                 <td><?php echo $queue->type ?></td>
                 <td><?php echo $queue->status ?></td>
             </tr>
