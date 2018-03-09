@@ -177,13 +177,11 @@ class Static_Maker_Admin {
         // All checkboxes inputs
         $valid = array();
 
-        //Cleanup
-        $valid['cleanup'] = (isset($input['cleanup']) && !empty($input['cleanup'])) ? 1 : 0;
-        $valid['comments_css_cleanup'] = (isset($input['comments_css_cleanup']) && !empty($input['comments_css_cleanup'])) ? 1: 0;
-        $valid['gallery_css_cleanup'] = (isset($input['gallery_css_cleanup']) && !empty($input['gallery_css_cleanup'])) ? 1 : 0;
-        $valid['body_class_slug'] = (isset($input['body_class_slug']) && !empty($input['body_class_slug'])) ? 1 : 0;
-        $valid['jquery_cdn'] = (isset($input['jquery_cdn']) && !empty($input['jquery_cdn'])) ? 1 : 0;
-        $valid['cdn_provider'] = esc_url($input['cdn_provider']);
+        $valid['host'] = (isset($input['host']) && !empty($input['host'])) ? $input['host'] : '';
+        $valid['basic_auth_user'] = (isset($input['basic_auth_user']) && !empty($input['basic_auth_user'])) ? $input['basic_auth_user'] : '';
+        $valid['basic_auth_pass'] = (isset($input['basic_auth_pass']) && !empty($input['basic_auth_pass'])) ? $input['basic_auth_pass'] : '';
+        $valid['output_path'] = (isset($input['output_path']) && !empty($input['output_path'])) ? $input['output_path'] : '';
+        $valid['queue_limit'] = (isset($input['queue_limit']) && !empty($input['queue_limit'])) ? $input['queue_limit'] : '';
 
         return $valid;
     }

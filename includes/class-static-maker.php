@@ -73,7 +73,7 @@ class Static_Maker_Class {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'static-maker';
+		$this->plugin_name = PLUGIN_NAME;
 
 		$this->load_dependencies();
 		$this->set_locale();
