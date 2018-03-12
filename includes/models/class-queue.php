@@ -45,7 +45,7 @@ class Queue {
         $table_name = self::table_name();
 
         $options = get_option( PLUGIN_NAME );
-        $limit = isset( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '10';
+        $limit = isset( $options[ 'queue_limit' ] ) && !empty( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '10';
 
         $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'waiting' LIMIT %d", $limit );
         $queues = $wpdb->get_results($sql);

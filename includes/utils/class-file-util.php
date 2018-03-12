@@ -3,11 +3,18 @@ namespace Static_Maker;
 
 class FileUtil {
 
-    public static function export_single_file( $url ) {
+    public static function export_single_file( $url, $replace_domain = true ) {
         if ( !$url || !filter_var( $url, FILTER_VALIDATE_URL ) ) { return false; }
+        $options = get_option( PLUGIN_NAME );
+        $alter_url = isset( $options[ 'host' ] ) ? $options[ 'host' ] : '';
+        $url_parsed = parse_url( $url );
+
+        if ( $replace_domain && !empty( $alter_url ) ) {
+            $target_host = $url_parsed[ 'scheme' ] . '://' . $url_parsed[ 'host' ];
+            $url = str_replace( $target_host, $alter_url, $url );
+        }
 
         $content = self::file_get_content( $url );
-        $url_parsed = parse_url( $url );
         $dir = $url_parsed[ 'path' ];
 
         return self::file_put_content( $content, 'index.html', $dir );

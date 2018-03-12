@@ -29,7 +29,6 @@ namespace Static_Maker;
     $basic_pass = isset( $options[ 'basic_auth_pass' ] ) ? $options[ 'basic_auth_pass' ] : '';
     $output = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
     $queue_limit =  isset( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '';
-
     ?>
 
     <form method="post" name="static-maker-options" action="options.php">
@@ -44,10 +43,10 @@ namespace Static_Maker;
         <table class="form-table">
             <tbody>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-host">Custom Host</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-host">Replace Host</label></th>
                     <td>
-                        <input type="text" id="<?php echo $this->plugin_name ?>-host" name="<?php echo $this->plugin_name ?>[host]" class="regular-text" placeholder="<?php echo home_url() ?>" value="<?php echo $host ?>" disabled>
-                        <p class="description">Set only if you want to change host name to fetch (e.g. docker containers)</p>
+                        <input type="text" id="<?php echo $this->plugin_name ?>-host" name="<?php echo $this->plugin_name ?>[host]" class="regular-text" placeholder="<?php echo home_url() ?>" value="<?php echo $host ?>">
+                        <p class="description">Replace "<?php echo home_url() ?>" with "<?echo $host ? $host : 'this field' ?>" when fetching</p>
                     </td>
                 </tr>
                 <tr>
