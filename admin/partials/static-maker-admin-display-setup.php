@@ -82,7 +82,7 @@ namespace Static_Maker;
                 <tr>
                     <th scope="row"><label for="<?php echo $this->plugin_name ?>-queue-limit">Queue Limit</label></th>
                     <td>
-                        <input type="text" id="<?php echo $this->plugin_name ?>-queue-limit" name="<?php echo $this->plugin_name ?>[queue_limit]" class="regular-text" value="<?php echo $queue_limit ?>" placeholder="10" disabled>
+                        <input type="text" id="<?php echo $this->plugin_name ?>-queue-limit" name="<?php echo $this->plugin_name ?>[queue_limit]" class="regular-text" value="<?php echo $queue_limit ?>" placeholder="10">
                         <p class="description">The number of queues to dequeue at once</p>
                     </td>
                 </tr>
