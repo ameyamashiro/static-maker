@@ -29,6 +29,8 @@ namespace Static_Maker;
     $basic_pass = isset( $options[ 'basic_auth_pass' ] ) ? $options[ 'basic_auth_pass' ] : '';
     $output = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
     $queue_limit =  isset( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '';
+
+    var_dump(wp_upload_dir()[ 'basedir' ]);
     ?>
 
     <form method="post" name="static-maker-options" action="options.php">
@@ -74,8 +76,8 @@ namespace Static_Maker;
                 <tr>
                     <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path">Output Directory</label></th>
                     <td>
-                        /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'path' ] ) ?>" value="<?php echo $output ?>" disabled>
-                        <p class="description">Default Value: /<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'path' ] ) ?></p>
+                        /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'basedir' ] ) ?>/static-maker" value="<?php echo $output ?>">
+                        <p class="description">Default Value: /<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'basedir' ] ) ?>/static-maker</p>
                     </td>
                 </tr>
                 <tr>

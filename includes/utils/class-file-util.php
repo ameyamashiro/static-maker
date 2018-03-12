@@ -31,15 +31,28 @@ class FileUtil {
     }
 
     private static function file_put_content( $content, $file_name = 'index.html', $subdir = '' ) {
-        $export_path = wp_upload_dir()[ 'path' ];
+        $export_path = wp_upload_dir()[ 'basedir' ] . '/static-maker';
+        $options = get_option( PLUGIN_NAME );
+        $output_path = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
 
-        if (!empty($subdir) && !is_dir( $export_path . $subdir )) {
-            if (!mkdir( $export_path . $subdir, 0700, true )) {
-                return false;
-            }
+        if ( !empty( $output_path ) ) {
+            $export_path = get_home_path() . $output_path;
+        }
+
+        if ( !self::create_dir( $export_path . $subdir ) ) {
+            return false;
         }
 
         return file_put_contents( $export_path . $subdir . $file_name, $content );
+    }
+
+    private static function create_dir( $export_path ) {
+        if (!is_dir( $export_path )) {
+            if (!mkdir( $export_path, 0700, true )) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
