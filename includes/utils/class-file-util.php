@@ -15,19 +15,38 @@ class FileUtil {
         }
 
         $content = self::file_get_content( $url );
-        $dir = $url_parsed[ 'path' ];
 
+        if ( $content === false ) {
+            return false;
+        }
+
+        $dir = $url_parsed[ 'path' ];
         return self::file_put_content( $content, 'index.html', $dir );
     }
 
     private static function file_get_content( $url ) {
-        $context = stream_context_create(array(
+        $options = get_option( PLUGIN_NAME );
+        $basic_enable = isset( $options[ 'basic_enable' ]) && $options[ 'basic_enable' ];
+        $req_opts = array(
             'http' => array(
                 'method' => 'GET',
             ),
-        ));
+        );
 
-        return file_get_contents( $url, false, $context );
+        if ( $basic_enable ) {
+            $auth = base64_encode( $options[ 'basic_auth_user' ] . ':' . $options[ 'basic_auth_pass' ] );
+            $req_opts[ 'http' ][ 'header' ] = 'Authorization: Basic ' . $auth;
+        }
+
+        $context = stream_context_create($req_opts);
+        $resp = file_get_contents( $url, false, $context );
+
+        if ($resp === false) {
+            // explode( ' ', $http_response_header[ 0 ])[ 1 ]  // status code;
+            return false;
+        }
+
+        return $resp;
     }
 
     private static function file_put_content( $content, $file_name = 'index.html', $subdir = '' ) {

@@ -25,12 +25,11 @@ namespace Static_Maker;
     $options = get_option( $this->plugin_name );
 
     $host = isset( $options[ 'host' ] ) ? $options[ 'host' ] : '';
+    $basic_enable = isset( $options[ 'basic_enable' ] ) && !empty( $options[ 'basic_enable' ] ) ? 1 : 0;
     $basic_user = isset( $options[ 'basic_auth_user' ] ) ? $options[ 'basic_auth_user' ] : '';
     $basic_pass = isset( $options[ 'basic_auth_pass' ] ) ? $options[ 'basic_auth_pass' ] : '';
     $output = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
     $queue_limit =  isset( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '';
-
-    var_dump(wp_upload_dir()[ 'basedir' ]);
     ?>
 
     <form method="post" name="static-maker-options" action="options.php">
@@ -59,15 +58,21 @@ namespace Static_Maker;
                         </fieldet>
                         <ul>
                             <li>
+                                <label for="<?php echo $this->plugin_name ?>-basic-enable">
+                                    <input type="checkbox" id="<?php echo $this->plugin_name ?>-basic-enable" name="<?php echo $this->plugin_name ?>[basic_enable]" value="1" <?php checked($basic_enable, 1) ?>>
+                                    Enable
+                                </label>
+                            </li>
+                            <li>
                                 <label for="<?php echo $this->plugin_name ?>-basic-auth-user">
                                     User:
-                                    <input type="text" id="<?php echo $this->plugin_name ?>-basic-auth-user" name="<?php echo $this->plugin_name ?>[basic_auth_user]" class="regular-text" value="<?php echo $basic_user ?>" disabled>
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-basic-auth-user" name="<?php echo $this->plugin_name ?>[basic_auth_user]" class="regular-text" value="<?php echo $basic_user ?>">
                                 </label>
                             </li>
                             <li>
                                 <label for="<?php echo $this->plugin_name ?>-basic-auth-pass">
                                     Pass:
-                                    <input type="text" id="<?php echo $this->plugin_name ?>-basic-auth-pass" name="<?php echo $this->plugin_name ?>[basic_auth_pass]" class="regular-text" value="<?php echo $basic_pass ?>" disabled>
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-basic-auth-pass" name="<?php echo $this->plugin_name ?>[basic_auth_pass]" class="regular-text" value="<?php echo $basic_pass ?>">
                                 </label>
                             </li>
                         </ul>

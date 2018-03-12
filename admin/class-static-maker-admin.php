@@ -178,6 +178,7 @@ class Static_Maker_Admin {
         $valid = array();
 
         $valid['host'] = (isset($input['host']) && !empty($input['host'])) ? $input['host'] : '';
+        $valid['basic_enable'] = (isset($input['basic_enable']) && !empty($input['basic_enable'])) ? 1 : 0;
         $valid['basic_auth_user'] = (isset($input['basic_auth_user']) && !empty($input['basic_auth_user'])) ? $input['basic_auth_user'] : '';
         $valid['basic_auth_pass'] = (isset($input['basic_auth_pass']) && !empty($input['basic_auth_pass'])) ? $input['basic_auth_pass'] : '';
         $valid['output_path'] = (isset($input['output_path']) && !empty($input['output_path'])) ? $input['output_path'] : '';
