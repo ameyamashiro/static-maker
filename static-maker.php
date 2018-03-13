@@ -48,6 +48,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/models/class-queue.php';
 
 require plugin_dir_path( __FILE__ ) . 'includes/utils/class-file-util.php';
 require plugin_dir_path( __FILE__ ) . 'includes/utils/class-post-util.php';
+require plugin_dir_path( __FILE__ ) . 'includes/utils/class-crypto-util.php';
+require plugin_dir_path( __FILE__ ) . 'includes/utils/class-rsync-util.php';
 
 require plugin_dir_path( __FILE__ ) . 'includes/class-ajax-admin-actions.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-post-actions.php';
