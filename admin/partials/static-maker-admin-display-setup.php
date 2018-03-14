@@ -30,6 +30,16 @@ namespace Static_Maker;
     $basic_pass = isset( $options[ 'basic_auth_pass' ] ) ? $options[ 'basic_auth_pass' ] : '';
     $output = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
     $queue_limit =  isset( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '';
+
+    $rsync_initial = array(
+        array(
+            'host' => '',
+            'user' => '',
+            'ssh_key' => '',
+            'dir' => ''
+        )
+    );
+    $rsync_options = isset( $options[ 'rsync' ] ) ? $options[ 'rsync' ] : $rsync_initial;
     ?>
 
     <form method="post" name="static-maker-options" action="options.php">
@@ -90,6 +100,39 @@ namespace Static_Maker;
                     <td>
                         <input type="text" id="<?php echo $this->plugin_name ?>-queue-limit" name="<?php echo $this->plugin_name ?>[queue_limit]" class="regular-text" value="<?php echo $queue_limit ?>" placeholder="10">
                         <p class="description">The number of queues to dequeue at once</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">rsync</th>
+                    <td>
+                        <?php foreach ( $rsync_options as $i => $rsync ): ?>
+                        <ul>
+                            <li>
+                                <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][host]">
+                                    Host:
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][host]" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][host]" value="<?php echo $rsync['host'] ?>" class="regular-text" placeholder="IP or Host Domain Name">
+                                </label>
+                            </li>
+                            <li>
+                                <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][user]">
+                                    User:
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][user]" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][user]" value="<?php echo $rsync['user'] ?>" class="regular-text" placeholder="ec2-user etc..">
+                                </label>
+                            </li>
+                            <li>
+                                <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][ssh_key]">
+                                    <p>SSH Private Key:</p>
+                                    <textarea id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][ssh_key]" class="large-text code" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][ssh_key]"><?php echo $rsync['ssh_key'] ?></textarea>
+                                </label>
+                            </li>
+                            <li>
+                                <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][dir]">
+                                    Target Directory:
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][dir]" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][dir]" class="regular-text" placeholder="~/public" value="<?php echo $rsync['dir'] ?>">
+                                </label>
+                            </li>
+                        </ul>
+                        <?php endforeach; ?>
                     </td>
                 </tr>
             </tbody>

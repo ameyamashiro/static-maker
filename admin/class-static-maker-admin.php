@@ -184,6 +184,13 @@ class Static_Maker_Admin {
         $valid['output_path'] = (isset($input['output_path']) && !empty($input['output_path'])) ? $input['output_path'] : '';
         $valid['queue_limit'] = (isset($input['queue_limit']) && !empty($input['queue_limit'])) ? $input['queue_limit'] : '';
 
+        foreach ($input['rsync'] as $i => $rsync) {
+            $valid['rsync'][$i]['host'] = $rsync['host'];
+            $valid['rsync'][$i]['user'] = $rsync['user'];
+            $valid['rsync'][$i]['ssh_key'] = $rsync['ssh_key'];
+            $valid['rsync'][$i]['dir'] = $rsync['dir'];
+        }
+
         return $valid;
     }
 
