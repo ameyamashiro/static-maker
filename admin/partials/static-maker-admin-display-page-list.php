@@ -46,7 +46,7 @@ namespace Static_Maker;
             <tr>
                 <th><?php echo $page->post_id ?></th>
                 <td>
-                    <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo $page->permalink ?></a>
+                    <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo rawurldecode( $page->permalink ) ?></a>
                     <div class="row-actions">
                         <span class="export-individual">
                             <a
