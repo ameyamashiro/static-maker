@@ -8,6 +8,8 @@ class Ajax_Admin_Actions {
 
         Queue_Actions::dequeue_all();
 
+        RsyncUtil::syncWithCurrentOptions();
+
         wp_die();
     }
 

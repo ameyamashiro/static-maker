@@ -3,6 +3,16 @@ namespace Static_Maker;
 
 class RsyncUtil {
     static function syncWithCurrentOptions() {
+        $options = get_option( PLUGIN_NAME );
+        $logs = '';
+
+        if ( isset( $options['rsync'] ) ) {
+            foreach ($options['rsync'] as $rsync) {
+                $logs .= static::sync($rsync['host'], $rsync['user'], $rsync['ssh_key'], $rsync['dir']);
+            }
+        }
+
+        return $logs;
     }
 
     static function sync($host, $user, $ssh_key, $target, $rsync_options = null, $ssh_options = null) {
