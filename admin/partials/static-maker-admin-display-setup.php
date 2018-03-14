@@ -122,7 +122,7 @@ namespace Static_Maker;
                             <li>
                                 <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][ssh_key]">
                                     <p>SSH Private Key:</p>
-                                    <textarea id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][ssh_key]" class="large-text code" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][ssh_key]"><?php echo $rsync['ssh_key'] ?></textarea>
+                                    <textarea id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][ssh_key]" class="large-text code" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][ssh_key]"><?php echo CryptoUtil::decrypt( $rsync['ssh_key'], true ) ?></textarea>
                                 </label>
                             </li>
                             <li>

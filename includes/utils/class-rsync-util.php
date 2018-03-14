@@ -8,7 +8,8 @@ class RsyncUtil {
 
         if ( isset( $options['rsync'] ) ) {
             foreach ($options['rsync'] as $rsync) {
-                $logs .= static::sync($rsync['host'], $rsync['user'], $rsync['ssh_key'], $rsync['dir']);
+                $key = CryptoUtil::decrypt( $rsync['ssh_key'], true );
+                $logs .= static::sync($rsync['host'], $rsync['user'], $key, $rsync['dir']);
             }
         }
 

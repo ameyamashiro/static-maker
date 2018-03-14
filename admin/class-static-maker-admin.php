@@ -189,10 +189,20 @@ class Static_Maker_Admin {
                 continue;
             }
 
-            $valid['rsync'][$i]['host'] = $rsync['host'];
-            $valid['rsync'][$i]['user'] = $rsync['user'];
-            $valid['rsync'][$i]['ssh_key'] = $rsync['ssh_key'];
-            $valid['rsync'][$i]['dir'] = $rsync['dir'];
+            $d = array();
+
+            // encrypt ssh key
+            $key = '';
+            if ( isset( $rsync['ssh_key'] ) && !empty( $rsync['ssh_key'] ) ) {
+                $key = CryptoUtil::encrypt( $rsync[ 'ssh_key' ], true );
+            }
+
+            $d['host'] = $rsync['host'];
+            $d['user'] = $rsync['user'];
+            $d['ssh_key'] = $key;
+            $d['dir'] = $rsync['dir'];
+
+            $valid['rsync'][$i] = $d;
         }
 
         return $valid;
