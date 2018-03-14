@@ -36,7 +36,9 @@ namespace Static_Maker;
             'host' => '',
             'user' => '',
             'ssh_key' => '',
-            'dir' => ''
+            'dir' => '',
+            'rsync_options' => '',
+            'before_command' => ''
         )
     );
     $rsync_options = isset( $options[ 'rsync' ] ) ? $options[ 'rsync' ] : $rsync_initial;
@@ -130,6 +132,24 @@ namespace Static_Maker;
                                     Target Directory:
                                     <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][dir]" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][dir]" class="regular-text" placeholder="~/public" value="<?php echo $rsync['dir'] ?>">
                                 </label>
+                            </li>
+                            <li>
+                                <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][rsync_options]">
+                                    Additional rsync options:
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][rsync_options]" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][rsync_options]" class="regular-text" placeholder="--exclude &quot;.git&quot;" value="<?php echo $rsync['rsync_options'] ?>">
+                                </label>
+                            </li>
+                            <li>
+                                <label for="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][before_command]">
+                                    Before command:
+                                    <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[<?php echo $i ?>][before_command]" name="<?php echo $this->plugin_name ?>[rsync][<?php echo $i ?>][before_command]" class="regular-text" placeholder="cp -r " value="<?php echo $rsync['before_command'] ?>">
+                                </label>
+                                <p class="description">Command which will be executed before rsync</p>
+                                <p class="description">
+                                    {{ROOT}} : Document root (get_home_path())<br>
+                                    {{WP_ROOT}} : WordPress root (ABSPATH)<br>
+                                    {{OUTPUT_DIR}} : Static Maker output directory
+                                </p>
                             </li>
                         </ul>
                         <?php endforeach; ?>

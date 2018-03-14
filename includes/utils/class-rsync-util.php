@@ -8,8 +8,18 @@ class RsyncUtil {
 
         if ( isset( $options['rsync'] ) ) {
             foreach ($options['rsync'] as $rsync) {
+                $command =  $rsync[ 'before_command' ];
+                $command = preg_replace( '/\{\{ROOT\}\}/', get_home_path(), $command );
+                $command = preg_replace( '/\{\{WP_ROOT\}\}/', ABSPATH, $command );
+                $command = preg_replace( '/\{\{OUTPUT_DIR\}\}/', FileUtil::get_output_path() . '/', $command );
+
+                if ( !empty( $command ) ) {
+                    $logs .= "\nBefore Command:\n";
+                    $logs .= shell_exec( $command . ' 2>&1' );
+                }
+
                 $key = CryptoUtil::decrypt( $rsync['ssh_key'], true );
-                $logs .= static::sync($rsync['host'], $rsync['user'], $key, $rsync['dir']);
+                $logs .= static::sync($rsync['host'], $rsync['user'], $key, $rsync['dir'], '-Pav --delete ' . $rsync['rsync_options']);
             }
         }
 

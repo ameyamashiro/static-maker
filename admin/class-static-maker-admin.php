@@ -201,6 +201,8 @@ class Static_Maker_Admin {
             $d['user'] = $rsync['user'];
             $d['ssh_key'] = $key;
             $d['dir'] = $rsync['dir'];
+            $d['rsync_options'] = $rsync['rsync_options'];
+            $d['before_command'] = $rsync['before_command'];
 
             $valid['rsync'][$i] = $d;
         }

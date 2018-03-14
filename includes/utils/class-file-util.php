@@ -96,7 +96,7 @@ class FileUtil {
 
     private static function create_dir( $export_path ) {
         if (!is_dir( $export_path )) {
-            if (!mkdir( $export_path, 0700, true )) {
+            if (!mkdir( $export_path, 0755, true )) {
                 return false;
             }
         }
