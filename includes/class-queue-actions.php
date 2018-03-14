@@ -15,15 +15,32 @@ class Queue_Actions {
             $queue->process_started = current_time( 'mysql' );
             $queue->save();
 
-            if (FileUtil::export_single_file( $queue->url ) !== false) {
-                $queue->status = 'completed';
-                $queue->process_ended = current_time( 'mysql' );
-                $queue->save();
+            if ( $queue->type === 'add' ) {
+                if (FileUtil::export_single_file( $queue->url ) !== false) {
+                    $queue->status = 'completed';
+                    $queue->process_ended = current_time( 'mysql' );
+                    $queue->save();
+                } else {
+                    $queue->status = 'failed';
+                    $queue->process_ended = current_time( 'mysql' );
+                    $queue->save();
+                }
+            } else if ( $queue->type === 'remove' ) {
+                if (FileUtil::remove_single_file( $queue->url ) !== false) {
+                    $queue->status = 'completed';
+                    $queue->process_ended = current_time( 'mysql' );
+                    $queue->save();
+                } else {
+                    $queue->status = 'failed';
+                    $queue->process_ended = current_time( 'mysql' );
+                    $queue->save();
+                }
             } else {
-                $queue->status = 'failed';
+                $queue->status = 'skipped (unknown)';
                 $queue->process_ended = current_time( 'mysql' );
                 $queue->save();
             }
+
         }
     }
 

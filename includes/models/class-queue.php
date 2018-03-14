@@ -83,7 +83,7 @@ class Queue {
         return $instances;
     }
 
-    public static function enqueue_by_id( $id ) {
+    public static function enqueue_by_id( $id, $action = 'add' ) {
         global $wpdb;
         $table_name = self::table_name();
 
@@ -93,14 +93,14 @@ class Queue {
             $table_name,
             array(
                 'created' => current_time( 'mysql' ),
-                'type' => 'individual',
+                'type' => $action,
                 'post_type' => $page->post_type,
                 'url' => $page->permalink
             )
         );
     }
 
-    public static function enqueue_by_post_id( $post_id ) {
+    public static function enqueue_by_post_id( $post_id, $action = 'add' ) {
         global $wpdb;
         $table_name = self::table_name();
 
@@ -112,7 +112,7 @@ class Queue {
             array(
                 'post_id' => $post_id,
                 'created' => current_time( 'mysql' ),
-                'type' => 'individual',
+                'type' => $action,
                 'post_type' => $post->post_type,
                 'url' => $url,
             )

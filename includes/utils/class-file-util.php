@@ -24,6 +24,25 @@ class FileUtil {
         return self::file_put_content( $content, 'index.html', $dir );
     }
 
+    public static function remove_single_file( $url ) {
+        $url_parsed = parse_url( $url );
+        $path = $url_parsed[ 'path' ];
+        $file = $path;
+
+        if ( substr( $path, -1 ) === '/' ) {
+            $file .= 'index.html';
+        }
+
+        $result = unlink( static::get_output_path() . $file );
+
+        // attempt to remove parent directory to avoid generating garbage files.
+        if ( $result ) {
+            rmdir( static::get_output_path() . $path );
+        }
+
+        return $result;
+    }
+
     private static function file_get_content( $url ) {
         $options = get_option( PLUGIN_NAME );
         $basic_enable = isset( $options[ 'basic_enable' ]) && $options[ 'basic_enable' ];

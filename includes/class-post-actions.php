@@ -2,14 +2,16 @@
 namespace Static_Maker;
 
 class Post_Actions {
-    function every_post_update( $post_id, $post ) {
-        if ( wp_is_post_revision( $post_id ) )
-            return;
-
-        if ( $post->post_status !== 'publish' ) {
-            return;
+    function change_post_status( $new_status, $old_status, $post ) {
+        switch ( $new_status ) {
+            case 'publish':
+                Queue::enqueue_by_post_id( $post->ID );
+                break;
+            case 'trash':
+                Queue::enqueue_by_post_id( $post->ID, 'remove' );
+                break;
+            default:
+                break;
         }
-
-        Queue::enqueue_by_post_id( $post_id );
     }
 }

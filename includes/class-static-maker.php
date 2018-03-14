@@ -79,7 +79,6 @@ class Static_Maker_Class {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -168,7 +167,7 @@ class Static_Maker_Class {
         $this->loader->add_action('admin_init', $plugin_admin, 'options_update');
 
         $post_actions = new Post_Actions();
-        $this->loader->add_action( 'publish_post', $post_actions, 'every_post_update', 10, 3 );
+        $this->loader->add_action( 'transition_post_status', $post_actions, 'change_post_status', 10, 3 );
 
         $queue_actions = new Queue_Actions();
         $this->loader->add_action( 'static_maker_dequeue', $queue_actions, 'dequeue_task' );
