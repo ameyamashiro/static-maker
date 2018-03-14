@@ -50,6 +50,16 @@ class FileUtil {
     }
 
     private static function file_put_content( $content, $file_name = 'index.html', $subdir = '' ) {
+        $export_path = static::get_output_path();
+
+        if ( !static::create_dir( $export_path . $subdir ) ) {
+            return false;
+        }
+
+        return file_put_contents( $export_path . $subdir . $file_name, $content );
+    }
+
+    public static function get_output_path() {
         $export_path = wp_upload_dir()[ 'basedir' ] . '/static-maker';
         $options = get_option( PLUGIN_NAME );
         $output_path = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
@@ -58,11 +68,11 @@ class FileUtil {
             $export_path = get_home_path() . $output_path;
         }
 
-        if ( !self::create_dir( $export_path . $subdir ) ) {
+        if ( !static::create_dir( $export_path ) ) {
             return false;
         }
 
-        return file_put_contents( $export_path . $subdir . $file_name, $content );
+        return $export_path;
     }
 
     private static function create_dir( $export_path ) {
