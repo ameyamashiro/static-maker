@@ -184,27 +184,29 @@ class Static_Maker_Admin {
         $valid['output_path'] = (isset($input['output_path']) && !empty($input['output_path'])) ? $input['output_path'] : '';
         $valid['queue_limit'] = (isset($input['queue_limit']) && !empty($input['queue_limit'])) ? $input['queue_limit'] : '';
 
-        foreach ($input['rsync'] as $i => $rsync) {
-            if (empty( $rsync['host'] ) && empty( $rsync['user'] ) && empty( $rsync['ssh_key'] ) && empty( $rsync['dir'] ) ) {
-                continue;
+        if ( isset( $input['rsync'] ) ) {
+            foreach ($input['rsync'] as $i => $rsync) {
+                if (empty( $rsync['host'] ) && empty( $rsync['user'] ) && empty( $rsync['ssh_key'] ) && empty( $rsync['dir'] ) ) {
+                    continue;
+                }
+
+                $d = array();
+
+                // encrypt ssh key
+                $key = '';
+                if ( isset( $rsync['ssh_key'] ) && !empty( $rsync['ssh_key'] ) ) {
+                    $key = CryptoUtil::encrypt( $rsync[ 'ssh_key' ], true );
+                }
+
+                $d['host'] = $rsync['host'];
+                $d['user'] = $rsync['user'];
+                $d['ssh_key'] = $key;
+                $d['dir'] = $rsync['dir'];
+                $d['rsync_options'] = $rsync['rsync_options'];
+                $d['before_command'] = $rsync['before_command'];
+
+                $valid['rsync'][$i] = $d;
             }
-
-            $d = array();
-
-            // encrypt ssh key
-            $key = '';
-            if ( isset( $rsync['ssh_key'] ) && !empty( $rsync['ssh_key'] ) ) {
-                $key = CryptoUtil::encrypt( $rsync[ 'ssh_key' ], true );
-            }
-
-            $d['host'] = $rsync['host'];
-            $d['user'] = $rsync['user'];
-            $d['ssh_key'] = $key;
-            $d['dir'] = $rsync['dir'];
-            $d['rsync_options'] = $rsync['rsync_options'];
-            $d['before_command'] = $rsync['before_command'];
-
-            $valid['rsync'][$i] = $d;
         }
 
         return $valid;
