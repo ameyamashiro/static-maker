@@ -10,10 +10,14 @@ class Queue_Actions {
         $queues = Queue::receive_unprocessed_queues();
         var_dump( $queues );
 
+        // mark all queues as processing
         foreach ( $queues as $queue ) {
             $queue->status = 'processing';
             $queue->process_started = current_time( 'mysql' );
             $queue->save();
+        }
+
+        foreach ( $queues as $queue ) {
 
             if ( $queue->type === 'add' ) {
                 if (FileUtil::export_single_file( $queue->url ) !== false) {
