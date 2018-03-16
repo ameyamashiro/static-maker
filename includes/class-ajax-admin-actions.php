@@ -23,10 +23,22 @@ class Ajax_Admin_Actions {
 
         if ( isset( $_POST[ 'post_id' ] ) ) {
             $result = Queue::enqueue_by_post_id( $_POST[ 'post_id' ] );
+
+            // enqueue its archive page if exists
+            $post = get_post( $_POST[ 'post_id' ] );
+            if ( $archive = get_post_type_archive_link( $post->post_type ) ) {
+                Queue::enqueue_by_link( $archive, 'add', $post->post_type );
+            }
         }
 
         if ( isset( $_POST[ 'id' ] ) ) {
             $result = Queue::enqueue_by_id( $_POST[ 'id' ] );
+
+            // enqueue its archive page if exists
+            $post = Page::get_page( $_POST[ 'id' ] );
+            if ( $archive = get_post_type_archive_link( $post->post_type ) ) {
+                Queue::enqueue_by_link( $archive, 'add', $post->post_type );
+            }
         }
 
         if ( $result === false ) {

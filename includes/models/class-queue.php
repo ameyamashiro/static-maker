@@ -119,6 +119,22 @@ class Queue {
         );
     }
 
+    public static function enqueue_by_link( $link, $action = 'add', $post_type = '' ) {
+        global $wpdb;
+        $table_name = self::table_name();
+
+        return $wpdb->insert(
+            $table_name,
+            array(
+                'post_id' => '',
+                'created' => current_time( 'mysql' ),
+                'type' => $action,
+                'post_type' => $post_type,
+                'url' => $link,
+            )
+        );
+    }
+
     public function __construct( $columns ) {
         foreach ( $columns as $key => $value ) {
             $this->$key = $value;
