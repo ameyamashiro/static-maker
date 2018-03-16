@@ -1,8 +1,7 @@
 <?php
-namespace Static_Maker;
 
 class Cron_Actions {
-    public function set_cron_schedule() {
+    public static function set_cron_schedule() {
         add_filter( 'cron_schedules', 'example_add_cron_interval' );
 
         function example_add_cron_interval( $schedules ) {
