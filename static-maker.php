@@ -16,7 +16,7 @@ namespace Static_Maker;
  * @wordpress-plugin
  * Plugin Name:       Static Maker
  * Plugin URI:        https://static-maker.example.com/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Generating static pages for WordPress.
  * Version:           1.0.0
  * Author:            ameyamashiro
  * Author URI:        https://developer.wordpress.org/
