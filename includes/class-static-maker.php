@@ -180,6 +180,11 @@ class Static_Maker_Class {
         $this->loader->add_action( 'wp_ajax_static-maker-add_page_by_url', $ajax_actions, 'add_page_by_url', 10, 1 );
         $this->loader->add_action( 'wp_ajax_static-maker-process_queue_all', $ajax_actions, 'process_queue_all', 10, 1 );
         $this->loader->add_action( 'wp_ajax_static-maker-enqueue_all_pages', $ajax_actions, 'enqueue_all_pages', 10, 1 );
+
+
+        // Plugin actions
+        $queue = new Queue(array());
+        $this->loader->add_action( 'static_maker_enqueue_by_link', $queue, 'enqueue_by_link', 10, 3 );
 	}
 
 	/**
