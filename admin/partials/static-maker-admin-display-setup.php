@@ -43,6 +43,8 @@ namespace Static_Maker;
     );
     global $rsync_options;
     $rsync_options = isset( $options[ 'rsync' ] ) ? $options[ 'rsync' ] : $rsync_initial;
+
+    $replaces = isset( $options['replaces'] ) ? $options[ 'replaces' ] : array( array( 'from' => '', 'to' => '' ) );
     ?>
 
     <form method="post" name="static-maker-options" action="options.php">
@@ -92,9 +94,12 @@ namespace Static_Maker;
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path">Replaces</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-replaces">Replaces</label></th>
                     <td>
-
+                        <div class="replaces-opt">
+                            <input type="text" id="<?php echo $this->plugin_name ?>-replaces" name="<?php echo $this->plugin_name ?>[replaces][0][from]" class="regular-text replaces-input" value="<?php echo $replaces[0]['from'] ?>" placeholder="from">
+                            <input type="text" id="<?php echo $this->plugin_name ?>-replaces" name="<?php echo $this->plugin_name ?>[replaces][0][to]" class="regular-text replaces-input" value="<?php echo $replaces[0]['to'] ?>" placeholder="to">
+                        </div>
                     </td>
                 </tr>
                 <tr>

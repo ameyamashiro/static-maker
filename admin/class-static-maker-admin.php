@@ -209,6 +209,8 @@ class Static_Maker_Admin {
             }
         }
 
+        $valid['replaces'] = isset($input['replaces']) ? $input['replaces'] : null;
+
         return $valid;
     }
 

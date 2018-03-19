@@ -18,3 +18,11 @@
     padding-top: 0;
     border-top: none;
 }
+
+.replaces-opt {
+    display: flex;
+}
+
+.replaces-input {
+    width: 40%;
+}

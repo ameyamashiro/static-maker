@@ -69,10 +69,19 @@ class FileUtil {
     }
 
     private static function file_put_content( $content, $file_name = 'index.html', $subdir = '' ) {
+        $options = get_option( PLUGIN_NAME );
         $export_path = static::get_output_path();
 
         if ( !static::create_dir( $export_path . $subdir ) ) {
             return false;
+        }
+
+        if ( $options['replaces'] && mb_strlen($options['replaces'][0]) !== 0 ) {
+            $replaces = $options['replaces'];
+
+            foreach ($replaces as $replace) {
+                $content = str_replace($replace[ 'from' ], $replace[ 'to' ], $content);
+            }
         }
 
         return file_put_contents( $export_path . $subdir . $file_name, $content );
