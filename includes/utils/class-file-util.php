@@ -72,6 +72,8 @@ class FileUtil {
         $options = get_option( PLUGIN_NAME );
         $export_path = static::get_output_path();
 
+        $subdir = rawurldecode($subdir);
+
         if ( !static::create_dir( $export_path . $subdir ) ) {
             return false;
         }
