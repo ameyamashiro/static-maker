@@ -92,6 +92,12 @@ namespace Static_Maker;
                     </td>
                 </tr>
                 <tr>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path">Replaces</label></th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
                     <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path">Output Directory</label></th>
                     <td>
                         /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'basedir' ] ) ?>/static-maker" value="<?php echo $output ?>">
@@ -230,6 +236,7 @@ namespace Static_Maker;
 
             $('.remove-target').on('click', function() {
                 var target = $(this).data('sm-target');
+                count--;
                 $('[data-sm-source="' + target + '"]').last().remove();
             });
         }) (jQuery);
