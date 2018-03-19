@@ -26,7 +26,7 @@ class FileUtil {
 
     public static function remove_single_file( $url ) {
         $url_parsed = parse_url( $url );
-        $path = $url_parsed[ 'path' ];
+        $path = rawurldecode($url_parsed[ 'path' ]);
         $file = $path;
 
         if ( substr( $path, -1 ) === '/' ) {
