@@ -184,6 +184,7 @@ class Static_Maker_Class {
         $this->loader->add_action( 'wp_ajax_static-maker-process_queue_all', $ajax_actions, 'process_queue_all', 10, 1 );
         $this->loader->add_action( 'wp_ajax_static-maker-enqueue_all_pages', $ajax_actions, 'enqueue_all_pages', 10, 1 );
         $this->loader->add_action( 'wp_ajax_static-maker-remove_page_from_list', $ajax_actions, 'remove_page_from_list', 10, 1 );
+        $this->loader->add_action( 'wp_ajax_static-maker-change-page-status', $ajax_actions, 'change_page_status', 10, 1 );
 
         // Plugin actions
         $queue = new Queue(array());

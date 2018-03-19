@@ -155,4 +155,23 @@ class Ajax_Admin_Actions {
 
         wp_die();
     }
+
+    static public function change_page_status() {
+        check_ajax_referer( 'change_page_status' );
+
+        $status = $_POST[ 'action-type' ] === 'disable' ? 0 : 1;
+
+        $id = $_POST[ 'id' ];
+        $page = Page::get_page( $id );
+
+        $page->active = $status;
+
+        if ( $page->save() === false) {
+            wp_die('', '', 500);
+            return;
+        }
+
+        wp_die();
+
+    }
 }

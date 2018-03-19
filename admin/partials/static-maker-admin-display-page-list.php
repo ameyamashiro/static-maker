@@ -109,7 +109,37 @@ if ( $_GET[ 'paged' ]) {
                         </span>
                     </div>
                 </td>
-                <td><?php echo $page->active === '1' ? '有効' : '無効' ?></td>
+                <td>
+                    <?php if ( $page->active === '1' ): ?>
+                    Active
+                    <div class="row-actions">
+                        <span class="trash">
+                            <a
+                                href=""
+                                class="trigger-change-page-status"
+                                data-action="disable"
+                                data-id="<?php echo $page->id ?>"
+                            >
+                                Disable
+                            </a>
+                        </span>
+                    </div>
+                    <?php else: ?>
+                    Disabled
+                    <div class="row-actions">
+                        <span>
+                            <a
+                                href=""
+                                class="trigger-change-page-status"
+                                data-action="activate"
+                                data-id="<?php echo $page->id ?>"
+                            >
+                                Activate
+                            </a>
+                        </span>
+                    </div>
+                    <?php endif ?>
+                </td>
             </tr>
         <?php endforeach ?>
         </tbody>
@@ -179,6 +209,23 @@ if ( $_GET[ 'paged' ]) {
                 action: 'static-maker-remove_page_from_list'
             };
 
+            data.id = $target.data('id');
+
+            jQuery.post(url, data, function() {
+                location.reload();
+            });
+        });
+
+        jQuery('.trigger-change-page-status').on('click', function(e) {
+            e.preventDefault();
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'change_page_status') ?>';
+            var $target = jQuery(e.target);
+
+            var data = {
+                action: 'static-maker-change-page-status'
+            };
+
+            data[ 'action-type' ] = $target.data('action');
             data.id = $target.data('id');
 
             jQuery.post(url, data, function() {
