@@ -35,7 +35,7 @@ namespace Static_Maker;
 <!--        </div>-->
 <!--    </div>-->
 
-    <table class="wp-list-table widefat fixed striped">
+    <table class="wp-list-table widefat striped">
         <thead>
             <td>Post ID</td>
             <td>Permalink</td>
@@ -76,7 +76,7 @@ namespace Static_Maker;
 
     <h3>Queues</h3>
 
-    <table class="wp-list-table widefat fixed striped">
+    <table class="wp-list-table widefat striped">
         <thead>
             <tr>
                 <td>Post ID</td>
@@ -91,7 +91,7 @@ namespace Static_Maker;
             <tr>
                 <th><?php echo $queue->post_id ?></th>
                 <td>
-                    <?php echo $queue->url ?>
+                    <a href="<?php echo $queue->url ?>" target="_blank"><?php echo rawurldecode( $queue->url ) ?></a>
                 </td>
                 <td><?php echo $queue->created ?></td>
                 <td><?php echo $queue->type ?></td>
