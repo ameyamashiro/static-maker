@@ -25,8 +25,6 @@ if ( $_GET[ 'paged' ]) {
 
     <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
-    <h3>File list</h3>
-
     <div class="tablenav top">
         <div class="tablenav-pages">
             <?php $each = 25; ?>
@@ -111,38 +109,6 @@ if ( $_GET[ 'paged' ]) {
         <button class="enqueue-all-pages button button-primary">Process all pages</button>
     </div>
 
-
-    <h3>Queues</h3>
-
-    <table class="wp-list-table widefat striped">
-        <thead>
-            <tr>
-                <td>Post ID</td>
-                <td>url</td>
-                <td>created</td>
-                <td>type</td>
-                <td>status</td>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach( Queue::get_queues( array( 'desc' => true, 'output' => 'original' ) ) as $queue ): ?>
-            <tr>
-                <th><?php echo $queue->post_id ?></th>
-                <td>
-                    <a href="<?php echo $queue->url ?>" target="_blank"><?php echo rawurldecode( $queue->url ) ?></a>
-                </td>
-                <td><?php echo $queue->created ?></td>
-                <td><?php echo $queue->type ?></td>
-                <td><?php echo $queue->status ?></td>
-            </tr>
-        <?php endforeach ?>
-        </tbody>
-    </table>
-
-    <div class="bottom-actions">
-        <button class="process-all button button-primary">Process All Queues</button>
-    </div>
-
 </div>
 
 <?php
@@ -209,23 +175,6 @@ if ( $_GET[ 'paged' ]) {
                     console.log(res);
                 }
             });
-        });
-
-        jQuery('.enqueue-all-pages').on('click', function(e) {
-            e.preventDefault();
-
-            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_all_pages') ?>';
-
-            jQuery.ajax({
-                type: 'post',
-                url: url,
-                data: {
-                    action: 'static-maker-enqueue_all_pages'
-                },
-                success: function(res) {
-                    console.log(res);
-                }
-            })
         });
     </script>
 <?php }
