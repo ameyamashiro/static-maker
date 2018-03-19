@@ -19,7 +19,7 @@ namespace Static_Maker;
 
     <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
-    <h3>ファイルリスト</h3>
+    <h3>File list</h3>
 
     <!-- TODO: 絞り込みとか -->
 <!--    <div class="tablenav top">-->
@@ -39,7 +39,7 @@ namespace Static_Maker;
         <thead>
             <td>Post ID</td>
             <td>Permalink</td>
-            <td>状態</td>
+            <td>Status</td>
         </thead>
         <tbody>
         <?php foreach( Page::get_pages() as $page ): ?>
@@ -51,14 +51,28 @@ namespace Static_Maker;
                         <span class="export-individual">
                             <a
                                 href=""
-                                class="trigger-individual"
+                                class="trigger-add-individual"
                                 <?php if ($page->post_id): ?>
                                 data-post-id="<?php echo $page->post_id ?>"
                                 <?php else: ?>
                                 data-id="<?php echo $page->id ?>"
                                 <?php endif; ?>
                             >
-                                書き出し
+                                Export
+                            </a>
+                            |
+                        </span>
+                        <span class="trash">
+                            <a
+                                href=""
+                                class="trigger-remove-individual"
+                                <?php if ($page->post_id): ?>
+                                data-post-id="<?php echo $page->post_id ?>"
+                                <?php else: ?>
+                                data-id="<?php echo $page->id ?>"
+                                <?php endif; ?>
+                            >
+                                Delete
                             </a>
                         </span>
                     </div>
@@ -112,7 +126,7 @@ namespace Static_Maker;
 
     function static_maker_javascript() { ?>
     <script>
-        jQuery('.trigger-individual').on('click', function(e) {
+        jQuery('.trigger-add-individual').on('click', function(e) {
             e.preventDefault();
             var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_single_by_id') ?>';
             var $target = jQuery(e.target);
@@ -127,6 +141,29 @@ namespace Static_Maker;
             } else {
                 data.id = $target.data('id');
             }
+
+            jQuery.post(url, data, function(res) {
+                console.log(res);
+            });
+        });
+
+        jQuery('.trigger-remove-individual').on('click', function(e) {
+            e.preventDefault();
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_single_by_id') ?>';
+            var $target = jQuery(e.target);
+            var postId = $target.data('post-id');
+
+            var data = {
+                action: 'static-maker-enqueue_single_by_id'
+            };
+
+            if ( postId ) {
+                data.post_id = postId;
+            } else {
+                data.id = $target.data('id');
+            }
+
+            data[ 'action-type' ] = 'remove';
 
             jQuery.post(url, data, function(res) {
                 console.log(res);

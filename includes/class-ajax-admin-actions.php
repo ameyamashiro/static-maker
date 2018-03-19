@@ -21,8 +21,10 @@ class Ajax_Admin_Actions {
             wp_die('ID を指定してください', '', 422);
         }
 
+        $actionType = isset( $_POST[ 'action-type' ] ) && $_POST[ 'action-type' ] === 'remove' ? 'remove' : 'add';
+
         if ( isset( $_POST[ 'post_id' ] ) ) {
-            $result = Queue::enqueue_by_post_id( $_POST[ 'post_id' ] );
+            $result = Queue::enqueue_by_post_id( $_POST[ 'post_id' ], $actionType );
 
             // enqueue its archive page if exists
             $post = get_post( $_POST[ 'post_id' ] );
@@ -32,7 +34,7 @@ class Ajax_Admin_Actions {
         }
 
         if ( isset( $_POST[ 'id' ] ) ) {
-            $result = Queue::enqueue_by_id( $_POST[ 'id' ] );
+            $result = Queue::enqueue_by_id( $_POST[ 'id' ], $actionType );
 
             // enqueue its archive page if exists
             $post = Page::get_page( $_POST[ 'id' ] );
