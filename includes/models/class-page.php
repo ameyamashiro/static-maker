@@ -36,10 +36,18 @@ class Page {
         dbDelta( $sql );
     }
 
-    public static function get_pages() {
+    public static function get_page_count() {
         global $wpdb;
         $table_name = self::table_name();
-        $pages = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
+        return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+    }
+
+    public static function get_pages($page = 1) {
+        global $wpdb;
+        $each_page = 25;
+        $table_name = self::table_name();
+        $query = $wpdb->prepare( "SELECT * FROM $table_name LIMIT %d OFFSET %d", $each_page, ($page - 1) * $each_page );
+        $pages = $wpdb->get_results( $query, ARRAY_A );
 
         $instances = array();
 

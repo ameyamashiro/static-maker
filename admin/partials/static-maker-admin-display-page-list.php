@@ -12,6 +12,12 @@ namespace Static_Maker;
  * @package    Static_Maker
  * @subpackage Static_Maker/admin/partials
  */
+
+if ( $_GET[ 'paged' ]) {
+    $current_page_num = intval( $_GET[ 'paged' ] );
+} else {
+    $current_page_num = 1;
+}
 ?>
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
@@ -21,19 +27,37 @@ namespace Static_Maker;
 
     <h3>File list</h3>
 
-    <!-- TODO: 絞り込みとか -->
-<!--    <div class="tablenav top">-->
-<!--        <div class="alignleft actions bulkactions">-->
-<!--            <select class="bulk-action-selector-top" name="" id="">-->
-<!--                <option value="-1">投稿タイプを選択</option>-->
-<!---->
-<!--                --><?php //foreach( PostHelper::get_post_types() as $type => $label ): ?>
-<!--                    <option value="--><?php //echo $type ?><!--">--><?php //echo $label ?><!--</option>-->
-<!--                --><?php //endforeach; ?>
-<!--            </select>-->
-<!--            <button class="button button-primary">一括追加</button>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="tablenav top">
+        <div class="tablenav-pages">
+            <?php $each = 25; ?>
+            <?php $count = Page::get_page_count() ?>
+            <span class="displaying-num"><?php echo $count ?> items</span>
+            <span class="pagination-links">
+                <?php if ( $current_page_num > 1 ): ?>
+                    <a class="prev-page" href="<?php echo strtok( $_SERVER['REQUEST_URI'], '?' ) . '?' . http_build_query( array( 'page' => $_GET['page'], 'paged' => $current_page_num - 1 )) ?>">
+                        <span class="screen-reader-text">Previous page</span><span aria-hidden="true">‹</span>
+                    </a>
+                <?php else: ?>
+                    <span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+                <?php endif ?>
+
+                <span class="paging-input">
+                    <label for="current-page-selector" class="screen-reader-text">
+                        Current Page
+                    </label>
+                    <?php echo $current_page_num ?><span class="tablenav-paging-text"> of <span class="total-pages"><?php echo ceil( $count / $each ) ?></span></span>
+                </span>
+
+                <?php if ( $current_page_num === intval(ceil( $count / $each ))): ?>
+                    <span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+                <?php else: ?>
+                    <a class="next-page" href="<?php echo strtok( $_SERVER['REQUEST_URI'], '?' ) . '?' . http_build_query( array( 'page' => $_GET['page'], 'paged' => $current_page_num + 1 )) ?>">
+                        <span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span>
+                    </a>
+                <?php endif ?>
+            </span>
+        </div>
+    </div>
 
     <table class="wp-list-table widefat striped">
         <thead>
@@ -42,7 +66,7 @@ namespace Static_Maker;
             <td>Status</td>
         </thead>
         <tbody>
-        <?php foreach( Page::get_pages() as $page ): ?>
+        <?php foreach( Page::get_pages( $current_page_num ) as $page ): ?>
             <tr>
                 <th><?php echo $page->post_id ?></th>
                 <td>
