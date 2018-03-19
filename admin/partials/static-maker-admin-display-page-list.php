@@ -80,7 +80,7 @@ if ( $_GET[ 'paged' ]) {
                                 data-id="<?php echo $page->id ?>"
                                 <?php endif; ?>
                             >
-                                Export
+                                Export Request
                             </a>
                             |
                         </span>
@@ -94,7 +94,17 @@ if ( $_GET[ 'paged' ]) {
                                 data-id="<?php echo $page->id ?>"
                                 <?php endif; ?>
                             >
-                                Delete
+                                Delete Request
+                            </a>
+                            |
+                        </span>
+                        <span class="trash">
+                            <a
+                                href=""
+                                class="trigger-remove-from-list"
+                                data-id="<?php echo $page->id ?>"
+                            >
+                                Delete from List
                             </a>
                         </span>
                     </div>
@@ -157,6 +167,22 @@ if ( $_GET[ 'paged' ]) {
 
             jQuery.post(url, data, function(res) {
                 console.log(res);
+            });
+        });
+
+        jQuery('.trigger-remove-from-list').on('click', function(e) {
+            e.preventDefault();
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'remove_page_from_list') ?>';
+            var $target = jQuery(e.target);
+
+            var data = {
+                action: 'static-maker-remove_page_from_list'
+            };
+
+            data.id = $target.data('id');
+
+            jQuery.post(url, data, function() {
+                location.reload();
             });
         });
 

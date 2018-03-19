@@ -140,4 +140,19 @@ class Ajax_Admin_Actions {
     static public function filter_remove_true($r) {
         return !$r;
     }
+
+    static public function remove_page_from_list() {
+        check_ajax_referer( 'remove_page_from_list' );
+
+        $id = $_POST[ 'id' ];
+
+        $page = Page::get_page( $id );
+
+        if ( $page->delete() === false) {
+            wp_die('', '', 500);
+            return;
+        }
+
+        wp_die();
+    }
 }
