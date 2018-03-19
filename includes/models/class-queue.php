@@ -166,44 +166,6 @@ class Queue {
         return $this->data[ $field_name ] = $field_value;
     }
 
-    public function dequeue() {
-        static::markQueueAsCompleted( $this->id );
-    }
-
-    private static function markQueueAsCompleted( $id ) {
-        global $wpdb;
-        $table_name = self::table_name();
-
-        $wpdb->update(
-            $table_name,
-            array(
-                'status' => 'completed',
-            ),
-            array( 'id' => $id ),
-            array(
-                '%s',
-            ),
-            array( '%d' )
-        );
-    }
-
-    private static function markQueueAsFailed( $id ) {
-        global $wpdb;
-        $table_name = self::table_name();
-
-        $wpdb->update(
-            $table_name,
-            array(
-                'status' => 'failed',
-            ),
-            array( 'id' => $id ),
-            array(
-                '%s',
-            ),
-            array( '%d' )
-        );
-    }
-
     public function save() {
         global $wpdb;
         $table_name = self::table_name();
