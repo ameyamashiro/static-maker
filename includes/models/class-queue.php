@@ -99,8 +99,12 @@ class Queue {
     public static function enqueue_by_id( $id, $action = 'add' ) {
         global $wpdb;
         $table_name = self::table_name();
+        $page_table_name = Page::table_name();
 
         $page = Page::get_page( $id );
+
+        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE id=%d AND active=1)", $id );
+        if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
         return $wpdb->insert(
             $table_name,
@@ -116,9 +120,13 @@ class Queue {
     public static function enqueue_by_post_id( $post_id, $action = 'add' ) {
         global $wpdb;
         $table_name = self::table_name();
+        $page_table_name = Page::table_name();
 
         $post = get_post( $post_id );
-        $url = get_permalink( $post_id );
+        $url = preg_replace('/__trashed$/', '', get_permalink( $post_id ));
+
+        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
+        if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
         return $wpdb->insert(
             $table_name,
@@ -127,7 +135,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $post->post_type,
-                'url' => preg_replace('/__trashed$/', '', $url),
+                'url' => $url,
             )
         );
     }
@@ -135,6 +143,12 @@ class Queue {
     public static function enqueue_by_link( $link, $action = 'add', $post_type = '' ) {
         global $wpdb;
         $table_name = self::table_name();
+        $page_table_name = Page::table_name();
+
+        $link = preg_replace('/__trashed$/', '', $link);
+
+        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link );
+        if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
         return $wpdb->insert(
             $table_name,
@@ -143,7 +157,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $post_type,
-                'url' => preg_replace('/__trashed$/', '', $link),
+                'url' => $link,
             )
         );
     }
