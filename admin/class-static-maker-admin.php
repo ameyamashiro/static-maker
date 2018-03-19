@@ -188,6 +188,7 @@ class Static_Maker_Admin {
         $valid['basic_auth_pass'] = (isset($input['basic_auth_pass']) && !empty($input['basic_auth_pass'])) ? $input['basic_auth_pass'] : '';
         $valid['output_path'] = (isset($input['output_path']) && !empty($input['output_path'])) ? $input['output_path'] : '';
         $valid['queue_limit'] = (isset($input['queue_limit']) && !empty($input['queue_limit'])) ? $input['queue_limit'] : '';
+        $valid['accepted_post_types'] = (isset($input['accepted_post_types']) && !empty($input['accepted_post_types'])) ? $input['accepted_post_types'] : '';
 
         if ( isset( $input['rsync'] ) ) {
             foreach ($input['rsync'] as $i => $rsync) {

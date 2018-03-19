@@ -65,6 +65,9 @@ class Page {
 
         $query = "SELECT * FROM $table_name WHERE id = %d LIMIT 1";
         $row = $wpdb->get_results($wpdb->prepare( $query, $id ), ARRAY_A)[0];
+
+        if (!$row) { return null; }
+
         return new self( $row );
     }
 
@@ -74,6 +77,9 @@ class Page {
 
         $query = "SELECT * FROM $table_name WHERE post_id = %d LIMIT 1";
         $row = $wpdb->get_results($wpdb->prepare( $query, $id ), ARRAY_A)[0];
+
+        if (!$row) { return null; }
+
         return new self( $row );
     }
 
@@ -93,6 +99,18 @@ class Page {
 
     public function __set( $field_name, $field_value ) {
         return $this->data[ $field_name ] = $field_value;
+    }
+
+
+    public static function create( $post_id, $post_type, $permalink, $active = 1 ) {
+        $page = new static( array(
+            'post_id' => $post_id,
+            'post_type' => $post_type,
+            'permalink' => $permalink,
+            'active' => $active,
+        ) );
+        $page->save();
+        return $page;
     }
 
     public function save() {

@@ -30,6 +30,7 @@ namespace Static_Maker;
     $basic_pass = isset( $options[ 'basic_auth_pass' ] ) ? $options[ 'basic_auth_pass' ] : '';
     $output = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
     $queue_limit =  isset( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '';
+    $accepted_post_types =  isset( $options[ 'accepted_post_types' ] ) ? $options[ 'accepted_post_types' ] : '';
 
     $rsync_initial = array(
         array(
@@ -45,6 +46,8 @@ namespace Static_Maker;
     $rsync_options = isset( $options[ 'rsync' ] ) ? $options[ 'rsync' ] : $rsync_initial;
 
     $replaces = isset( $options['replaces'] ) ? $options[ 'replaces' ] : array( array( 'from' => '', 'to' => '' ) );
+
+
     ?>
 
     <form method="post" name="static-maker-options" action="options.php">
@@ -112,6 +115,13 @@ namespace Static_Maker;
                     <td>
                         <input type="text" id="<?php echo $this->plugin_name ?>-queue-limit" name="<?php echo $this->plugin_name ?>[queue_limit]" class="regular-text" value="<?php echo $queue_limit ?>" placeholder="10">
                         <p class="description">The number of queues to dequeue at once</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-accept-post-types">Accepted post types</label></th>
+                    <td>
+                        <input type="text" id="<?php echo $this->plugin_name ?>-accept-post-types" name="<?php echo $this->plugin_name ?>[accepted_post_types]" class="regular-text" value="<?php echo $accepted_post_types ?>" placeholder="post,custom_post_type,and_others">
+                        <p class="description">Comma separated list. A new page of these post types is automatically added to the page list</p>
                     </td>
                 </tr>
                 <tr>
