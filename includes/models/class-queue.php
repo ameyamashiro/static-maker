@@ -58,9 +58,15 @@ class Queue {
         return $instances;
     }
 
-    // TODO: 自身をインスタンス化
+    public static function get_queue_count() {
+        global $wpdb;
+        $table_name = self::table_name();
+        return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+    }
+
     public static function get_queues( $args = array() ) {
         global $wpdb;
+        $each_page = 25;
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name";
@@ -69,7 +75,14 @@ class Queue {
             $query .= ' ORDER BY id DESC';
         }
 
-        $queues = $wpdb->get_results( $query );
+        if ( isset($args[ 'paged' ]) && $args[ 'paged' ]) {
+            $paged = $args[ 'paged' ];
+        } else {
+            $paged = 1;
+        }
+
+        $q = $wpdb->prepare( $query . ' LIMIT %d OFFSET %d', $each_page, ($paged - 1) * $each_page );
+        $queues = $wpdb->get_results( $q );
 
         if ( isset( $args[ 'output' ] ) && $args[ 'output' ] === 'original' ) {
             return $queues;

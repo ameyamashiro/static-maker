@@ -27,6 +27,38 @@ if ( $_GET[ 'paged' ]) {
 
     <hr class="wp-header-end">
 
+    <div class="tablenav top">
+        <div class="tablenav-pages">
+            <?php $each = 25; ?>
+            <?php $count = Queue::get_queue_count() ?>
+            <span class="displaying-num"><?php echo $count ?> items</span>
+            <span class="pagination-links">
+                <?php if ( $current_page_num > 1 ): ?>
+                    <a class="prev-page" href="<?php echo strtok( $_SERVER['REQUEST_URI'], '?' ) . '?' . http_build_query( array( 'page' => $_GET['page'], 'paged' => $current_page_num - 1 )) ?>">
+                        <span class="screen-reader-text">Previous page</span><span aria-hidden="true">‹</span>
+                    </a>
+                <?php else: ?>
+                    <span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+                <?php endif ?>
+
+                <span class="paging-input">
+                    <label for="current-page-selector" class="screen-reader-text">
+                        Current Page
+                    </label>
+                    <?php echo $current_page_num ?><span class="tablenav-paging-text"> of <span class="total-pages"><?php echo ceil( $count / $each ) ?></span></span>
+                </span>
+
+                <?php if ( $current_page_num === intval(ceil( $count / $each ))): ?>
+                    <span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+                <?php else: ?>
+                    <a class="next-page" href="<?php echo strtok( $_SERVER['REQUEST_URI'], '?' ) . '?' . http_build_query( array( 'page' => $_GET['page'], 'paged' => $current_page_num + 1 )) ?>">
+                        <span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span>
+                    </a>
+                <?php endif ?>
+            </span>
+        </div>
+    </div>
+
     <table class="wp-list-table widefat striped">
         <thead>
             <tr>
@@ -38,7 +70,7 @@ if ( $_GET[ 'paged' ]) {
             </tr>
         </thead>
         <tbody>
-        <?php foreach( Queue::get_queues( array( 'desc' => true, 'output' => 'original' ) ) as $queue ): ?>
+        <?php foreach( Queue::get_queues( array( 'desc' => true, 'output' => 'original', 'paged' => $current_page_num ) ) as $queue ): ?>
             <tr>
                 <th><?php echo $queue->post_id ?></th>
                 <td>
