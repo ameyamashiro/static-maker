@@ -54,8 +54,6 @@ namespace Static_Maker;
         do_settings_sections( $this->plugin_name );
         ?>
 
-        <p>Disabled inputs means that the feature is not implemented</p>
-
         <table class="form-table">
             <tbody>
                 <tr style="display: none;">
