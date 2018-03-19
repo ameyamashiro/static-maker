@@ -95,7 +95,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $page->post_type,
-                'url' => $page->permalink
+                'url' => preg_replace('/__trashed$/', '', $page->permalink)
             )
         );
     }
@@ -114,7 +114,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $post->post_type,
-                'url' => $url,
+                'url' => preg_replace('/__trashed$/', '', $url),
             )
         );
     }
@@ -130,7 +130,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $post_type,
-                'url' => $link,
+                'url' => preg_replace('/__trashed$/', '', $link),
             )
         );
     }
