@@ -56,7 +56,7 @@ namespace Static_Maker;
 
         <table class="form-table">
             <tbody>
-                <tr>
+                <tr style="display: none;">
                     <th scope="row"><label for="<?php echo $this->plugin_name ?>-host">Replace Host</label></th>
                     <td>
                         <input type="text" id="<?php echo $this->plugin_name ?>-host" name="<?php echo $this->plugin_name ?>[host]" class="regular-text" placeholder="<?php echo home_url() ?>" value="<?php echo $host ?>">
