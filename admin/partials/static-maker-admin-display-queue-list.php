@@ -95,21 +95,21 @@ if ( $_GET[ 'paged' ]) {
 
     function static_maker_javascript() { ?>
     <script>
-        jQuery('.enqueue-all-pages').on('click', function(e) {
+        jQuery('.process-all').on('click', function(e) {
             e.preventDefault();
 
-            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_all_pages') ?>';
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'process_queue_all') ?>';
 
             jQuery.ajax({
                 type: 'post',
                 url: url,
                 data: {
-                    action: 'static-maker-enqueue_all_pages'
+                    action: 'static-maker-process_queue_all'
                 },
                 success: function(res) {
                     console.log(res);
                 }
-            })
+            });
         });
     </script>
 <?php }

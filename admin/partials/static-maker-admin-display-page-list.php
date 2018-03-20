@@ -233,21 +233,21 @@ if ( $_GET[ 'paged' ]) {
             });
         });
 
-        jQuery('.process-all').on('click', function(e) {
+        jQuery('.enqueue-all-pages').on('click', function(e) {
             e.preventDefault();
 
-            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'process_queue_all') ?>';
+            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_all_pages') ?>';
 
             jQuery.ajax({
                 type: 'post',
                 url: url,
                 data: {
-                    action: 'static-maker-process_queue_all'
+                    action: 'static-maker-enqueue_all_pages'
                 },
                 success: function(res) {
                     console.log(res);
                 }
-            });
+            })
         });
     </script>
 <?php }
