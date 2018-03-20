@@ -193,4 +193,49 @@ class Queue {
             return $wpdb->insert( $table_name, $this->data );
         }
     }
+
+    public function dequeue() {
+        if ( $this->data[ 'type' ] === 'add' ) {
+            if ( FileUtil::export_single_file( $this->data[ 'url' ] ) !== false ) {
+                $this->mark_as_completed();
+            } else {
+                $this->mark_as_failed();
+            }
+        } else if ( $this->data[ 'type' ] === 'remove' ) {
+            if ( FileUtil::remove_single_file( $this->data[ 'url' ] ) !== false ) {
+                $this->mark_as_completed();
+
+                Page::get_page_by_link( $this->data[ 'url' ] )->delete();
+            } else {
+                $this->mark_as_failed();
+            }
+        } else {
+            $this->mark_as_skipped();
+        }
+    }
+
+    public function mark_as_processing() {
+        $this->data[ 'status' ] = 'processing';
+        $this->data[ 'process_started' ] = current_time( 'mysql' );
+        $this->save();
+    }
+
+    public function mark_as_completed() {
+        $this->data[ 'status' ] = 'completed';
+        $this->data[ 'process_started' ] = current_time( 'mysql' );
+        $this->save();
+    }
+
+    public function mark_as_failed() {
+        $this->data[ 'status' ] = 'failed';
+        $this->data[ 'process_started' ] = current_time( 'mysql' );
+        $this->save();
+    }
+
+    public function mark_as_skipped() {
+        $this->data[ 'status' ] = 'skipped (unknown)';
+        $this->data[ 'process_started' ] = current_time( 'mysql' );
+        $this->save();
+    }
+
 }

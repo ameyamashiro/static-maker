@@ -83,6 +83,18 @@ class Page {
         return new self( $row );
     }
 
+    public static function get_page_by_link( $link ) {
+        global $wpdb;
+        $table_name = self::table_name();
+
+        $query = "SELECT * FROM $table_name WHERE permalink = %s LIMIT 1";
+        $row = $wpdb->get_results($wpdb->prepare( $query, $link ), ARRAY_A)[0];
+
+        if (!$row) { return null; }
+
+        return new self( $row );
+    }
+
     public function __construct( $columns ) {
         foreach ( $columns as $key => $value ) {
             $this->$key = $value;

@@ -13,39 +13,11 @@ class Queue_Actions {
 
         // mark all queues as processing
         foreach ( $queues as $queue ) {
-            $queue->status = 'processing';
-            $queue->process_started = current_time( 'mysql' );
-            $queue->save();
+            $queue->mark_as_processing();
         }
 
         foreach ( $queues as $queue ) {
-
-            if ( $queue->type === 'add' ) {
-                if (FileUtil::export_single_file( $queue->url ) !== false) {
-                    $queue->status = 'completed';
-                    $queue->process_ended = current_time( 'mysql' );
-                    $queue->save();
-                } else {
-                    $queue->status = 'failed';
-                    $queue->process_ended = current_time( 'mysql' );
-                    $queue->save();
-                }
-            } else if ( $queue->type === 'remove' ) {
-                if (FileUtil::remove_single_file( $queue->url ) !== false) {
-                    $queue->status = 'completed';
-                    $queue->process_ended = current_time( 'mysql' );
-                    $queue->save();
-                } else {
-                    $queue->status = 'failed';
-                    $queue->process_ended = current_time( 'mysql' );
-                    $queue->save();
-                }
-            } else {
-                $queue->status = 'skipped (unknown)';
-                $queue->process_ended = current_time( 'mysql' );
-                $queue->save();
-            }
-
+            $queue->dequeue();
         }
     }
 
