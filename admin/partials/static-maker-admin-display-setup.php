@@ -205,14 +205,16 @@ namespace Static_Maker;
             var count = 0;
             var rsyncVars = [
                 <?php foreach ( $rsync_options as $i => $rsync ): ?>
-                <?php echo $i !== 0 ? ',' : '' ?>{
-                    '{{HOST}}': '<?php echo $rsync['host'] ?>',
-                    '{{USER}}': '<?php echo $rsync['user'] ?>',
-                    '{{SSH_KEY}}': '<?php echo CryptoUtil::decrypt($rsync['ssh_key'], true) ?>',
-                    '{{DIR}}': '<?php echo $rsync['dir'] ?>',
-                    '{{RSYNC_OPTIONS}}': '<?php echo $rsync['rsync_options'] ?>',
-                    '{{BEFORE_COMMAND}}': '<?php echo $rsync['before_command'] ?>'
-                }
+                <?php echo $i !== 0 ? ',' : '' ?>
+                <?php echo json_encode(array(
+                    '{{HOST}}' => $rsync['host'],
+                    '{{USER}}' => $rsync['user'],
+                    '{{SSH_KEY}}' => CryptoUtil::decrypt($rsync['ssh_key'], true),
+                    '{{DIR}}' => $rsync['dir'],
+                    '{{RSYNC_OPTIONS}}' => $rsync['rsync_options'],
+                    '{{BEFORE_COMMAND}}' => $rsync['before_command']
+                    )
+                ); ?>
                 <?php endforeach; ?>
             ];
 
