@@ -1,6 +1,11 @@
 <?php
 namespace Static_Maker;
 
+// workaround for "Fatal error: Call to undefined function get_home_path()"
+if ( !function_exists( 'get_home_path' ) )
+    require_once( dirname(__FILE__) . '/../../../../../wp-admin/includes/file.php' );
+
+
 class FileUtil {
 
     public static function export_single_file( $url, $replace_domain = true ) {
@@ -78,7 +83,7 @@ class FileUtil {
             return false;
         }
 
-        if ( $options['replaces'] && mb_strlen($options['replaces'][0]) !== 0 ) {
+        if ( isset( $options['replaces'] ) ) {
             $replaces = $options['replaces'];
 
             foreach ($replaces as $replace) {
@@ -95,7 +100,7 @@ class FileUtil {
         $output_path = isset( $options[ 'output_path' ] ) ? $options[ 'output_path' ] : '';
 
         if ( !empty( $output_path ) ) {
-            $export_path = get_home_path() . $output_path;
+            $export_path = \get_home_path() . $output_path;
         }
 
         if ( !static::create_dir( $export_path ) ) {

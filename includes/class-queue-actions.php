@@ -9,7 +9,6 @@ class Queue_Actions {
 
     static public function dequeue_all() {
         $queues = Queue::receive_unprocessed_queues();
-        var_dump( $queues );
 
         // mark all queues as processing
         foreach ( $queues as $queue ) {
