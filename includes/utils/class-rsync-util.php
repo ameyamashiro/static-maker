@@ -12,6 +12,7 @@ class RsyncUtil {
                 $command = preg_replace( '/\{\{ROOT\}\}/', get_home_path(), $command );
                 $command = preg_replace( '/\{\{WP_ROOT\}\}/', ABSPATH, $command );
                 $command = preg_replace( '/\{\{OUTPUT_DIR\}\}/', FileUtil::get_output_path() . '/', $command );
+                $command = preg_replace('#/+#','/', $command);
 
                 if ( !empty( $command ) ) {
                     $logs .= "\nBefore Command:\n";
