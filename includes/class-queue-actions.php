@@ -18,6 +18,8 @@ class Queue_Actions {
         foreach ( $queues as $queue ) {
             $queue->dequeue();
         }
+
+        RsyncUtil::syncWithCurrentOptions();
     }
 
 }
