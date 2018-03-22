@@ -21,25 +21,25 @@ namespace Static_Maker;
 
     <div class="metabox-holder">
         <div class="">
-            <h3>Add pages by post type</h3>
+            <h3><?php _e( 'Add pages by post type', PLUGIN_NAME ) ?></h3>
             <div class="inside">
                 <div>
-                    <p>Currently Managed Post Types:
+                    <p><?php _e( 'Currently Managed Post Types', PLUGIN_NAME ) ?>:
                         <span style="font-weight: bold;"><?php echo OptionsUtil::get_accepted_post_types( 'string' ) ?></span>
-                        <br>(these values can be removed from settings)
+                        <br>(<?php _e( 'these values can be removed from settings', PLUGIN_NAME ) ?>)
                     </p>
                 </div>
 
                 <form class="add-pages-by-post-type" action="">
                     <select name="post-type-select" id="">
-                        <option value="">Select Post types</option>
+                        <option value=""><?php _e( 'Select Post types' , PLUGIN_NAME ) ?></option>
 
                         <?php foreach( PostUtil::get_post_types() as $type => $label ): ?>
                             <option value="<?php echo $type ?>"><?php echo $label ?></option>
                         <?php endforeach; ?>
                     </select>
                     <div class="submit">
-                        <button class="button button-primary">Add</button>
+                        <button class="button button-primary"><?php _e( 'Add', PLUGIN_NAME ) ?></button>
                     </div>
                 </form>
                 <p class="post-type-message"></p>
@@ -49,13 +49,13 @@ namespace Static_Maker;
 
     <div class="metabox-holder">
         <div class="">
-            <h3>Add a page by url</h3>
+            <h3><?php _e( 'Add a page by url', PLUGIN_NAME ) ?></h3>
             <div class="inside">
-                <p>Manually added pages are not tracked changes</p>
+                <p><?php _e( 'Manually added pages are not tracked changes', PLUGIN_NAME ) ?></p>
                 <form class="add-page-by-url">
                     <input type="text" name="url" class="regular-text">
                     <div class="submit">
-                        <button class="button button-primary">Add</button>
+                        <button class="button button-primary"><?php _e( 'Add', PLUGIN_NAME ) ?></button>
                     </div>
                 </form>
                 <p class="url-based-message"></p>
@@ -86,7 +86,7 @@ namespace Static_Maker;
                     if (status === 'success') {
                         location.reload();
                     } else {
-                        $postType.empty().html('登録に失敗しました。');
+                        $postType.empty().html('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
 
                         var $error = jQuery('.error');
                         $error.empty();
@@ -114,7 +114,7 @@ namespace Static_Maker;
                         location.reload();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        $msg.empty().html('登録に失敗しました。<br>' + jqXHR.responseText);
+                        $msg.empty().html('<?php _e( 'Failed to register', PLUGIN_NAME ) ?><br>' + jqXHR.responseText);
                     }
                 });
             }

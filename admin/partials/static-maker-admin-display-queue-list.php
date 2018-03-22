@@ -62,11 +62,11 @@ if ( $_GET[ 'paged' ]) {
     <table class="wp-list-table widefat striped">
         <thead>
             <tr>
-                <td>Post ID</td>
-                <td>url</td>
-                <td>created</td>
-                <td>type</td>
-                <td>status</td>
+                <td><?php _e( 'Post ID', PLUGIN_NAME ) ?></td>
+                <td><?php _e( 'URL', PLUGIN_NAME ) ?></td>
+                <td><?php _e( 'Created', PLUGIN_NAME ) ?></td>
+                <td><?php _e( 'Type', PLUGIN_NAME ) ?></td>
+                <td><?php _e( 'Status', PLUGIN_NAME ) ?></td>
             </tr>
         </thead>
         <tbody>
@@ -78,14 +78,33 @@ if ( $_GET[ 'paged' ]) {
                 </td>
                 <td><?php echo $queue->created ?></td>
                 <td><?php echo $queue->type ?></td>
-                <td><?php echo $queue->status ?></td>
+                <td><?php switch( $queue->status ) {
+                        case 'waiting':
+                            _e( 'waiting', PLUGIN_NAME );
+                            break;
+                        case 'processing':
+                            _e( 'processing', PLUGIN_NAME );
+                            break;
+                        case 'failed':
+                            _e( 'failed', PLUGIN_NAME );
+                            break;
+                        case 'skipped (unknown)':
+                            _e( 'skipped (unknown)', PLUGIN_NAME );
+                            break;
+                        case 'completed':
+                            _e( 'completed', PLUGIN_NAME );
+                            break;
+                        default:
+                            _e( 'N/A', PLUGIN_NAME );
+                            break;
+                    } ?></td>
             </tr>
         <?php endforeach ?>
         </tbody>
     </table>
 
     <div class="bottom-actions">
-        <button class="process-all button button-primary">Process All Queues</button>
+        <button class="process-all button button-primary"><?php _e( 'Process queues', PLUGIN_NAME ) ?></button>
     </div>
 
 </div>

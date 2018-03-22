@@ -3,54 +3,55 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-22 17:11+0900\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2018-03-22 17:11+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: admin/partials/static-maker-admin-display-add.php:24
 msgid "Add pages by post type"
-msgstr ""
+msgstr "投稿タイプでページを追加"
 
 #: admin/partials/static-maker-admin-display-add.php:27
 msgid "Currently Managed Post Types"
-msgstr ""
+msgstr "管理中の投稿タイプ"
 
 #: admin/partials/static-maker-admin-display-add.php:29
 msgid "these values can be removed from settings"
-msgstr ""
+msgstr "この値は設定ページから削除・変更できます"
 
 #: admin/partials/static-maker-admin-display-add.php:35
 msgid "Select Post types"
-msgstr ""
+msgstr "投稿タイプを選択"
 
 #: admin/partials/static-maker-admin-display-add.php:42
 #: admin/partials/static-maker-admin-display-add.php:58
 #: admin/class-static-maker-admin.php:129
 msgid "Add"
-msgstr ""
+msgstr "追加"
 
 #: admin/partials/static-maker-admin-display-add.php:52
 msgid "Add a page by url"
-msgstr ""
+msgstr "URLでページを追加"
 
 #: admin/partials/static-maker-admin-display-add.php:54
 msgid "Manually added pages are not tracked changes"
-msgstr ""
+msgstr "手動で追加したページは変更を追跡できません"
 
 #: admin/partials/static-maker-admin-display-add.php:89
 #: admin/partials/static-maker-admin-display-add.php:117
 msgid "Failed to register"
-msgstr ""
+msgstr "登録に失敗しました"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:65
 #: admin/partials/static-maker-admin-display-page-list.php:62
@@ -63,198 +64,203 @@ msgstr ""
 
 #: admin/partials/static-maker-admin-display-queue-list.php:67
 msgid "Created"
-msgstr ""
+msgstr "追加日時"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:68
 msgid "Type"
-msgstr ""
+msgstr "タイプ"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:69
 #: admin/partials/static-maker-admin-display-page-list.php:64
 msgid "Status"
-msgstr ""
+msgstr "状態"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:83
 msgid "waiting"
-msgstr ""
+msgstr "処理待ち"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:86
 msgid "processing"
-msgstr ""
+msgstr "処理中"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:89
 msgid "failed"
-msgstr ""
+msgstr "失敗"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:92
 msgid "skipped (unknown)"
-msgstr ""
+msgstr "スキップ (不明なエラー)"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:95
 msgid "completed"
-msgstr ""
+msgstr "完了"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:98
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: admin/partials/static-maker-admin-display-queue-list.php:107
 msgid "Process queues"
-msgstr ""
+msgstr "キューを処理"
 
 #: admin/partials/static-maker-admin-display-page-list.php:63
 msgid "Permalink"
-msgstr ""
+msgstr "URL"
 
 #: admin/partials/static-maker-admin-display-page-list.php:83
 msgid "Export Request"
-msgstr ""
+msgstr "出力リクエスト"
 
 #: admin/partials/static-maker-admin-display-page-list.php:97
 msgid "Delete Request"
-msgstr ""
+msgstr "削除リクエスト"
 
 #: admin/partials/static-maker-admin-display-page-list.php:107
 msgid "Delete from List"
-msgstr ""
+msgstr "リストから削除"
 
 #: admin/partials/static-maker-admin-display-page-list.php:114
 msgid "Active"
-msgstr ""
+msgstr "有効"
 
 #: admin/partials/static-maker-admin-display-page-list.php:123
 msgid "Disable"
-msgstr ""
+msgstr "無効化"
 
 #: admin/partials/static-maker-admin-display-page-list.php:128
 msgid "Disabled"
-msgstr ""
+msgstr "無効"
 
 #: admin/partials/static-maker-admin-display-page-list.php:137
 msgid "Activate"
-msgstr ""
+msgstr "有効化"
 
 #: admin/partials/static-maker-admin-display-page-list.php:149
 msgid "Process all pages"
-msgstr ""
+msgstr "全てのページを書き出し"
 
 #: admin/partials/static-maker-admin-display-setup.php:70
 #: admin/partials/static-maker-admin-display-setup.php:73
 msgid "Basic Auth"
-msgstr ""
+msgstr "Basic認証"
 
 #: admin/partials/static-maker-admin-display-setup.php:79
 msgid "Enable"
-msgstr ""
+msgstr "有効"
 
 #: admin/partials/static-maker-admin-display-setup.php:84
 #: admin/partials/static-maker-admin-display-setup.php:152
 msgid "User"
-msgstr ""
+msgstr "ユーザー"
 
 #: admin/partials/static-maker-admin-display-setup.php:90
 msgid "Pass"
-msgstr ""
+msgstr "パスワード"
 
 #: admin/partials/static-maker-admin-display-setup.php:98
 msgid "Replaces"
-msgstr ""
+msgstr "置換"
 
 #: admin/partials/static-maker-admin-display-setup.php:107
 msgid "Output Directory"
-msgstr ""
+msgstr "出力先ディレクトリ"
 
 #: admin/partials/static-maker-admin-display-setup.php:110
 msgid "Default Value"
-msgstr ""
+msgstr "初期値"
 
 #: admin/partials/static-maker-admin-display-setup.php:114
 msgid "Queue Limit"
-msgstr ""
+msgstr "キュー制限"
 
 #: admin/partials/static-maker-admin-display-setup.php:117
 msgid "The number of queues to dequeue at once"
-msgstr ""
+msgstr "一度に処理するキューの数"
 
 #: admin/partials/static-maker-admin-display-setup.php:121
 msgid "Accepted post types"
-msgstr ""
+msgstr "管理中の投稿タイプ"
 
 #: admin/partials/static-maker-admin-display-setup.php:124
 msgid ""
 "Comma separated list. A new page of these post types is automatically added "
 "to the page list"
 msgstr ""
+"カンマ区切りのリスト。ここにある投稿タイプの新規投稿は自動的にページリストに"
+"追加されます"
 
 #: admin/partials/static-maker-admin-display-setup.php:132
 msgid "Add rsync target"
-msgstr ""
+msgstr "rsync 先の追加"
 
 #: admin/partials/static-maker-admin-display-setup.php:133
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #: admin/partials/static-maker-admin-display-setup.php:139
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: admin/partials/static-maker-admin-display-setup.php:146
 msgid "Host"
-msgstr ""
+msgstr "ホスト"
 
 #: admin/partials/static-maker-admin-display-setup.php:158
 msgid "SSH Private Key"
-msgstr ""
+msgstr "SSH秘密鍵"
 
 #: admin/partials/static-maker-admin-display-setup.php:164
 msgid "Target Directory"
-msgstr ""
+msgstr "リモートディレクトリ"
 
 #: admin/partials/static-maker-admin-display-setup.php:170
 msgid "Additional rsync options"
-msgstr ""
+msgstr "追加の rsync オプション"
 
 #: admin/partials/static-maker-admin-display-setup.php:176
 msgid "Before command"
-msgstr ""
+msgstr "事前実行コマンド"
 
 #: admin/partials/static-maker-admin-display-setup.php:179
 msgid "Command which will be executed before rsync"
-msgstr ""
+msgstr "rsync 前に実行するシェルコマンド"
 
 #: admin/partials/static-maker-admin-display-setup.php:181
 msgid "Document root"
-msgstr ""
+msgstr "ドキュメントルート"
 
 #: admin/partials/static-maker-admin-display-setup.php:182
 msgid "WordPress root"
-msgstr ""
+msgstr "WordPress のルートディレクトリ"
 
 #: admin/partials/static-maker-admin-display-setup.php:183
 msgid "Static Maker output directory"
-msgstr ""
+msgstr "Static Maker の静的ファイル出力先"
 
 #: admin/class-static-maker-admin.php:127
 msgid "Managed page list"
-msgstr ""
+msgstr "管理ページ一覧"
 
 #: admin/class-static-maker-admin.php:127
 msgid "Pages"
-msgstr ""
+msgstr "ページ"
 
 #: admin/class-static-maker-admin.php:128
 msgid "All Queue List"
-msgstr ""
+msgstr "キュー一覧"
 
 #: admin/class-static-maker-admin.php:128
 msgid "Queues"
-msgstr ""
+msgstr "処理タスク"
 
 #: admin/class-static-maker-admin.php:129
 msgid "Add page"
-msgstr ""
+msgstr "ページ追加"
 
 #: admin/class-static-maker-admin.php:130
 #: admin/class-static-maker-admin.php:144
 msgid "Settings"
-msgstr ""
+msgstr "設定"
+
+#~ msgid "Preferences"
+#~ msgstr "設定"

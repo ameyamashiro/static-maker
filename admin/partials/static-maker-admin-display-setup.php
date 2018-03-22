@@ -67,27 +67,27 @@ namespace Static_Maker;
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-basic-auth">Basic Auth</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-basic-auth"><?php _e( 'Basic Auth', PLUGIN_NAME ) ?></label></th>
                     <td>
                         <fieldet>
-                            <legend class="screen-reader-text">Basic Auth</legend>
+                            <legend class="screen-reader-text"><?php _e( 'Basic Auth', PLUGIN_NAME ) ?></legend>
                         </fieldet>
                         <ul>
                             <li>
                                 <label for="<?php echo $this->plugin_name ?>-basic-enable">
                                     <input type="checkbox" id="<?php echo $this->plugin_name ?>-basic-enable" name="<?php echo $this->plugin_name ?>[basic_enable]" value="1" <?php checked($basic_enable, 1) ?>>
-                                    Enable
+                                    <?php _e( 'Enable', PLUGIN_NAME ) ?>
                                 </label>
                             </li>
                             <li>
                                 <label for="<?php echo $this->plugin_name ?>-basic-auth-user">
-                                    User:
+                                    <?php _e( 'User', PLUGIN_NAME ) ?>:
                                     <input type="text" id="<?php echo $this->plugin_name ?>-basic-auth-user" name="<?php echo $this->plugin_name ?>[basic_auth_user]" class="regular-text" value="<?php echo $basic_user ?>">
                                 </label>
                             </li>
                             <li>
                                 <label for="<?php echo $this->plugin_name ?>-basic-auth-pass">
-                                    Pass:
+                                    <?php _e( 'Pass', PLUGIN_NAME ) ?>:
                                     <input type="text" id="<?php echo $this->plugin_name ?>-basic-auth-pass" name="<?php echo $this->plugin_name ?>[basic_auth_pass]" class="regular-text" value="<?php echo $basic_pass ?>">
                                 </label>
                             </li>
@@ -95,7 +95,7 @@ namespace Static_Maker;
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-replaces">Replaces</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-replaces"><?php _e( 'Replaces', PLUGIN_NAME ) ?></label></th>
                     <td>
                         <div class="replaces-opt">
                             <input type="text" id="<?php echo $this->plugin_name ?>-replaces" name="<?php echo $this->plugin_name ?>[replaces][0][from]" class="regular-text replaces-input" value="<?php echo $replaces[0]['from'] ?>" placeholder="from">
@@ -104,24 +104,24 @@ namespace Static_Maker;
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path">Output Directory</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path"><?php _e( 'Output Directory', PLUGIN_NAME ) ?></label></th>
                     <td>
                         /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'basedir' ] ) ?>/static-maker" value="<?php echo $output ?>">
-                        <p class="description">Default Value: /<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'basedir' ] ) ?>/static-maker</p>
+                        <p class="description"><?php _e( 'Default Value', PLUGIN_NAME ) ?>: /<?php echo str_replace( get_home_path(), '', wp_upload_dir()[ 'basedir' ] ) ?>/static-maker</p>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-queue-limit">Queue Limit</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-queue-limit"><?php _e( 'Queue Limit', PLUGIN_NAME ) ?></label></th>
                     <td>
                         <input type="text" id="<?php echo $this->plugin_name ?>-queue-limit" name="<?php echo $this->plugin_name ?>[queue_limit]" class="regular-text" value="<?php echo $queue_limit ?>" placeholder="10">
-                        <p class="description">The number of queues to dequeue at once</p>
+                        <p class="description"><?php _e( 'The number of queues to dequeue at once', PLUGIN_NAME ) ?></p>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-accept-post-types">Accepted post types</label></th>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-accept-post-types"><?php _e( 'Accepted post types', PLUGIN_NAME ) ?></label></th>
                     <td>
                         <input type="text" id="<?php echo $this->plugin_name ?>-accept-post-types" name="<?php echo $this->plugin_name ?>[accepted_post_types]" class="regular-text" value="<?php echo $accepted_post_types ?>" placeholder="post,custom_post_type,and_others">
-                        <p class="description">Comma separated list. A new page of these post types is automatically added to the page list</p>
+                        <p class="description"><?php _e( 'Comma separated list. A new page of these post types is automatically added to the page list', PLUGIN_NAME ) ?></p>
                     </td>
                 </tr>
                 <tr>
@@ -129,58 +129,58 @@ namespace Static_Maker;
                     <td class="rsync-list">
                         <!-- rsync list is inserted here -->
 
-                        <button type="button" class="add-target button" data-sm-target="rsync">Add rsync target</button>
-                        <button type="button" class="remove-target button" data-sm-target="rsync">Remove</button>
+                        <button type="button" class="add-target button" data-sm-target="rsync"><?php _e( 'Add rsync target', PLUGIN_NAME ) ?></button>
+                        <button type="button" class="remove-target button" data-sm-target="rsync"><?php _e( 'Remove', PLUGIN_NAME ) ?></button>
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <?php submit_button(__('Save all changes', $this->plugin_name), 'primary','submit', TRUE); ?>
+        <?php submit_button(__('Save', $this->plugin_name), 'primary','submit', TRUE); ?>
     </form>
 
     <script type="text/html" id="rsync-template">
         <ul data-sm-source="rsync" class="rsync-item">
             <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][host]">
-                    Host:
+                    <?php _e( 'Host',  PLUGIN_NAME ) ?>:
                     <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][host]" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][host]" value="{{HOST}}" class="regular-text" placeholder="IP or Host Domain Name">
                 </label>
             </li>
             <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][user]">
-                    User:
+                    <?php _e( 'User', PLUGIN_NAME ) ?>:
                     <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][user]" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][user]" value="{{USER}}" class="regular-text" placeholder="ec2-user etc..">
                 </label>
             </li>
             <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][ssh_key]">
-                    <p>SSH Private Key:</p>
+                    <p><?php _e( 'SSH Private Key', PLUGIN_NAME ) ?>:</p>
                     <textarea id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][ssh_key]" class="large-text code" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][ssh_key]">{{SSH_KEY}}</textarea>
                 </label>
             </li>
             <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][dir]">
-                    Target Directory:
+                    <?php _e( 'Target Directory', PLUGIN_NAME ) ?>:
                     <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][dir]" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][dir]" class="regular-text" placeholder="~/public" value="{{DIR}}">
                 </label>
             </li>
             <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][rsync_options]">
-                    Additional rsync options:
+                    <?php _e( 'Additional rsync options', PLUGIN_NAME ) ?>:
                     <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][rsync_options]" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][rsync_options]" class="regular-text" placeholder="--exclude &quot;.git&quot;" value="{{RSYNC_OPTIONS}}">
                 </label>
             </li>
             <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][before_command]">
-                    Before command:
+                    <?php _e( 'Before command', PLUGIN_NAME ) ?>:
                     <input type="text" id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][before_command]" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][before_command]" class="regular-text" placeholder="cp -r " value="{{BEFORE_COMMAND}}">
                 </label>
-                <p class="description">Command which will be executed before rsync</p>
+                <p class="description"><?php _e( 'Command which will be executed before rsync', PLUGIN_NAME ) ?></p>
                 <p class="description">
-                    {{ROOT}} : Document root (get_home_path())<br>
-                    {{WP_ROOT}} : WordPress root (ABSPATH)<br>
-                    {{OUTPUT_DIR}} : Static Maker output directory
+                    {{ROOT}} : <?php _e( 'Document root', PLUGIN_NAME ) ?> (get_home_path())<br>
+                    {{WP_ROOT}} : <?php _e( 'WordPress root', PLUGIN_NAME ) ?> (ABSPATH)<br>
+                    {{OUTPUT_DIR}} : <?php _e( 'Static Maker output directory', PLUGIN_NAME ) ?>
                 </p>
             </li>
         </ul>

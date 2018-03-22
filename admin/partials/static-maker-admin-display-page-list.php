@@ -59,9 +59,9 @@ if ( $_GET[ 'paged' ]) {
 
     <table class="wp-list-table widefat striped">
         <thead>
-            <td>Post ID</td>
-            <td>Permalink</td>
-            <td>Status</td>
+            <td><?php _e( 'Post ID', PLUGIN_NAME ) ?></td>
+            <td><?php _e( 'Permalink', PLUGIN_NAME ) ?></td>
+            <td><?php _e( 'Status', PLUGIN_NAME ) ?></td>
         </thead>
         <tbody>
         <?php foreach( Page::get_pages( $current_page_num ) as $page ): ?>
@@ -80,7 +80,7 @@ if ( $_GET[ 'paged' ]) {
                                 data-id="<?php echo $page->id ?>"
                                 <?php endif; ?>
                             >
-                                Export Request
+                                <?php _e( 'Export Request', PLUGIN_NAME ) ?>
                             </a>
                             |
                         </span>
@@ -94,7 +94,7 @@ if ( $_GET[ 'paged' ]) {
                                 data-id="<?php echo $page->id ?>"
                                 <?php endif; ?>
                             >
-                                Delete Request
+                                <?php _e( 'Delete Request', PLUGIN_NAME ) ?>
                             </a>
                             |
                         </span>
@@ -104,14 +104,14 @@ if ( $_GET[ 'paged' ]) {
                                 class="trigger-remove-from-list"
                                 data-id="<?php echo $page->id ?>"
                             >
-                                Delete from List
+                                <?php _e( 'Delete from List', PLUGIN_NAME ) ?>
                             </a>
                         </span>
                     </div>
                 </td>
                 <td>
                     <?php if ( $page->active === '1' ): ?>
-                    Active
+                    <?php _e( 'Active', PLUGIN_NAME ) ?>
                     <div class="row-actions">
                         <span class="trash">
                             <a
@@ -120,12 +120,12 @@ if ( $_GET[ 'paged' ]) {
                                 data-action="disable"
                                 data-id="<?php echo $page->id ?>"
                             >
-                                Disable
+                                <?php _e( 'Disable', PLUGIN_NAME ) ?>
                             </a>
                         </span>
                     </div>
                     <?php else: ?>
-                    Disabled
+                    <?php _e( 'Disabled', PLUGIN_NAME ) ?>
                     <div class="row-actions">
                         <span>
                             <a
@@ -134,7 +134,7 @@ if ( $_GET[ 'paged' ]) {
                                 data-action="activate"
                                 data-id="<?php echo $page->id ?>"
                             >
-                                Activate
+                                <?php _e( 'Activate', PLUGIN_NAME ) ?>
                             </a>
                         </span>
                     </div>
@@ -146,7 +146,7 @@ if ( $_GET[ 'paged' ]) {
     </table>
 
     <div class="bottom-actions">
-        <button class="enqueue-all-pages button button-primary">Process all pages</button>
+        <button class="enqueue-all-pages button button-primary"><?php _e( 'Process all pages', PLUGIN_NAME ) ?></button>
     </div>
 
 </div>

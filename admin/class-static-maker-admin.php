@@ -124,10 +124,10 @@ class Static_Maker_Admin {
 
         add_menu_page( 'Static Maker', 'Static Maker', $cap, $slug, false, 'dashicons-welcome-widgets-menus', '80.050' );
 
-        add_submenu_page( $this->plugin_name, 'Managed page list', 'Pages', $cap, $slug, array($this, 'display_plugin_page_list_page') );
-        add_submenu_page( $this->plugin_name, 'All Queue List', 'Queues', $cap, $slug . '_queues', array($this, 'display_plugin_queue_list_page') );
-        add_submenu_page( $this->plugin_name, 'Add page', 'Add', $cap, $slug . '_page_add', array($this, 'display_plugin_add_page') );
-        add_submenu_page( $this->plugin_name, 'Preferences', 'Preferences', $cap, $slug . '_preferences', array($this, 'display_plugin_setup_page') );
+        add_submenu_page( $this->plugin_name, __( 'Managed page list', PLUGIN_NAME ), __( 'Pages', PLUGIN_NAME ), $cap, $slug, array($this, 'display_plugin_page_list_page') );
+        add_submenu_page( $this->plugin_name, __( 'All Queue List', PLUGIN_NAME ), __( 'Queues', PLUGIN_NAME ), $cap, $slug . '_queues', array($this, 'display_plugin_queue_list_page') );
+        add_submenu_page( $this->plugin_name, __( 'Add page', PLUGIN_NAME ), __( 'Add', PLUGIN_NAME ), $cap, $slug . '_page_add', array($this, 'display_plugin_add_page') );
+        add_submenu_page( $this->plugin_name, __( 'Settings', PLUGIN_NAME ), __( 'Settings', PLUGIN_NAME ), $cap, $slug . '_settings', array($this, 'display_plugin_setup_page') );
     }
 
     /**
@@ -141,7 +141,7 @@ class Static_Maker_Admin {
         *  Documentation : https://codex.wordpress.org/Plugin_API/Filter_Reference/plugin_action_links_(plugin_file_name)
         */
         $settings_link = array(
-            '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_name ) . '">' . __('Settings', $this->plugin_name) . '</a>',
+            '<a href="' . admin_url( 'admin.php?page=' . $this->plugin_name . '_settings' ) . '">' . __('Settings', $this->plugin_name) . '</a>',
         );
         return array_merge(  $settings_link, $links );
 
