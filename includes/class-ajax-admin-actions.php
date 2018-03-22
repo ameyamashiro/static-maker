@@ -91,6 +91,8 @@ class Ajax_Admin_Actions {
             }
         }
 
+        OptionsUtil::add_accepted_post_type( $post_type );
+
         wp_die();
     }
 

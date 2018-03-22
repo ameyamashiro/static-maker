@@ -24,6 +24,14 @@ namespace Static_Maker;
             <h3>一括追加</h3>
             <div class="inside">
                 <p>投稿タイプ別で管理対象のページを追加できます。</p>
+
+                <div>
+                    <p>Currently Managed Post Types:
+                        <span style="font-weight: bold;"><?php echo OptionsUtil::get_accepted_post_types( 'string' ) ?></span>
+                        <br>(these values can be removed from settings)
+                    </p>
+                </div>
+
                 <form class="add-pages-by-post-type" action="">
                     <select name="post-type-select" id="">
                         <option value="">投稿タイプを選択</option>
@@ -79,7 +87,7 @@ namespace Static_Maker;
                     console.log(res);
 
                     if (status === 'success') {
-                        $postType.empty().html('登録に成功しました。');
+                        location.reload();
                     } else {
                         $postType.empty().html('登録に失敗しました。');
 
@@ -106,8 +114,7 @@ namespace Static_Maker;
                         url: urlValue
                     },
                     success: function(res) {
-                        console.log(res);
-
+                        location.reload();
                         $msg.empty().html('登録に成功しました。');
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
