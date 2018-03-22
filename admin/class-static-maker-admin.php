@@ -124,10 +124,10 @@ class Static_Maker_Admin {
 
         add_menu_page( 'Static Maker', 'Static Maker', $cap, $slug, false, 'dashicons-welcome-widgets-menus', '80.050' );
 
-        add_submenu_page( $this->plugin_name, '管理対象ページ一覧', '管理ページ一覧', $cap, $slug, array($this, 'display_plugin_page_list_page') );
+        add_submenu_page( $this->plugin_name, 'Managed page list', 'Pages', $cap, $slug, array($this, 'display_plugin_page_list_page') );
         add_submenu_page( $this->plugin_name, 'All Queue List', 'Queues', $cap, $slug . '_queues', array($this, 'display_plugin_queue_list_page') );
-        add_submenu_page( $this->plugin_name, '管理対象ページの追加', '管理ページ追加', $cap, $slug . '_page_add', array($this, 'display_plugin_add_page') );
-        add_submenu_page( $this->plugin_name, 'Preferences', '設定', $cap, $slug . '_preferences', array($this, 'display_plugin_setup_page') );
+        add_submenu_page( $this->plugin_name, 'Add page', 'Add', $cap, $slug . '_page_add', array($this, 'display_plugin_add_page') );
+        add_submenu_page( $this->plugin_name, 'Preferences', 'Preferences', $cap, $slug . '_preferences', array($this, 'display_plugin_setup_page') );
     }
 
     /**

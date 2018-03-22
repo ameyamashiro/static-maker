@@ -21,10 +21,8 @@ namespace Static_Maker;
 
     <div class="metabox-holder">
         <div class="">
-            <h3>一括追加</h3>
+            <h3>Add pages by post type</h3>
             <div class="inside">
-                <p>投稿タイプ別で管理対象のページを追加できます。</p>
-
                 <div>
                     <p>Currently Managed Post Types:
                         <span style="font-weight: bold;"><?php echo OptionsUtil::get_accepted_post_types( 'string' ) ?></span>
@@ -34,14 +32,14 @@ namespace Static_Maker;
 
                 <form class="add-pages-by-post-type" action="">
                     <select name="post-type-select" id="">
-                        <option value="">投稿タイプを選択</option>
+                        <option value="">Select Post types</option>
 
                         <?php foreach( PostUtil::get_post_types() as $type => $label ): ?>
                             <option value="<?php echo $type ?>"><?php echo $label ?></option>
                         <?php endforeach; ?>
                     </select>
                     <div class="submit">
-                        <button class="button button-primary">一括追加</button>
+                        <button class="button button-primary">Add</button>
                     </div>
                 </form>
                 <p class="post-type-message"></p>
@@ -51,13 +49,13 @@ namespace Static_Maker;
 
     <div class="metabox-holder">
         <div class="">
-            <h3>個別追加</h3>
+            <h3>Add a page by url</h3>
             <div class="inside">
-                <p>URL を指定して手動で管理対象のページを追加できます。</p>
+                <p>Manually added pages are not tracked changes</p>
                 <form class="add-page-by-url">
                     <input type="text" name="url" class="regular-text">
                     <div class="submit">
-                        <button class="button button-primary">追加</button>
+                        <button class="button button-primary">Add</button>
                     </div>
                 </form>
                 <p class="url-based-message"></p>
