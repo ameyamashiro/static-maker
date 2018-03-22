@@ -34,6 +34,7 @@ class PostUtil {
                     'post_title' => $post->post_title,
                     'permalink' => get_permalink( $post->ID ),
                     'post_type' => $post->post_type,
+                    'post_status' => $post->post_status
                 );
                 $posts[] = $info;
             }

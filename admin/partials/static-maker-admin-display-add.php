@@ -84,7 +84,6 @@ namespace Static_Maker;
                     post_type: postType
                 }, function(res, status) {
                     var $postType = jQuery('.post-type-message');
-                    console.log(res);
 
                     if (status === 'success') {
                         location.reload();
@@ -115,7 +114,6 @@ namespace Static_Maker;
                     },
                     success: function(res) {
                         location.reload();
-                        $msg.empty().html('登録に成功しました。');
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $msg.empty().html('登録に失敗しました。<br>' + jqXHR.responseText);

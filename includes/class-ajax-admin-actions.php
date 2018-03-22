@@ -77,6 +77,12 @@ class Ajax_Admin_Actions {
         $posts = PostUtil::get_posts( $post_type );
 
         foreach( $posts as $post_data ) {
+
+            // remove posts which status is not publish
+            if ( $post_data[ 'post_status' ] !== 'publish' ) {
+                continue;
+            }
+
             $post = new Page( array(
 //                'post_title' => $post_type->post_title,
                 'post_id' => $post_data[ 'ID' ],
