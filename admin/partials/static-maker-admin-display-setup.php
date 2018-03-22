@@ -129,7 +129,7 @@ namespace Static_Maker;
                     <td class="rsync-list">
                         <!-- rsync list is inserted here -->
 
-                        <button type="button" class="add-target button-primary" data-sm-target="rsync">Add rsync target</button>
+                        <button type="button" class="add-target button" data-sm-target="rsync">Add rsync target</button>
                         <button type="button" class="remove-target button" data-sm-target="rsync">Remove</button>
                     </td>
                 </tr>
