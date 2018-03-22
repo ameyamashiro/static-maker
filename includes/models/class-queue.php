@@ -147,6 +147,11 @@ class Queue {
 
         $link = preg_replace('/__trashed$/', '', $link);
 
+        // append get_home_url() result if the url is not started with http
+        if (substr( $link, 0, 4 ) !== 'http') {
+            $link = get_home_url() . $link;
+        }
+
         $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link );
         if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
