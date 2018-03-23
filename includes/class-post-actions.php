@@ -9,7 +9,7 @@ class Post_Actions {
                     if ( !Page::get_page_by_post_id( $post->ID ) ) {
                         Page::create( $post->ID, $post->post_type, get_permalink( $post->ID ) );
                     }
-                    Queue::enqueue_by_post_id( $post->ID );
+                    Queue::enqueue_by_post_id( $post->ID, 'add', true );
                 }
                 break;
             case 'trash':

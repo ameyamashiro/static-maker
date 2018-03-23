@@ -96,48 +96,89 @@ class Queue {
         return $instances;
     }
 
-    public static function enqueue_by_id( $id, $action = 'add' ) {
+    public static function enqueue_by_id( $id, $action = 'add', $parent = false ) {
         global $wpdb;
         $table_name = self::table_name();
         $page_table_name = Page::table_name();
-
         $page = Page::get_page( $id );
+        $post_id = $page->post_id;
+        $results = array();
 
+        // Process specified static maker id
         $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE id=%d AND active=1)", $id );
         if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
-        return $wpdb->insert(
+        $results[] = $wpdb->insert(
             $table_name,
             array(
+                'post_id' => $post_id,
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $page->post_type,
                 'url' => preg_replace('/__trashed$/', '', $page->permalink)
             )
         );
+
+        // Process related if it has
+        $post_ids = array();
+        if ( !empty($post_id) && $parent ) {
+            $post_ids = Page::get_related_pages( $post_id );
+        }
+        foreach ( $post_ids as $post_id ) {
+            $post = get_post( $post_id );
+
+            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
+            if ( $wpdb->get_var( $query ) !== '1') { return false; }
+
+            $url = preg_replace('/__trashed$/', '', get_permalink( $post_id ));
+            $results[] = $wpdb->insert(
+                $table_name,
+                array(
+                    'post_id' => $post_id,
+                    'created' => current_time( 'mysql' ),
+                    'type' => $action,
+                    'post_type' => $post->post_type,
+                    'url' => $url
+                )
+            );
+        }
+
+        return $results;
     }
 
-    public static function enqueue_by_post_id( $post_id, $action = 'add' ) {
+    public static function enqueue_by_post_id( $post_id, $action = 'add', $parent = false ) {
         global $wpdb;
         $table_name = self::table_name();
         $page_table_name = Page::table_name();
 
-        $post = get_post( $post_id );
-        $url = preg_replace('/__trashed$/', '', get_permalink( $post_id ));
+        $post_ids = array( $post_id );
 
-        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
-        if ( $wpdb->get_var( $query ) !== '1') { return false; }
+        if ( $parent ) {
+            $post_ids = array_merge( $post_ids, Page::get_related_pages( $post_id ) );
+        }
 
-        return $wpdb->insert(
-            $table_name,
-            array(
-                'post_id' => $post_id,
-                'created' => current_time( 'mysql' ),
-                'type' => $action,
-                'post_type' => $post->post_type,
-                'url' => $url,
-            )
-        );
+        $results = array();
+
+        foreach ( $post_ids as $post_id ) {
+            $post = get_post( $post_id );
+
+            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
+            if ( $wpdb->get_var( $query ) !== '1') { return false; }
+
+            $url = preg_replace('/__trashed$/', '', get_permalink( $post_id ));
+            $results[] = $wpdb->insert(
+                $table_name,
+                array(
+                    'post_id' => $post_id,
+                    'created' => current_time( 'mysql' ),
+                    'type' => $action,
+                    'post_type' => $post->post_type,
+                    'url' => $url,
+                )
+            );
+        }
+
+        return $results;
     }
 
     public static function enqueue_by_link( $link, $action = 'add', $post_type = '' ) {

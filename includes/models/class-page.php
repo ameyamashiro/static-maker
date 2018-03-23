@@ -105,6 +105,25 @@ class Page {
         return new self( $row );
     }
 
+    public static function get_related_pages( $post_id ) {
+        $posts_to_process = array();
+        // $posts_to_process[] = $post_id;
+
+        $post = Page::get_page_by_post_id( $post_id );
+
+        if ( $archive = get_post_type_archive_link( $post->post_type ) ) {
+            $posts_to_process[] = $archive->ID;
+        }
+
+        if ( $parents = get_post_ancestors( $post->post_id ) ) {
+            foreach ( $parents as $parent ) {
+                $posts_to_process[] = $parent;
+            }
+        }
+
+        return $posts_to_process;
+    }
+
     public function __construct( $columns ) {
         foreach ( $columns as $key => $value ) {
             $this->$key = $value;

@@ -16,6 +16,7 @@ class Ajax_Admin_Actions {
     static public function enqueue_single_by_id() {
         global $wpdb;
         check_ajax_referer( 'enqueue_single_by_id' );
+        $results = array();
 
         if ( !isset( $_POST[ 'post_id' ] ) && !isset( $_POST[ 'id' ] ) ) {
             wp_die('ID を指定してください', '', 422);
@@ -24,27 +25,17 @@ class Ajax_Admin_Actions {
         $actionType = isset( $_POST[ 'action-type' ] ) && $_POST[ 'action-type' ] === 'remove' ? 'remove' : 'add';
 
         if ( isset( $_POST[ 'post_id' ] ) ) {
-            $result = Queue::enqueue_by_post_id( $_POST[ 'post_id' ], $actionType );
-
-            // enqueue its archive page if exists
-            $post = get_post( $_POST[ 'post_id' ] );
-            if ( $archive = get_post_type_archive_link( $post->post_type ) ) {
-                Queue::enqueue_by_link( $archive, 'add', $post->post_type );
-            }
+            $results = Queue::enqueue_by_post_id( $_POST[ 'post_id' ], $actionType, true );
         }
 
         if ( isset( $_POST[ 'id' ] ) ) {
-            $result = Queue::enqueue_by_id( $_POST[ 'id' ], $actionType );
-
-            // enqueue its archive page if exists
-            $post = Page::get_page( $_POST[ 'id' ] );
-            if ( $archive = get_post_type_archive_link( $post->post_type ) ) {
-                Queue::enqueue_by_link( $archive, 'add', $post->post_type );
-            }
+            $results = Queue::enqueue_by_id( $_POST[ 'id' ], $actionType, true );
         }
 
-        if ( $result === false ) {
-            wp_die($wpdb->print_error(), '', 500);
+        foreach ( $results as $result ) {
+            if ( $result === false ) {
+                return wp_die($wpdb->print_error(), '', 500);
+            }
         }
 
         wp_die();
