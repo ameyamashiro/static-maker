@@ -115,7 +115,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $page->post_type,
-                'url' => preg_replace('/__trashed$/', '', $page->permalink)
+                'url' => preg_replace('/__trashed(\/?)$/', '$1', $page->permalink)
             )
         );
 
@@ -130,7 +130,7 @@ class Queue {
             $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
             if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
-            $url = preg_replace('/__trashed$/', '', get_permalink( $post_id ));
+            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink( $post_id ));
             $results[] = $wpdb->insert(
                 $table_name,
                 array(
@@ -165,7 +165,7 @@ class Queue {
             $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
             if ( $wpdb->get_var( $query ) !== '1') { return false; }
 
-            $url = preg_replace('/__trashed$/', '', get_permalink( $post_id ));
+            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink( $post_id ));
             $results[] = $wpdb->insert(
                 $table_name,
                 array(
@@ -186,7 +186,7 @@ class Queue {
         $table_name = self::table_name();
         $page_table_name = Page::table_name();
 
-        $link = preg_replace('/__trashed$/', '', $link);
+        $link = preg_replace('/__trashed(\/?)$/', '$1', $link);
 
         // append get_home_url() result if the url is not started with http
         if (substr( $link, 0, 4 ) !== 'http') {
