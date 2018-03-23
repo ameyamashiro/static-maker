@@ -42,11 +42,21 @@ class Page {
         return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
     }
 
-    public static function get_pages($page = 1) {
+    public static function get_pages( $user_option ) {
+        $defaults = array(
+            'paged' => 1,
+            'numberposts' => 25
+        );
+        $option = array_merge( $defaults, $user_option );
+
         global $wpdb;
-        $each_page = 25;
         $table_name = self::table_name();
-        $query = $wpdb->prepare( "SELECT * FROM $table_name LIMIT %d OFFSET %d", $each_page, ($page - 1) * $each_page );
+        if ( $option[ 'numberposts' ] === -1 ) {
+            // get all pages
+            $query = $wpdb->prepare( "SELECT * FROM $table_name" );
+        } else {
+            $query = $wpdb->prepare( "SELECT * FROM $table_name LIMIT %d OFFSET %d", $option[ 'numberposts' ], ($option[ 'paged' ] - 1) * $option[ 'numberposts' ] );
+        }
         $pages = $wpdb->get_results( $query, ARRAY_A );
 
         $instances = array();

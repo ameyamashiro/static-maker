@@ -64,7 +64,7 @@ if ( $_GET[ 'paged' ]) {
             <td><?php _e( 'Status', PLUGIN_NAME ) ?></td>
         </thead>
         <tbody>
-        <?php foreach( Page::get_pages( $current_page_num ) as $page ): ?>
+        <?php foreach( Page::get_pages( array( 'paged' => $current_page_num ) ) as $page ): ?>
             <tr>
                 <th><?php echo $page->post_id ?></th>
                 <td>
