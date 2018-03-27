@@ -154,8 +154,16 @@ namespace Static_Maker;
                 </label>
             </li>
             <li>
+                <label>
+                    <input type="radio" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][auth_method]" value="ssh" {{SSH_AUTH}}><?php _e( 'SSH Private Key',  PLUGIN_NAME ) ?>
+                </label>
+                <label>
+                    <input type="radio" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][auth_method]" value="pass" {{PASS_AUTH}}><?php _e( 'Password',  PLUGIN_NAME ) ?>
+                </label>
+            </li>
+            <li>
                 <label for="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][ssh_key]">
-                    <p><?php _e( 'SSH Private Key', PLUGIN_NAME ) ?>:</p>
+                    <p><?php _e( 'SSH Private Key', PLUGIN_NAME ) ?> or <?php _e( 'Password', PLUGIN_NAME ) ?>:</p>
                     <textarea id="<?php echo $this->plugin_name ?>-rsync-options[{{COUNT}}][ssh_key]" class="large-text code" name="<?php echo $this->plugin_name ?>[rsync][{{COUNT}}][ssh_key]">{{SSH_KEY}}</textarea>
                 </label>
             </li>
@@ -212,7 +220,9 @@ namespace Static_Maker;
                     '{{SSH_KEY}}' => CryptoUtil::decrypt($rsync['ssh_key'], true),
                     '{{DIR}}' => $rsync['dir'],
                     '{{RSYNC_OPTIONS}}' => $rsync['rsync_options'],
-                    '{{BEFORE_COMMAND}}' => $rsync['before_command']
+                    '{{BEFORE_COMMAND}}' => $rsync['before_command'],
+                    '{{SSH_AUTH}}' => $rsync[ 'auth_method' ] === 'ssh' ? 'checked' : '',
+                    '{{PASS_AUTH}}' => $rsync[ 'auth_method' ] === 'pass' ? 'checked' : ''
                     )
                 ); ?>
                 <?php endforeach; ?>

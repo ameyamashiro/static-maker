@@ -179,6 +179,7 @@ class Static_Maker_Admin {
      *
      **/
     public function validate($input) {
+
         // All checkboxes inputs
         $valid = array();
 
@@ -206,6 +207,7 @@ class Static_Maker_Admin {
 
                 $d['host'] = $rsync['host'];
                 $d['user'] = $rsync['user'];
+                $d['auth_method'] = $rsync['auth_method'];
                 $d['ssh_key'] = $key;
                 $d['dir'] = $rsync['dir'];
                 $d['rsync_options'] = $rsync['rsync_options'];
