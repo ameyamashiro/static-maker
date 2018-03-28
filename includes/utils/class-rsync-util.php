@@ -20,22 +20,29 @@ class RsyncUtil {
                 }
 
                 $key = CryptoUtil::decrypt( $rsync['ssh_key'], true );
-                $logs .= static::sync($rsync['host'], $rsync['user'], $key, $rsync['dir'], '-Pav --delete ' . $rsync['rsync_options']);
+                $logs .= static::sync($rsync['host'], $rsync['user'], $rsync['auth_method'], $key, $rsync['dir'], '-Pav --delete ' . $rsync['rsync_options']);
             }
         }
 
         return $logs;
     }
 
-    static function sync($host, $user, $ssh_key, $target, $rsync_options = null, $ssh_options = null) {
+    static function sync($host, $user, $auth_method, $credential, $target, $rsync_options = null, $ssh_options = null) {
         $temp = tmpfile();
         $path = stream_get_meta_data( $temp )[ 'uri' ];
-        fwrite($temp, $ssh_key);
+        fwrite($temp, $credential);
 
         $local_src = FileUtil::get_output_path() . '/';
         $rsync_options = $rsync_options ? $rsync_options : '-Pav --delete';
-        $ssh_options = $ssh_options ? $ssh_options : "-e 'ssh -i $path -o StrictHostKeyChecking=no'";
-        $rsync_command = "rsync $rsync_options $ssh_options $local_src $user@$host:$target 2>&1";
+
+        $pass_options = $auth_options = '';
+        if ( $auth_method === 'ssh' ) {
+            $auth_options = $ssh_options ? $ssh_options : "-e 'ssh -i $path -o StrictHostKeyChecking=no'";
+        } else if ( $auth_method === 'pass' ) {
+            $pass_options = "--password-file=$path";
+        }
+
+        $rsync_command = "rsync $rsync_options $auth_options $pass_options $local_src $user@$host:$target 2>&1";
 
         $output = shell_exec( $rsync_command );
         fclose($temp);
