@@ -103,10 +103,22 @@ class Queue {
         $page = Page::get_page( $id );
         $post_id = $page->post_id;
         $results = array();
+        $url = preg_replace('/__trashed(\/?)$/', '$1', $page->permalink);
 
         // Process specified static maker id
         $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE id=%d AND active=1)", $id );
         if ( $wpdb->get_var( $query ) !== '1') { return false; }
+
+        // Check queue duplication
+        if ( $post_id ) {
+            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
+        } else {
+            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $url, $action );
+        }
+        if ( $wpdb->get_var($query) ) {
+            $results[] = false;
+            return $results;
+        }
 
         $results[] = $wpdb->insert(
             $table_name,
@@ -115,7 +127,7 @@ class Queue {
                 'created' => current_time( 'mysql' ),
                 'type' => $action,
                 'post_type' => $page->post_type,
-                'url' => preg_replace('/__trashed(\/?)$/', '$1', $page->permalink)
+                'url' => $url
             )
         );
 
@@ -128,7 +140,13 @@ class Queue {
             $post = get_post( $post_id );
 
             $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
-            if ( $wpdb->get_var( $query ) !== '1') { return false; }
+            if ( $wpdb->get_var( $query ) !== '1') { continue; }
+
+            // Check queue duplication
+            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
+            if ( $wpdb->get_var($query) ) {
+                continue;
+            }
 
             $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink( $post_id ));
             $results[] = $wpdb->insert(
@@ -159,11 +177,21 @@ class Queue {
 
         $results = array();
 
-        foreach ( $post_ids as $post_id ) {
+        foreach ( $post_ids as $i => $post_id ) {
             $post = get_post( $post_id );
 
             $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
-            if ( $wpdb->get_var( $query ) !== '1') { return false; }
+            if ( $wpdb->get_var( $query ) !== '1') { continue; }
+
+            // Check queue duplication
+            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
+            if ( $wpdb->get_var($query) ) {
+                if ( $i === 0 ) {
+                    $results[] = false;
+                    break;
+                }
+                continue;
+            }
 
             $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink( $post_id ));
             $results[] = $wpdb->insert(
@@ -195,6 +223,10 @@ class Queue {
 
         $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link );
         if ( $wpdb->get_var( $query ) !== '1') { return false; }
+
+        // Check queue duplication
+        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $link, $action );
+        if ( $wpdb->get_var($query) ) { return false; }
 
         return $wpdb->insert(
             $table_name,
