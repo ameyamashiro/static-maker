@@ -133,7 +133,7 @@ class Queue {
 
         // Process related if it has
         $post_ids = array();
-        if ( $action === 'add' && !empty($post_id) && $parent ) {
+        if ( !empty($post_id) && $parent ) {
             $post_ids = Page::get_related_pages( $post_id );
         }
         foreach ( $post_ids as $post_id ) {
@@ -154,7 +154,7 @@ class Queue {
                 array(
                     'post_id' => $post_id,
                     'created' => current_time( 'mysql' ),
-                    'type' => $action,
+                    'type' => 'add',
                     'post_type' => $post->post_type,
                     'url' => $url
                 )
@@ -171,7 +171,7 @@ class Queue {
 
         $post_ids = array( $post_id );
 
-        if ( $action === 'add' && $parent ) {
+        if ( $parent ) {
             $post_ids = array_merge( $post_ids, Page::get_related_pages( $post_id ) );
         }
 
@@ -199,7 +199,7 @@ class Queue {
                 array(
                     'post_id' => $post_id,
                     'created' => current_time( 'mysql' ),
-                    'type' => $action,
+                    'type' => $i === 0 ? $action : 'add',
                     'post_type' => $post->post_type,
                     'url' => $url,
                 )
