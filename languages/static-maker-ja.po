@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-22 17:11+0900\n"
-"PO-Revision-Date: 2018-03-22 17:11+0900\n"
+"POT-Creation-Date: 2018-06-01 18:36+0900\n"
+"PO-Revision-Date: 2018-06-01 18:42+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: admin/partials/static-maker-admin-display-add.php:24
@@ -50,6 +50,9 @@ msgstr "手動で追加したページは変更を追跡できません"
 
 #: admin/partials/static-maker-admin-display-add.php:89
 #: admin/partials/static-maker-admin-display-add.php:117
+#: admin/partials/static-maker-admin-display-page-list.php:179
+#: admin/partials/static-maker-admin-display-page-list.php:206
+#: admin/partials/static-maker-admin-display-page-list.php:258
 msgid "Failed to register"
 msgstr "登録に失敗しました"
 
@@ -139,6 +142,12 @@ msgstr "有効化"
 msgid "Process all pages"
 msgstr "全てのページを書き出し"
 
+#: admin/partials/static-maker-admin-display-page-list.php:177
+#: admin/partials/static-maker-admin-display-page-list.php:204
+#: admin/partials/static-maker-admin-display-page-list.php:256
+msgid "Process Completed"
+msgstr "処理完了"
+
 #: admin/partials/static-maker-admin-display-setup.php:70
 #: admin/partials/static-maker-admin-display-setup.php:73
 msgid "Basic Auth"
@@ -206,34 +215,40 @@ msgid "Host"
 msgstr "ホスト"
 
 #: admin/partials/static-maker-admin-display-setup.php:158
+#: admin/partials/static-maker-admin-display-setup.php:166
 msgid "SSH Private Key"
 msgstr "SSH秘密鍵"
 
-#: admin/partials/static-maker-admin-display-setup.php:164
+#: admin/partials/static-maker-admin-display-setup.php:161
+#: admin/partials/static-maker-admin-display-setup.php:166
+msgid "Password"
+msgstr ""
+
+#: admin/partials/static-maker-admin-display-setup.php:172
 msgid "Target Directory"
 msgstr "リモートディレクトリ"
 
-#: admin/partials/static-maker-admin-display-setup.php:170
+#: admin/partials/static-maker-admin-display-setup.php:178
 msgid "Additional rsync options"
 msgstr "追加の rsync オプション"
 
-#: admin/partials/static-maker-admin-display-setup.php:176
+#: admin/partials/static-maker-admin-display-setup.php:184
 msgid "Before command"
 msgstr "事前実行コマンド"
 
-#: admin/partials/static-maker-admin-display-setup.php:179
+#: admin/partials/static-maker-admin-display-setup.php:187
 msgid "Command which will be executed before rsync"
 msgstr "rsync 前に実行するシェルコマンド"
 
-#: admin/partials/static-maker-admin-display-setup.php:181
+#: admin/partials/static-maker-admin-display-setup.php:189
 msgid "Document root"
 msgstr "ドキュメントルート"
 
-#: admin/partials/static-maker-admin-display-setup.php:182
+#: admin/partials/static-maker-admin-display-setup.php:190
 msgid "WordPress root"
 msgstr "WordPress のルートディレクトリ"
 
-#: admin/partials/static-maker-admin-display-setup.php:183
+#: admin/partials/static-maker-admin-display-setup.php:191
 msgid "Static Maker output directory"
 msgstr "Static Maker の静的ファイル出力先"
 

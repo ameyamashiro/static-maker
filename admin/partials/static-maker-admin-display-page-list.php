@@ -172,8 +172,14 @@ if ( $_GET[ 'paged' ]) {
                 data.id = $target.data('id');
             }
 
-            jQuery.post(url, data, function(res) {
-                console.log(res);
+            jQuery.post(url, data, function(res, status) {
+                if (status === 'success') {
+                    alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
+                } else {
+                    alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                }
+            }).fail(function() {
+                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
             });
         });
 
@@ -195,8 +201,14 @@ if ( $_GET[ 'paged' ]) {
 
             data[ 'action-type' ] = 'remove';
 
-            jQuery.post(url, data, function(res) {
-                console.log(res);
+            jQuery.post(url, data, function(res, status) {
+                if (status === 'success') {
+                    alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
+                } else {
+                    alert('<?php _e('Failed to register', PLUGIN_NAME) ?>');
+                }
+            }).fail(function() {
+                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
             });
         });
 
@@ -213,6 +225,8 @@ if ( $_GET[ 'paged' ]) {
 
             jQuery.post(url, data, function() {
                 location.reload();
+            }).fail(function() {
+                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
             });
         });
 
@@ -230,6 +244,8 @@ if ( $_GET[ 'paged' ]) {
 
             jQuery.post(url, data, function() {
                 location.reload();
+            }).fail(function() {
+                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
             });
         });
 
@@ -244,8 +260,15 @@ if ( $_GET[ 'paged' ]) {
                 data: {
                     action: 'static-maker-enqueue_all_pages'
                 },
-                success: function(res) {
-                    console.log(res);
+                success: function(res, status) {
+                    if (status === 'success') {
+                        alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
+                    } else {
+                        alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                    }
+                },
+                error: function() {
+                    alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
                 }
             })
         });

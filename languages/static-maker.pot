@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-22 17:11+0900\n"
+"POT-Creation-Date: 2018-06-01 18:36+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,9 @@ msgstr ""
 
 #: admin/partials/static-maker-admin-display-add.php:89
 #: admin/partials/static-maker-admin-display-add.php:117
+#: admin/partials/static-maker-admin-display-page-list.php:179
+#: admin/partials/static-maker-admin-display-page-list.php:206
+#: admin/partials/static-maker-admin-display-page-list.php:258
 msgid "Failed to register"
 msgstr ""
 
@@ -138,6 +141,12 @@ msgstr ""
 msgid "Process all pages"
 msgstr ""
 
+#: admin/partials/static-maker-admin-display-page-list.php:177
+#: admin/partials/static-maker-admin-display-page-list.php:204
+#: admin/partials/static-maker-admin-display-page-list.php:256
+msgid "Process Completed"
+msgstr ""
+
 #: admin/partials/static-maker-admin-display-setup.php:70
 #: admin/partials/static-maker-admin-display-setup.php:73
 msgid "Basic Auth"
@@ -203,34 +212,40 @@ msgid "Host"
 msgstr ""
 
 #: admin/partials/static-maker-admin-display-setup.php:158
+#: admin/partials/static-maker-admin-display-setup.php:166
 msgid "SSH Private Key"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:164
+#: admin/partials/static-maker-admin-display-setup.php:161
+#: admin/partials/static-maker-admin-display-setup.php:166
+msgid "Password"
+msgstr ""
+
+#: admin/partials/static-maker-admin-display-setup.php:172
 msgid "Target Directory"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:170
+#: admin/partials/static-maker-admin-display-setup.php:178
 msgid "Additional rsync options"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:176
+#: admin/partials/static-maker-admin-display-setup.php:184
 msgid "Before command"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:179
+#: admin/partials/static-maker-admin-display-setup.php:187
 msgid "Command which will be executed before rsync"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:181
+#: admin/partials/static-maker-admin-display-setup.php:189
 msgid "Document root"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:182
+#: admin/partials/static-maker-admin-display-setup.php:190
 msgid "WordPress root"
 msgstr ""
 
-#: admin/partials/static-maker-admin-display-setup.php:183
+#: admin/partials/static-maker-admin-display-setup.php:191
 msgid "Static Maker output directory"
 msgstr ""
 

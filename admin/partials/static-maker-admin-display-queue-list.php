@@ -126,7 +126,7 @@ if ( $_GET[ 'paged' ]) {
                     action: 'static-maker-process_queue_all'
                 },
                 success: function(res) {
-                    console.log(res);
+                    alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
                 }
             });
         });
