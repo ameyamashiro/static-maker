@@ -13,7 +13,7 @@ class Post_Actions {
                 }
                 break;
             case 'trash':
-                Queue::enqueue_by_post_id( $post->ID, 'remove' );
+                Queue::enqueue_by_post_id( $post->ID, 'remove', true );
                 break;
             default:
                 break;
