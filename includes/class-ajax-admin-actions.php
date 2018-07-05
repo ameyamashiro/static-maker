@@ -43,6 +43,8 @@ class Ajax_Admin_Actions {
 
     /**
      * Export html immediately
+     *
+     * @deprecated
      */
     static public function fetch_single_html() {
         check_ajax_referer( 'single_file_get_content' );

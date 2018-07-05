@@ -8,7 +8,34 @@ if ( !function_exists( 'get_home_path' ) )
 
 class FileUtil {
 
-    public static function export_single_file( $url, $replace_domain = true ) {
+    public static function get_default_export_file_path($url) {
+        if ( !$url || !filter_var( $url, FILTER_VALIDATE_URL ) ) { return false; }
+
+        $url_parsed = parse_url($url);
+
+        // if the url has any query string return false
+        if ( $url_parsed[ 'query' ] ) {
+            return false;
+        }
+
+        return array(
+            'file_name' => 'index.html',
+            'subdir' => $url_parsed[ 'path' ]
+        );
+    }
+
+    /**
+     * Export specific url to file
+     *
+     * @param $url
+     * @param bool $replace_domain
+     * @param null $to
+     * @return bool|int
+     */
+    public static function export_single_file( $url, $replace_domain = true, $to = null ) {
+        $path = self::get_default_export_file_path( $url );
+        if ( !$path ) { return false; }
+
         if ( !$url || !filter_var( $url, FILTER_VALIDATE_URL ) ) { return false; }
         $options = get_option( PLUGIN_NAME );
         $alter_url = isset( $options[ 'host' ] ) ? $options[ 'host' ] : '';
@@ -25,8 +52,7 @@ class FileUtil {
             return false;
         }
 
-        $dir = $url_parsed[ 'path' ];
-        return self::file_put_content( $content, 'index.html', $dir );
+        return self::file_put_content( $content, $path[ 'file_name' ], $path[ 'subdir' ] );
     }
 
     public static function remove_single_file( $url ) {
