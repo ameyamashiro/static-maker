@@ -181,7 +181,7 @@ class Queue {
             $post = get_post( $post_id );
 
             $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
-            if ( $wpdb->get_var( $query ) !== '1') { continue; }
+            if ( $wpdb->get_var( $query ) !== '1') { break; }
 
             // Check queue duplication
             $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
