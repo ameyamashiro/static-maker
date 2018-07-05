@@ -45,18 +45,36 @@ class Page {
     public static function get_pages( $user_option ) {
         $defaults = array(
             'paged' => 1,
-            'numberposts' => 25
+            'numberposts' => 25,
+            'published' => true
         );
         $option = array_merge( $defaults, $user_option );
 
         global $wpdb;
         $table_name = self::table_name();
-        if ( $option[ 'numberposts' ] === -1 ) {
-            // get all pages
-            $query = $wpdb->prepare( "SELECT * FROM $table_name" );
-        } else {
-            $query = $wpdb->prepare( "SELECT * FROM $table_name LIMIT %d OFFSET %d", $option[ 'numberposts' ], ($option[ 'paged' ] - 1) * $option[ 'numberposts' ] );
+
+        $sql = "SELECT * FROM $table_name ";
+        $args = array();
+
+        // join
+        if ( $option[ 'published' ] ) {
+            $sql .= " LEFT JOIN {$wpdb->prefix}posts AS posts ON {$table_name}.post_id = posts.id ";
         }
+
+        // where
+        if ( $option[ 'published' ] ) {
+            $sql .= " WHERE {$table_name}.post_id IS NULL OR posts.post_status = 'publish' ";
+        }
+
+        // limit, offset
+        if ( $option[ 'numberposts' ] !== -1 ) {
+            $sql .= " LIMIT %d OFFSET %d ";
+
+            $args[] = $option[ 'numberposts' ];
+            $args[] = ($option[ 'paged' ] - 1) * $option[ 'numberposts' ];
+        }
+
+        $query = call_user_func_array(array($wpdb, 'prepare'), array_merge(array($sql), $args));
         $pages = $wpdb->get_results( $query, ARRAY_A );
 
         $instances = array();

@@ -117,7 +117,7 @@ class Ajax_Admin_Actions {
     static public function enqueue_all_pages() {
         check_ajax_referer( 'enqueue_all_pages' );
 
-        $pages = Page::get_pages( array( 'numberposts' => -1 ) );
+        $pages = Page::get_pages( array( 'numberposts' => -1, 'published' => true ) );
 
         $results = array();
 

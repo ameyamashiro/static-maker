@@ -8,7 +8,13 @@ class Post_Actions {
                 if ( OptionsUtil::is_accepted_post_type( $post->post_type ) ) {
                     if ( !Page::get_page_by_post_id( $post->ID ) ) {
                         Page::create( $post->ID, $post->post_type, get_permalink( $post->ID ) );
+                    } else {
+                        // Change status to enabled
+                        $page = Page::get_page_by_post_id($post->ID);
+                        $page->active = 1;
+                        $page->save();
                     }
+
                     Queue::enqueue_by_post_id( $post->ID, 'add', true );
                 }
                 break;
@@ -16,6 +22,12 @@ class Post_Actions {
                 Queue::enqueue_by_post_id( $post->ID, 'remove', true );
                 break;
             default:
+                $page = Page::get_page_by_post_id($post->ID);
+                if ($page) {
+                    // Change status to disabled
+                    $page->active = 0;
+                    $page->save();
+                }
                 break;
         }
     }
