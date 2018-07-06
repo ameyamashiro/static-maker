@@ -139,7 +139,14 @@ class Ajax_Admin_Actions {
     }
 
     static public function filter_remove_true($r) {
-        return !$r;
+        $ret = false;
+        foreach ( $r as $e ) {
+            if ( !$e ) {
+                $ret = true;
+                break;
+            }
+        }
+        return $ret;
     }
 
     static public function remove_page_from_list() {
