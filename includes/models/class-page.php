@@ -46,7 +46,8 @@ class Page {
         $defaults = array(
             'paged' => 1,
             'numberposts' => 25,
-            'published' => true
+            'published' => true,
+            'include_manual_posts' => true,
         );
         $option = array_merge( $defaults, $user_option );
 
@@ -62,8 +63,21 @@ class Page {
         }
 
         // where
+        if ( $option[ 'published' ] || $option[ 'include_manual_posts' ] ) {
+            $sql .= " WHERE ";
+        }
+
         if ( $option[ 'published' ] ) {
-            $sql .= " WHERE {$table_name}.post_id IS NULL OR posts.post_status = 'publish' ";
+            $sql .= " ({$table_name}.post_id IS NULL OR posts.post_status = 'publish') ";
+        }
+
+        if ( $option[ 'include_manual_posts' ] ) {
+            if ( $option[ 'published' ] ) {
+                $sql .= " OR ({$table_name}.post_type = 'static-maker-manual' )";
+            } else {
+                $sql .= " ({$table_name}.post_type = 'static-maker-manual' )";
+            }
+            $sql .= "  ";
         }
 
         // limit, offset
