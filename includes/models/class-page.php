@@ -46,38 +46,27 @@ class Page {
         $defaults = array(
             'paged' => 1,
             'numberposts' => 25,
-            'published' => true,
-            'include_manual_posts' => true,
+            'published' => true
         );
         $option = array_merge( $defaults, $user_option );
 
         global $wpdb;
         $table_name = self::table_name();
 
-        $sql = "SELECT * FROM $table_name ";
+        $columns = '*';
+        $sql = '';
         $args = array();
 
         // join
         if ( $option[ 'published' ] ) {
+            $columns = "*, {$table_name}.post_type as post_type";
             $sql .= " LEFT JOIN {$wpdb->prefix}posts AS posts ON {$table_name}.post_id = posts.id ";
         }
 
         // where
-        if ( $option[ 'published' ] || $option[ 'include_manual_posts' ] ) {
-            $sql .= " WHERE ";
-        }
-
         if ( $option[ 'published' ] ) {
-            $sql .= " ({$table_name}.post_id IS NULL OR posts.post_status = 'publish') ";
-        }
-
-        if ( $option[ 'include_manual_posts' ] ) {
-            if ( $option[ 'published' ] ) {
-                $sql .= " OR ({$table_name}.post_type = 'static-maker-manual' )";
-            } else {
-                $sql .= " ({$table_name}.post_type = 'static-maker-manual' )";
-            }
-            $sql .= "  ";
+            $columns = "*, {$table_name}.post_type as post_type";
+            $sql .= " WHERE {$table_name}.post_id IS NULL OR posts.post_status = 'publish' ";
         }
 
         // limit, offset
@@ -88,7 +77,15 @@ class Page {
             $args[] = ($option[ 'paged' ] - 1) * $option[ 'numberposts' ];
         }
 
-        $query = call_user_func_array(array($wpdb, 'prepare'), array_merge(array($sql), $args));
+        $sql_head = "SELECT ${columns} FROM $table_name ";
+        $sql = $sql_head . $sql;
+
+        $prepareArgs = array_merge(array($sql), $args);
+        if (!isset($prepareArgs[1])) {
+            $prepareArgs[1] = $args;
+        }
+
+        $query = call_user_func_array(array($wpdb, 'prepare'), $prepareArgs);
         $pages = $wpdb->get_results( $query, ARRAY_A );
 
         $instances = array();
