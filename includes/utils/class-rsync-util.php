@@ -35,6 +35,8 @@ class RsyncUtil {
         $local_src = FileUtil::get_output_path() . '/';
         $rsync_options = $rsync_options ? $rsync_options : '-Pav --delete';
 
+        $output = "\nRsync Command:\n";
+
         $pass_options = $auth_options = '';
         if ( $auth_method === 'ssh' ) {
             $auth_options = $ssh_options ? $ssh_options : "-e 'ssh -i $path -o StrictHostKeyChecking=no'";
@@ -44,7 +46,7 @@ class RsyncUtil {
 
         $rsync_command = "rsync $rsync_options $auth_options $pass_options $local_src $user@$host:$target 2>&1";
 
-        $output = shell_exec( $rsync_command );
+        $output .= shell_exec( $rsync_command );
         fclose($temp);
 
         return $output;
