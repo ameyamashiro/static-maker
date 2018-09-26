@@ -13,8 +13,8 @@ namespace Static_Maker;
  * @subpackage Static_Maker/admin/partials
  */
 
-if ( $_GET[ 'paged' ]) {
-    $current_page_num = intval( $_GET[ 'paged' ] );
+if ($_GET['paged']) {
+    $current_page_num = intval($_GET['paged']);
 } else {
     $current_page_num = 1;
 }
@@ -23,52 +23,52 @@ if ( $_GET[ 'paged' ]) {
 
 <div class="wrap">
 
-    <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+    <h2><?php echo esc_html(get_admin_page_title()); ?></h2>
 
     <div class="tablenav top">
         <div class="tablenav-pages">
-            <?php $each = 25; ?>
-            <?php $count = Page::get_page_count() ?>
+            <?php $each = 25;?>
+            <?php $count = Page::get_page_count()?>
             <span class="displaying-num"><?php echo $count ?> items</span>
             <span class="pagination-links">
-                <?php if ( $current_page_num > 1 ): ?>
-                    <a class="prev-page" href="<?php echo strtok( $_SERVER['REQUEST_URI'], '?' ) . '?' . http_build_query( array( 'page' => $_GET['page'], 'paged' => $current_page_num - 1 )) ?>">
+                <?php if ($current_page_num > 1): ?>
+                    <a class="prev-page" href="<?php echo strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query(array('page' => $_GET['page'], 'paged' => $current_page_num - 1)) ?>">
                         <span class="screen-reader-text">Previous page</span><span aria-hidden="true">‹</span>
                     </a>
                 <?php else: ?>
                     <span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
-                <?php endif ?>
+                <?php endif?>
 
                 <span class="paging-input">
                     <label for="current-page-selector" class="screen-reader-text">
                         Current Page
                     </label>
-                    <?php echo $current_page_num ?><span class="tablenav-paging-text"> of <span class="total-pages"><?php echo ceil( $count / $each ) ?></span></span>
+                    <?php echo $current_page_num ?><span class="tablenav-paging-text"> of <span class="total-pages"><?php echo ceil($count / $each) ?></span></span>
                 </span>
 
-                <?php if ( $current_page_num === intval(ceil( $count / $each ))): ?>
+                <?php if ($current_page_num === intval(ceil($count / $each))): ?>
                     <span class="tablenav-pages-navspan" aria-hidden="true">›</span>
                 <?php else: ?>
-                    <a class="next-page" href="<?php echo strtok( $_SERVER['REQUEST_URI'], '?' ) . '?' . http_build_query( array( 'page' => $_GET['page'], 'paged' => $current_page_num + 1 )) ?>">
+                    <a class="next-page" href="<?php echo strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query(array('page' => $_GET['page'], 'paged' => $current_page_num + 1)) ?>">
                         <span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span>
                     </a>
-                <?php endif ?>
+                <?php endif?>
             </span>
         </div>
     </div>
 
     <table class="wp-list-table widefat striped">
         <thead>
-            <td><?php _e( 'Post ID', PLUGIN_NAME ) ?></td>
-            <td><?php _e( 'Permalink', PLUGIN_NAME ) ?></td>
-            <td><?php _e( 'Status', PLUGIN_NAME ) ?></td>
+            <td><?php _e('Post ID', PLUGIN_NAME)?></td>
+            <td><?php _e('Permalink', PLUGIN_NAME)?></td>
+            <td><?php _e('Status', PLUGIN_NAME)?></td>
         </thead>
         <tbody>
-        <?php foreach( Page::get_pages( array( 'paged' => $current_page_num, 'published' => false ) ) as $page ): ?>
+        <?php foreach (Page::get_pages(array('paged' => $current_page_num, 'published' => false)) as $page): ?>
             <tr>
                 <th><?php echo $page->post_id ?></th>
                 <td>
-                    <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo rawurldecode( $page->permalink ) ?></a>
+                    <a href="<?php echo $page->permalink ?>" target="_blank"><?php echo rawurldecode($page->permalink) ?></a>
                     <div class="row-actions">
                         <span class="export-individual">
                             <a
@@ -78,9 +78,9 @@ if ( $_GET[ 'paged' ]) {
                                 data-post-id="<?php echo $page->post_id ?>"
                                 <?php else: ?>
                                 data-id="<?php echo $page->id ?>"
-                                <?php endif; ?>
+                                <?php endif;?>
                             >
-                                <?php _e( 'Export Request', PLUGIN_NAME ) ?>
+                                <?php _e('Export Request', PLUGIN_NAME)?>
                             </a>
                             |
                         </span>
@@ -92,9 +92,9 @@ if ( $_GET[ 'paged' ]) {
                                 data-post-id="<?php echo $page->post_id ?>"
                                 <?php else: ?>
                                 data-id="<?php echo $page->id ?>"
-                                <?php endif; ?>
+                                <?php endif;?>
                             >
-                                <?php _e( 'Delete Request', PLUGIN_NAME ) ?>
+                                <?php _e('Delete Request', PLUGIN_NAME)?>
                             </a>
                             |
                         </span>
@@ -104,14 +104,14 @@ if ( $_GET[ 'paged' ]) {
                                 class="trigger-remove-from-list"
                                 data-id="<?php echo $page->id ?>"
                             >
-                                <?php _e( 'Delete from List', PLUGIN_NAME ) ?>
+                                <?php _e('Delete from List', PLUGIN_NAME)?>
                             </a>
                         </span>
                     </div>
                 </td>
                 <td>
-                    <?php if ( $page->active === '1' ): ?>
-                    <?php _e( 'Active', PLUGIN_NAME ) ?>
+                    <?php if ($page->active === '1'): ?>
+                    <?php _e('Active', PLUGIN_NAME)?>
                     <div class="row-actions">
                         <span class="trash">
                             <a
@@ -120,12 +120,12 @@ if ( $_GET[ 'paged' ]) {
                                 data-action="disable"
                                 data-id="<?php echo $page->id ?>"
                             >
-                                <?php _e( 'Disable', PLUGIN_NAME ) ?>
+                                <?php _e('Disable', PLUGIN_NAME)?>
                             </a>
                         </span>
                     </div>
                     <?php else: ?>
-                    <?php _e( 'Disabled', PLUGIN_NAME ) ?>
+                    <?php _e('Disabled', PLUGIN_NAME)?>
                     <div class="row-actions">
                         <span>
                             <a
@@ -134,27 +134,28 @@ if ( $_GET[ 'paged' ]) {
                                 data-action="activate"
                                 data-id="<?php echo $page->id ?>"
                             >
-                                <?php _e( 'Activate', PLUGIN_NAME ) ?>
+                                <?php _e('Activate', PLUGIN_NAME)?>
                             </a>
                         </span>
                     </div>
-                    <?php endif ?>
+                    <?php endif?>
                 </td>
             </tr>
-        <?php endforeach ?>
+        <?php endforeach?>
         </tbody>
     </table>
 
     <div class="bottom-actions">
-        <button class="enqueue-all-pages button button-primary"><?php _e( 'Process all pages', PLUGIN_NAME ) ?></button>
+        <button class="enqueue-all-pages button button-primary"><?php _e('Process all pages', PLUGIN_NAME)?></button>
     </div>
 
 </div>
 
 <?php
-    add_action( 'admin_footer', 'Static_Maker\static_maker_javascript' );
+add_action('admin_footer', 'Static_Maker\static_maker_javascript');
 
-    function static_maker_javascript() { ?>
+function static_maker_javascript()
+{?>
     <script>
         jQuery('.trigger-add-individual').on('click', function(e) {
             e.preventDefault();
@@ -176,10 +177,10 @@ if ( $_GET[ 'paged' ]) {
                 if (status === 'success') {
                     alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
                 } else {
-                    alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                    alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
                 }
             }).fail(function() {
-                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
             });
         });
 
@@ -205,10 +206,10 @@ if ( $_GET[ 'paged' ]) {
                 if (status === 'success') {
                     alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
                 } else {
-                    alert('<?php _e('Failed to register', PLUGIN_NAME) ?>');
+                    alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
                 }
             }).fail(function() {
-                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
             });
         });
 
@@ -226,7 +227,7 @@ if ( $_GET[ 'paged' ]) {
             jQuery.post(url, data, function() {
                 location.reload();
             }).fail(function() {
-                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
             });
         });
 
@@ -245,7 +246,7 @@ if ( $_GET[ 'paged' ]) {
             jQuery.post(url, data, function() {
                 location.reload();
             }).fail(function() {
-                alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
             });
         });
 
@@ -264,11 +265,11 @@ if ( $_GET[ 'paged' ]) {
                     if (status === 'success') {
                         alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
                     } else {
-                        alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                        alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
                     }
                 },
                 error: function() {
-                    alert('<?php _e( 'Failed to register', PLUGIN_NAME ) ?>');
+                    alert('<?php _e('Failed to register', PLUGIN_NAME)?>');
                 }
             })
         });

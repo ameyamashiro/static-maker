@@ -4,25 +4,25 @@
  */
 
 .bottom-actions {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .rsync-item {
-    margin-top: 30px;
-    padding-top: 30px;
-    border-top: 1px solid #ccc;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #ccc;
 }
 
 .rsync-item:first-child {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .replaces-opt {
-    display: flex;
+  display: flex;
 }
 
 .replaces-input {
-    width: 40%;
+  width: 40%;
 }

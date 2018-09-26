@@ -1,21 +1,24 @@
 <?php
 namespace Static_Maker;
 
-class Queue_Actions {
+class Queue_Actions
+{
 
-    function dequeue_task() {
+    public function dequeue_task()
+    {
         static::dequeue_all();
     }
 
-    static public function dequeue_all() {
+    public static function dequeue_all()
+    {
         $queues = Queue::receive_unprocessed_queues();
 
         // mark all queues as processing
-        foreach ( $queues as $queue ) {
+        foreach ($queues as $queue) {
             $queue->mark_as_processing();
         }
 
-        foreach ( $queues as $queue ) {
+        foreach ($queues as $queue) {
             $queue->dequeue();
         }
 

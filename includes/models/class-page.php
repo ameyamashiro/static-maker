@@ -1,23 +1,26 @@
 <?php
 namespace Static_Maker;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-class Page {
+class Page
+{
 
     protected static $table_name = 'staticmaker_pages';
 
     protected static $columns = array();
     protected $data = array();
 
-    public static function table_name() {
+    public static function table_name()
+    {
         global $wpdb;
         return $wpdb->prefix . self::$table_name;
     }
 
-    public static function create_table() {
+    public static function create_table()
+    {
         global $wpdb;
 
         $table_name = self::table_name();
@@ -32,23 +35,25 @@ class Page {
           PRIMARY KEY (id)
         ) $charset_collate";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta($sql);
     }
 
-    public static function get_page_count() {
+    public static function get_page_count()
+    {
         global $wpdb;
         $table_name = self::table_name();
-        return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+        return $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
     }
 
-    public static function get_pages( $user_option ) {
+    public static function get_pages($user_option)
+    {
         $defaults = array(
             'paged' => 1,
             'numberposts' => 25,
-            'published' => true
+            'published' => true,
         );
-        $option = array_merge( $defaults, $user_option );
+        $option = array_merge($defaults, $user_option);
 
         global $wpdb;
         $table_name = self::table_name();
@@ -58,23 +63,23 @@ class Page {
         $args = array();
 
         // join
-        if ( $option[ 'published' ] ) {
+        if ($option['published']) {
             $columns = "*, {$table_name}.post_type as post_type";
             $sql .= " LEFT JOIN {$wpdb->prefix}posts AS posts ON {$table_name}.post_id = posts.id ";
         }
 
         // where
-        if ( $option[ 'published' ] ) {
+        if ($option['published']) {
             $columns = "*, {$table_name}.post_type as post_type";
             $sql .= " WHERE {$table_name}.post_id IS NULL OR posts.post_status = 'publish' ";
         }
 
         // limit, offset
-        if ( $option[ 'numberposts' ] !== -1 ) {
+        if ($option['numberposts'] !== -1) {
             $sql .= " LIMIT %d OFFSET %d ";
 
-            $args[] = $option[ 'numberposts' ];
-            $args[] = ($option[ 'paged' ] - 1) * $option[ 'numberposts' ];
+            $args[] = $option['numberposts'];
+            $args[] = ($option['paged'] - 1) * $option['numberposts'];
         }
 
         $sql_head = "SELECT ${columns} FROM $table_name ";
@@ -86,66 +91,70 @@ class Page {
         }
 
         $query = call_user_func_array(array($wpdb, 'prepare'), $prepareArgs);
-        $pages = $wpdb->get_results( $query, ARRAY_A );
+        $pages = $wpdb->get_results($query, ARRAY_A);
 
         $instances = array();
 
-        foreach ( $pages as $page ) {
-            $ins = new self( $page );
+        foreach ($pages as $page) {
+            $ins = new self($page);
             $instances[] = $ins;
         }
 
         return $instances;
     }
 
-    public static function get_page( $id ) {
+    public static function get_page($id)
+    {
         global $wpdb;
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name WHERE id = %d LIMIT 1";
-        $row = $wpdb->get_results($wpdb->prepare( $query, $id ), ARRAY_A)[0];
+        $row = $wpdb->get_results($wpdb->prepare($query, $id), ARRAY_A)[0];
 
-        if (!$row) { return null; }
+        if (!$row) {return null;}
 
-        return new self( $row );
+        return new self($row);
     }
 
-    public static function get_page_by_post_id( $id ) {
+    public static function get_page_by_post_id($id)
+    {
         global $wpdb;
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name WHERE post_id = %d LIMIT 1";
-        $row = $wpdb->get_results($wpdb->prepare( $query, $id ), ARRAY_A)[0];
+        $row = $wpdb->get_results($wpdb->prepare($query, $id), ARRAY_A)[0];
 
-        if (!$row) { return null; }
+        if (!$row) {return null;}
 
-        return new self( $row );
+        return new self($row);
     }
 
-    public static function get_page_by_link( $link ) {
+    public static function get_page_by_link($link)
+    {
         global $wpdb;
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name WHERE permalink = %s LIMIT 1";
-        $row = $wpdb->get_results($wpdb->prepare( $query, $link ), ARRAY_A)[0];
+        $row = $wpdb->get_results($wpdb->prepare($query, $link), ARRAY_A)[0];
 
-        if (!$row) { return null; }
+        if (!$row) {return null;}
 
-        return new self( $row );
+        return new self($row);
     }
 
-    public static function get_related_pages( $post_id ) {
+    public static function get_related_pages($post_id)
+    {
         $posts_to_process = array();
         // $posts_to_process[] = $post_id;
 
-        $post = Page::get_page_by_post_id( $post_id );
+        $post = Page::get_page_by_post_id($post_id);
 
-        if ( $archive = get_post_type_archive_link( $post->post_type ) ) {
+        if ($archive = get_post_type_archive_link($post->post_type)) {
             $posts_to_process[] = $archive->ID;
         }
 
-        if ( $parents = get_post_ancestors( $post->post_id ) ) {
-            foreach ( $parents as $parent ) {
+        if ($parents = get_post_ancestors($post->post_id)) {
+            foreach ($parents as $parent) {
                 $posts_to_process[] = $parent;
             }
         }
@@ -153,71 +162,76 @@ class Page {
         return $posts_to_process;
     }
 
-    public function __construct( $columns ) {
-        foreach ( $columns as $key => $value ) {
+    public function __construct($columns)
+    {
+        foreach ($columns as $key => $value) {
             $this->$key = $value;
         }
     }
 
-    public function __get( $field_name ) {
-        if ( ! array_key_exists( $field_name, $this->data ) ) {
-            throw new \Exception( 'Undefined variable for ' . get_called_class() );
+    public function __get($field_name)
+    {
+        if (!array_key_exists($field_name, $this->data)) {
+            throw new \Exception('Undefined variable for ' . get_called_class());
         } else {
-            return $this->data[ $field_name ];
+            return $this->data[$field_name];
         }
     }
 
-    public function __set( $field_name, $field_value ) {
-        return $this->data[ $field_name ] = $field_value;
+    public function __set($field_name, $field_value)
+    {
+        return $this->data[$field_name] = $field_value;
     }
 
-
-    public static function create( $post_id, $post_type, $permalink, $active = 1 ) {
-        $page = new static( array(
+    public static function create($post_id, $post_type, $permalink, $active = 1)
+    {
+        $page = new static(array(
             'post_id' => $post_id,
             'post_type' => $post_type,
             'permalink' => $permalink,
             'active' => $active,
-        ) );
+        ));
         $page->save();
         return $page;
     }
 
-    public function save() {
+    public function save()
+    {
         global $wpdb;
         $table_name = self::table_name();
 
-        $is_manual_type = $this->data[ 'post_type' ] === 'static-maker-manual';
-        $permalink = $this->data[ 'permalink' ];
-        $post_id = $this->data[ 'post_id' ];
+        $is_manual_type = $this->data['post_type'] === 'static-maker-manual';
+        $permalink = $this->data['permalink'];
+        $post_id = $this->data['post_id'];
 
-        if ( $is_manual_type ) {
-            $exists_query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE permalink = %s)", $permalink );
+        if ($is_manual_type) {
+            $exists_query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE permalink = %s)", $permalink);
         } else {
-            $exists_query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id = %s)", $post_id );
+            $exists_query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id = %s)", $post_id);
         }
 
-        if ( $wpdb->get_var( $exists_query ) === '1' ) { // have
+        if ($wpdb->get_var($exists_query) === '1') { // have
 
-            if ( $is_manual_type ) {
-                return $wpdb->update( $table_name, $this->data, array( 'permalink' => $permalink ) );
+            if ($is_manual_type) {
+                return $wpdb->update($table_name, $this->data, array('permalink' => $permalink));
             } else {
-                return $wpdb->update( $table_name, $this->data, array( 'post_id' => $post_id ) );
+                return $wpdb->update($table_name, $this->data, array('post_id' => $post_id));
             }
 
         } else {
-            if ( $is_manual_type ) {
-                return $wpdb->insert( $table_name, $this->data );
+            if ($is_manual_type) {
+                return $wpdb->insert($table_name, $this->data);
             } else {
-                return $wpdb->insert( $table_name, $this->data );
+                return $wpdb->insert($table_name, $this->data);
             }
         }
     }
 
-    public function delete() {
+    public function delete()
+    {
         global $wpdb;
         $table_name = self::table_name();
-        return $wpdb->delete( $table_name, array( 'id' => $this->data[ 'id' ] ) );
+        return $wpdb->delete($table_name, array('id' => $this->data['id']));
     }
 
 }

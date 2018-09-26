@@ -25,24 +25,23 @@ namespace Static_Maker;
  * @subpackage Static_Maker/includes
  * @author     ameyamashiro <ameyamashiro@example.com>
  */
-class Static_Maker_i18n {
+class Static_Maker_i18n
+{
 
+    /**
+     * Load the plugin text domain for translation.
+     *
+     * @since    1.0.0
+     */
+    public function load_plugin_textdomain()
+    {
 
-	/**
-	 * Load the plugin text domain for translation.
-	 *
-	 * @since    1.0.0
-	 */
-	public function load_plugin_textdomain() {
+        load_plugin_textdomain(
+            'static-maker',
+            false,
+            dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
+        );
 
-		load_plugin_textdomain(
-			'static-maker',
-			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
-		);
-
-	}
-
-
+    }
 
 }

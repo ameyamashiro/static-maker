@@ -21,17 +21,19 @@ namespace Static_Maker;
  * @subpackage Static_Maker/includes
  * @author     ameyamashiro <ameyamashiro@example.com>
  */
-class Static_Maker_Deactivator {
+class Static_Maker_Deactivator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function deactivate() {
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function deactivate()
+    {
 
-	}
+    }
 
 }

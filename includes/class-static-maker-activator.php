@@ -21,18 +21,20 @@ namespace Static_Maker;
  * @subpackage Static_Maker/includes
  * @author     ameyamashiro <ameyamashiro@example.com>
  */
-class Static_Maker_Activator {
+class Static_Maker_Activator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function activate() {
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function activate()
+    {
         Queue::create_table();
-	    Page::create_table();
+        Page::create_table();
     }
 
 }

@@ -3,7 +3,8 @@ namespace Static_Maker;
 
 // https://stackoverflow.com/questions/9262109/simplest-two-way-encryption-using-php
 
-class CryptoUtil {
+class CryptoUtil
+{
     const METHOD = 'aes-256-ctr';
     const KEY = SECURE_AUTH_KEY;
 
@@ -32,9 +33,9 @@ class CryptoUtil {
         // Now let's pack the IV and the ciphertext together
         // Naively, we can just concatenate
         if ($encode) {
-            return base64_encode($nonce.$ciphertext);
+            return base64_encode($nonce . $ciphertext);
         }
-        return $nonce.$ciphertext;
+        return $nonce . $ciphertext;
     }
 
     /**

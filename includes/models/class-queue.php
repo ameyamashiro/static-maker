@@ -1,23 +1,26 @@
 <?php
 namespace Static_Maker;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-class Queue {
+class Queue
+{
 
     protected static $table_name = 'staticmaker_queues';
 
     protected static $columns = array();
     protected $data = array();
 
-    public static function table_name() {
+    public static function table_name()
+    {
         global $wpdb;
         return $wpdb->prefix . self::$table_name;
     }
 
-    public static function create_table() {
+    public static function create_table()
+    {
         global $wpdb;
 
         $table_name = self::table_name();
@@ -36,86 +39,90 @@ class Queue {
           PRIMARY KEY (id)
         ) $charset_collate";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta($sql);
     }
 
-    public static function receive_unprocessed_queues() {
+    public static function receive_unprocessed_queues()
+    {
         global $wpdb;
         $table_name = self::table_name();
 
-        $options = get_option( PLUGIN_NAME );
-        $limit = isset( $options[ 'queue_limit' ] ) && !empty( $options[ 'queue_limit' ] ) ? $options[ 'queue_limit' ] : '10';
+        $options = get_option(PLUGIN_NAME);
+        $limit = isset($options['queue_limit']) && !empty($options['queue_limit']) ? $options['queue_limit'] : '10';
 
-        $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'waiting' LIMIT %d", $limit );
+        $sql = $wpdb->prepare("SELECT * FROM $table_name WHERE status = 'waiting' LIMIT %d", $limit);
         $queues = $wpdb->get_results($sql);
         $instances = array();
 
-        foreach( $queues as $queue ) {
-            $instances[] = new self( $queue );
+        foreach ($queues as $queue) {
+            $instances[] = new self($queue);
         }
 
         return $instances;
     }
 
-    public static function get_queue_count() {
+    public static function get_queue_count()
+    {
         global $wpdb;
         $table_name = self::table_name();
-        return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+        return $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
     }
 
-    public static function get_queues( $args = array() ) {
+    public static function get_queues($args = array())
+    {
         global $wpdb;
         $each_page = 25;
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name";
 
-        if ( isset($args[ 'desc' ]) && $args[ 'desc' ] ) {
+        if (isset($args['desc']) && $args['desc']) {
             $query .= ' ORDER BY id DESC';
         }
 
-        if ( isset($args[ 'paged' ]) && $args[ 'paged' ]) {
-            $paged = $args[ 'paged' ];
+        if (isset($args['paged']) && $args['paged']) {
+            $paged = $args['paged'];
         } else {
             $paged = 1;
         }
 
-        $q = $wpdb->prepare( $query . ' LIMIT %d OFFSET %d', $each_page, ($paged - 1) * $each_page );
-        $queues = $wpdb->get_results( $q );
+        $q = $wpdb->prepare($query . ' LIMIT %d OFFSET %d', $each_page, ($paged - 1) * $each_page);
+        $queues = $wpdb->get_results($q);
 
-        if ( isset( $args[ 'output' ] ) && $args[ 'output' ] === 'original' ) {
+        if (isset($args['output']) && $args['output'] === 'original') {
             return $queues;
         }
 
         $instances = array();
-        foreach ( $queues as $queue ) {
-            $instances[] = new self( $queue );
+        foreach ($queues as $queue) {
+            $instances[] = new self($queue);
         }
 
         return $instances;
     }
 
-    public static function enqueue_by_id( $id, $action = 'add', $parent = false ) {
+    public static function enqueue_by_id($id, $action = 'add', $parent = false)
+    {
         global $wpdb;
         $table_name = self::table_name();
         $page_table_name = Page::table_name();
-        $page = Page::get_page( $id );
+        $page = Page::get_page($id);
         $post_id = $page->post_id;
         $results = array();
         $url = preg_replace('/__trashed(\/?)$/', '$1', $page->permalink);
 
         // Process specified static maker id
-        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE id=%d AND active=1)", $id );
-        if ( $wpdb->get_var( $query ) !== '1') { return false; }
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE id=%d AND active=1)", $id);
+        if ($wpdb->get_var($query) !== '1') {return false;}
 
         // Check queue duplication
-        if ( $post_id ) {
-            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
+        if ($post_id) {
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
         } else {
-            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $url, $action );
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $url, $action);
         }
-        if ( $wpdb->get_var($query) ) {
+        if ($wpdb->get_var($query)) {
             $results[] = false;
             return $results;
         }
@@ -124,39 +131,39 @@ class Queue {
             $table_name,
             array(
                 'post_id' => $post_id,
-                'created' => current_time( 'mysql' ),
+                'created' => current_time('mysql'),
                 'type' => $action,
                 'post_type' => $page->post_type,
-                'url' => $url
+                'url' => $url,
             )
         );
 
         // Process related if it has
         $post_ids = array();
-        if ( !empty($post_id) && $parent ) {
-            $post_ids = Page::get_related_pages( $post_id );
+        if (!empty($post_id) && $parent) {
+            $post_ids = Page::get_related_pages($post_id);
         }
-        foreach ( $post_ids as $post_id ) {
-            $post = get_post( $post_id );
+        foreach ($post_ids as $post_id) {
+            $post = get_post($post_id);
 
-            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
-            if ( $wpdb->get_var( $query ) !== '1') { continue; }
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
+            if ($wpdb->get_var($query) !== '1') {continue;}
 
             // Check queue duplication
-            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
-            if ( $wpdb->get_var($query) ) {
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
+            if ($wpdb->get_var($query)) {
                 continue;
             }
 
-            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink( $post_id ));
+            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
             $results[] = $wpdb->insert(
                 $table_name,
                 array(
                     'post_id' => $post_id,
-                    'created' => current_time( 'mysql' ),
+                    'created' => current_time('mysql'),
                     'type' => 'add',
                     'post_type' => $post->post_type,
-                    'url' => $url
+                    'url' => $url,
                 )
             );
         }
@@ -164,41 +171,42 @@ class Queue {
         return $results;
     }
 
-    public static function enqueue_by_post_id( $post_id, $action = 'add', $parent = false ) {
+    public static function enqueue_by_post_id($post_id, $action = 'add', $parent = false)
+    {
         global $wpdb;
         $table_name = self::table_name();
         $page_table_name = Page::table_name();
 
-        $post_ids = array( $post_id );
+        $post_ids = array($post_id);
 
-        if ( $parent ) {
-            $post_ids = array_merge( $post_ids, Page::get_related_pages( $post_id ) );
+        if ($parent) {
+            $post_ids = array_merge($post_ids, Page::get_related_pages($post_id));
         }
 
         $results = array();
 
-        foreach ( $post_ids as $i => $post_id ) {
-            $post = get_post( $post_id );
+        foreach ($post_ids as $i => $post_id) {
+            $post = get_post($post_id);
 
-            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id );
-            if ( $wpdb->get_var( $query ) !== '1') { break; }
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
+            if ($wpdb->get_var($query) !== '1') {break;}
 
             // Check queue duplication
-            $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action );
-            if ( $wpdb->get_var($query) ) {
-                if ( $i === 0 ) {
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
+            if ($wpdb->get_var($query)) {
+                if ($i === 0) {
                     $results[] = false;
                     break;
                 }
                 continue;
             }
 
-            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink( $post_id ));
+            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
             $results[] = $wpdb->insert(
                 $table_name,
                 array(
                     'post_id' => $post_id,
-                    'created' => current_time( 'mysql' ),
+                    'created' => current_time('mysql'),
                     'type' => $i === 0 ? $action : 'add',
                     'post_type' => $post->post_type,
                     'url' => $url,
@@ -209,7 +217,8 @@ class Queue {
         return $results;
     }
 
-    public static function enqueue_by_link( $link, $action = 'add', $post_type = '' ) {
+    public static function enqueue_by_link($link, $action = 'add', $post_type = '')
+    {
         global $wpdb;
         $table_name = self::table_name();
         $page_table_name = Page::table_name();
@@ -217,22 +226,22 @@ class Queue {
         $link = preg_replace('/__trashed(\/?)$/', '$1', $link);
 
         // append get_home_url() result if the url is not started with http
-        if (substr( $link, 0, 4 ) !== 'http') {
+        if (substr($link, 0, 4) !== 'http') {
             $link = get_home_url() . $link;
         }
 
-        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link );
-        if ( $wpdb->get_var( $query ) !== '1') { return false; }
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link);
+        if ($wpdb->get_var($query) !== '1') {return false;}
 
         // Check queue duplication
-        $query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $link, $action );
-        if ( $wpdb->get_var($query) ) { return false; }
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $link, $action);
+        if ($wpdb->get_var($query)) {return false;}
 
         return $wpdb->insert(
             $table_name,
             array(
                 'post_id' => '',
-                'created' => current_time( 'mysql' ),
+                'created' => current_time('mysql'),
                 'type' => $action,
                 'post_type' => $post_type,
                 'url' => $link,
@@ -240,50 +249,55 @@ class Queue {
         );
     }
 
-    public function __construct( $columns ) {
-        foreach ( $columns as $key => $value ) {
+    public function __construct($columns)
+    {
+        foreach ($columns as $key => $value) {
             $this->$key = $value;
         }
     }
 
-    public function __get( $field_name ) {
-        if ( ! array_key_exists( $field_name, $this->data ) ) {
-            throw new \Exception( 'Undefined variable for ' . get_called_class() );
+    public function __get($field_name)
+    {
+        if (!array_key_exists($field_name, $this->data)) {
+            throw new \Exception('Undefined variable for ' . get_called_class());
         } else {
-            return $this->data[ $field_name ];
+            return $this->data[$field_name];
         }
     }
 
-    public function __set( $field_name, $field_value ) {
-        return $this->data[ $field_name ] = $field_value;
+    public function __set($field_name, $field_value)
+    {
+        return $this->data[$field_name] = $field_value;
     }
 
-    public function save() {
+    public function save()
+    {
         global $wpdb;
         $table_name = self::table_name();
-        $id = $this->data[ 'id' ];
+        $id = $this->data['id'];
 
-        $exists_query = $wpdb->prepare( "SELECT EXISTS(SELECT * FROM $table_name WHERE id = %d)", $id );
+        $exists_query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE id = %d)", $id);
 
-        if ( $wpdb->get_var( $exists_query ) === '1' ) { // have
-            return $wpdb->update( $table_name, $this->data, array( 'id' => $id ) );
+        if ($wpdb->get_var($exists_query) === '1') { // have
+            return $wpdb->update($table_name, $this->data, array('id' => $id));
         } else {
-            return $wpdb->insert( $table_name, $this->data );
+            return $wpdb->insert($table_name, $this->data);
         }
     }
 
-    public function dequeue() {
-        if ( $this->data[ 'type' ] === 'add' ) {
-            if ( FileUtil::export_single_file( $this->data[ 'url' ] ) !== false ) {
+    public function dequeue()
+    {
+        if ($this->data['type'] === 'add') {
+            if (FileUtil::export_single_file($this->data['url']) !== false) {
                 $this->mark_as_completed();
             } else {
                 $this->mark_as_failed();
             }
-        } else if ( $this->data[ 'type' ] === 'remove' ) {
-            if ( FileUtil::remove_single_file( $this->data[ 'url' ] ) !== false ) {
+        } else if ($this->data['type'] === 'remove') {
+            if (FileUtil::remove_single_file($this->data['url']) !== false) {
                 $this->mark_as_completed();
 
-                Page::get_page_by_link( $this->data[ 'url' ] )->delete();
+                Page::get_page_by_link($this->data['url'])->delete();
             } else {
                 $this->mark_as_failed();
             }
@@ -292,27 +306,31 @@ class Queue {
         }
     }
 
-    public function mark_as_processing() {
-        $this->data[ 'status' ] = 'processing';
-        $this->data[ 'process_started' ] = current_time( 'mysql' );
+    public function mark_as_processing()
+    {
+        $this->data['status'] = 'processing';
+        $this->data['process_started'] = current_time('mysql');
         $this->save();
     }
 
-    public function mark_as_completed() {
-        $this->data[ 'status' ] = 'completed';
-        $this->data[ 'process_started' ] = current_time( 'mysql' );
+    public function mark_as_completed()
+    {
+        $this->data['status'] = 'completed';
+        $this->data['process_started'] = current_time('mysql');
         $this->save();
     }
 
-    public function mark_as_failed() {
-        $this->data[ 'status' ] = 'failed';
-        $this->data[ 'process_started' ] = current_time( 'mysql' );
+    public function mark_as_failed()
+    {
+        $this->data['status'] = 'failed';
+        $this->data['process_started'] = current_time('mysql');
         $this->save();
     }
 
-    public function mark_as_skipped() {
-        $this->data[ 'status' ] = 'skipped (unknown)';
-        $this->data[ 'process_started' ] = current_time( 'mysql' );
+    public function mark_as_skipped()
+    {
+        $this->data['status'] = 'skipped (unknown)';
+        $this->data['process_started'] = current_time('mysql');
         $this->save();
     }
 
