@@ -31,10 +31,24 @@ class Static_Maker_Activator
      *
      * @since    1.0.0
      */
-    public static function activate()
+    public static function activate($network_wide)
     {
-        Queue::create_table();
-        Page::create_table();
+        if (is_multisite() && $network_wide) {
+
+            global $wpdb;
+
+            foreach ($wpdb->get_col("SELECT blog_id FROM $wpdb->blogs") as $blog_id) {
+                switch_to_blog($blog_id);
+                Queue::create_table();
+                Page::create_table();
+                restore_current_blog();
+            }
+
+        } else {
+            Queue::create_table();
+            Page::create_table();
+        }
+
     }
 
 }

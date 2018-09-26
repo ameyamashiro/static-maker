@@ -61,10 +61,10 @@ require plugin_dir_path(__FILE__) . 'includes/class-cron-actions.php';
  * The code that runs during plugin activation.
  * This action is documented in includes/class-static-maker-activator.php
  */
-function activate_static_maker()
+function activate_static_maker($network_wide)
 {
     require_once plugin_dir_path(__FILE__) . 'includes/class-static-maker-activator.php';
-    Static_Maker_Activator::activate();
+    Static_Maker_Activator::activate($network_wide);
 }
 
 /**
