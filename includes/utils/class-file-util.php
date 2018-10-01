@@ -3,7 +3,7 @@ namespace Static_Maker;
 
 // workaround for "Fatal error: Call to undefined function get_home_path()"
 if (!function_exists('get_home_path')) {
-    require_once dirname(__FILE__) . '/../../../../../wp-admin/includes/file.php';
+    require_once ABSPATH . '/wp-admin/includes/file.php';
 }
 
 class FileUtil
