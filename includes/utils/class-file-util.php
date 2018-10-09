@@ -128,7 +128,7 @@ class FileUtil
 
     public static function get_output_path()
     {
-        $export_path = wp_upload_dir()['basedir'] . '/static-maker';
+        $export_path = wp_upload_dir()['basedir'] . '/static-maker/';
         $options = get_option(PLUGIN_NAME);
         $output_path = isset($options['output_path']) ? $options['output_path'] : '';
 

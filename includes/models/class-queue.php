@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+
 class Queue
 {
 
@@ -270,6 +271,17 @@ class Queue
         return $this->data[$field_name] = $field_value;
     }
 
+    /**
+     * Replace the 'NULL' string with NULL
+     *
+     * @param  string $query
+     * @return string $query
+     */
+    public function wp_db_null_value( $query )
+    {
+        return str_ireplace( "'NULL'", "NULL", $query );
+    }
+
     public function save()
     {
         global $wpdb;
@@ -279,7 +291,16 @@ class Queue
         $exists_query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE id = %d)", $id);
 
         if ($wpdb->get_var($exists_query) === '1') { // have
-            return $wpdb->update($table_name, $this->data, array('id' => $id));
+            // workaround for NULL value... (NULL will be '' automatically...)
+            add_filter( 'query', array($this, 'wp_db_null_value') );
+
+            $this->data['process_ended'] = $this->data['process_ended'] ?: 'NULL';
+
+            $result = $wpdb->update($table_name, $this->data, array('id' => $id));
+
+            remove_filter( 'query', array($this, 'wp_db_null_value') );
+
+            return $result;
         } else {
             return $wpdb->insert($table_name, $this->data);
         }
