@@ -200,6 +200,7 @@ class Static_Maker_Admin
         $valid['output_path'] = (isset($input['output_path']) && !empty($input['output_path'])) ? $input['output_path'] : '';
         $valid['queue_limit'] = (isset($input['queue_limit']) && !empty($input['queue_limit'])) ? $input['queue_limit'] : '';
         $valid['accepted_post_types'] = (isset($input['accepted_post_types']) && !empty($input['accepted_post_types'])) ? $input['accepted_post_types'] : '';
+        $valid['copy_directories'] = (isset($input['copy_directories']) && !empty($input['copy_directories'])) ? $input['copy_directories'] : '';
 
         if (isset($input['rsync'])) {
             foreach ($input['rsync'] as $i => $rsync) {

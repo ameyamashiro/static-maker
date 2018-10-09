@@ -31,6 +31,7 @@ $basic_pass = isset($options['basic_auth_pass']) ? $options['basic_auth_pass'] :
 $output = isset($options['output_path']) ? $options['output_path'] : '';
 $queue_limit = isset($options['queue_limit']) ? $options['queue_limit'] : '';
 $accepted_post_types = isset($options['accepted_post_types']) ? $options['accepted_post_types'] : '';
+$copy_directories = isset($options['copy_directories']) ? $options['copy_directories'] : '';
 
 $rsync_initial = array(
     array(
@@ -51,7 +52,7 @@ $replaces = isset($options['replaces']) ? $options['replaces'] : array(array('fr
 
     <form method="post" name="static-maker-options" action="options.php">
 
-        <?php
+<?php
 settings_fields($this->plugin_name);
 do_settings_sections($this->plugin_name);
 ?>
@@ -107,6 +108,17 @@ do_settings_sections($this->plugin_name);
                     <td>
                         /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo str_replace(get_home_path(), '', wp_upload_dir()['basedir']) ?>/static-maker" value="<?php echo $output ?>">
                         <p class="description"><?php _e('Default Value', PLUGIN_NAME)?>: /<?php echo str_replace(get_home_path(), '', wp_upload_dir()['basedir']) ?>/static-maker</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="<?php echo $this->plugin_name ?>-copydir"><?php _e('Copy Directories', PLUGIN_NAME)?></label></th>
+                    <td>
+                        <input type="text" id="<?php echo $this->plugin_name ?>-copy-directories" name="<?php echo $this->plugin_name ?>[copy_directories]" class="regular-text replaces-input" value="<?php echo $copy_directories ?>" placeholder="{{WP_ROOT}}/wp-content,...">
+                        <p class="description"><?php _e('Copy listed directories into the output directory (Comma separated)', PLUGIN_NAME)?></p>
+                        <p class="description">
+                            {{ROOT}} : <?php _e('Document root', PLUGIN_NAME)?> (get_home_path())<br>
+                            {{WP_ROOT}} : <?php _e('WordPress root', PLUGIN_NAME)?> (ABSPATH)
+                        </p>
                     </td>
                 </tr>
                 <tr>

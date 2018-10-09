@@ -9,6 +9,30 @@ class OptionsUtil
         return get_option(PLUGIN_NAME);
     }
 
+    public static function replace_vars($string) {
+        $string = preg_replace('/\{\{ROOT\}\}/', get_home_path(), $string);
+        $string = preg_replace('/\{\{WP_ROOT\}\}/', ABSPATH, $string);
+        $string = preg_replace('/\{\{OUTPUT_DIR\}\}/', FileUtil::get_output_path() . '/', $string);
+        $string = preg_replace('#/+#', '/', $string);
+        return $string;
+    }
+
+    public static function get_copy_directories() 
+    {
+        $option = get_option(PLUGIN_NAME)['copy_directories'];
+        if (!$option) {
+            return [];
+        }
+        $directories = explode(',', $option);
+        $output = [];
+
+        foreach ($directories as $directory) {
+            array_push($output, self::replace_vars($directory));
+        }
+
+        return $output;
+    }
+
     public static function get_accepted_post_types($format = 'array')
     {
         $options = get_option(PLUGIN_NAME)['accepted_post_types'];

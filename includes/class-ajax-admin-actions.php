@@ -10,7 +10,7 @@ class Ajax_Admin_Actions
 
         Queue_Actions::dequeue_all();
 
-        echo RsyncUtil::syncWithCurrentOptions();
+        echo RsyncUtil::sync_with_current_options();
 
         wp_die();
     }

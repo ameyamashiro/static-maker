@@ -22,7 +22,17 @@ class Queue_Actions
             $queue->dequeue();
         }
 
-        RsyncUtil::syncWithCurrentOptions();
+        $options = get_option(PLUGIN_NAME);
+
+        if ($options['copy_directories']) {
+            $directories = OptionsUtil::get_copy_directories();
+
+            foreach ($directories as $directory) {
+                RsyncUtil::sync_local($directory, FileUtil::get_output_path());
+            }
+        }
+
+        RsyncUtil::sync_with_current_options();
     }
 
 }
