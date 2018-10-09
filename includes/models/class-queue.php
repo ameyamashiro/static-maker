@@ -33,7 +33,7 @@ class Queue
           type varchar(20) NOT NULL,
           url varchar(255) DEFAULT '' NOT NULL,
           status varchar(20) DEFAULT 'waiting' NOT NULL,
-          created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+          created datetime,
           process_started datetime,
           process_ended datetime,
           PRIMARY KEY (id)
