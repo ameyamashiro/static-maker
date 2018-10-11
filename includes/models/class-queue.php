@@ -5,7 +5,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
 class Queue
 {
 
@@ -203,6 +202,9 @@ class Queue
             }
 
             $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
+            $lng_code = apply_filters('wpml_post_language_details', null, $post_id)['language_code'] ?? '';
+            $url = apply_filters('wpml_permalink', $url, $lng_code);
+
             $results[] = $wpdb->insert(
                 $table_name,
                 array(
@@ -277,9 +279,9 @@ class Queue
      * @param  string $query
      * @return string $query
      */
-    public function wp_db_null_value( $query )
+    public function wp_db_null_value($query)
     {
-        return str_ireplace( "'NULL'", "NULL", $query );
+        return str_ireplace("'NULL'", "NULL", $query);
     }
 
     public function save()
@@ -292,13 +294,13 @@ class Queue
 
         if ($wpdb->get_var($exists_query) === '1') { // have
             // workaround for NULL value... (NULL will be '' automatically...)
-            add_filter( 'query', array($this, 'wp_db_null_value') );
+            add_filter('query', array($this, 'wp_db_null_value'));
 
             $this->data['process_ended'] = $this->data['process_ended'] ?: 'NULL';
 
             $result = $wpdb->update($table_name, $this->data, array('id' => $id));
 
-            remove_filter( 'query', array($this, 'wp_db_null_value') );
+            remove_filter('query', array($this, 'wp_db_null_value'));
 
             return $result;
         } else {
