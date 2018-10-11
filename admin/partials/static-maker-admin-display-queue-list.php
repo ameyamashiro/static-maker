@@ -13,11 +13,7 @@ namespace Static_Maker;
  * @subpackage Static_Maker/admin/partials
  */
 
-if ($_GET['paged']) {
-    $current_page_num = intval($_GET['paged']);
-} else {
-    $current_page_num = 1;
-}
+$current_page_num = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
 ?>
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
