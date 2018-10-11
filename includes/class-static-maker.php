@@ -186,7 +186,7 @@ class Static_Maker_Class
 
         // Plugin actions
         $queue = new Queue(array());
-        $this->loader->add_action('static_maker_enqueue_by_link', $queue, 'enqueue_by_link', 10, 3);
+        $this->loader->add_action('static_maker_enqueue_by_link', $queue, 'enqueue_by_link', 10, 4);
     }
 
     /**
