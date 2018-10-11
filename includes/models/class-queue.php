@@ -179,48 +179,52 @@ class Queue
 
         $post_ids = array($post_id);
 
-        if ($parent) {
-            $post_ids = array_merge($post_ids, Page::get_related_pages($post_id));
+        $results = array();
+        $post = get_post($post_id);
+
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
+        if ($wpdb->get_var($query) !== '1') {return [false];}
+
+        // Check queue duplication
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
+        if ($wpdb->get_var($query)) {
+            return [false];
         }
 
-        $results = array();
+        $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
+        $lng_code = apply_filters('wpml_post_language_details', null, $post_id)['language_code'] ?? '';
+        $url = apply_filters('wpml_permalink', $url, $lng_code);
 
-        foreach ($post_ids as $i => $post_id) {
-            $post = get_post($post_id);
+        $results[] = $wpdb->insert(
+            $table_name,
+            array(
+                'post_id' => $post_id,
+                'created' => current_time('mysql'),
+                'type' => $action,
+                'post_type' => $post->post_type,
+                'url' => $url,
+            )
+        );
 
-            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
-            if ($wpdb->get_var($query) !== '1') {break;}
-
-            // Check queue duplication
-            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
-            if ($wpdb->get_var($query)) {
-                if ($i === 0) {
-                    $results[] = false;
-                    break;
+        // enqueue related posts or linkk if exist
+        if ($parent) {
+            $posts = Page::get_related_pages($post_id);
+            foreach ($posts as $post) {
+                switch ($post['type']) {
+                    case 'post_id':
+                        $results = array_merge($results, self::enqueue_by_post_id($post['data'], 'add', false));
+                        break;
+                    case 'url':
+                        $results[] = self::enqueue_by_link($post['data'], 'add', '', true);
+                        break;
                 }
-                continue;
             }
-
-            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
-            $lng_code = apply_filters('wpml_post_language_details', null, $post_id)['language_code'] ?? '';
-            $url = apply_filters('wpml_permalink', $url, $lng_code);
-
-            $results[] = $wpdb->insert(
-                $table_name,
-                array(
-                    'post_id' => $post_id,
-                    'created' => current_time('mysql'),
-                    'type' => $i === 0 ? $action : 'add',
-                    'post_type' => $post->post_type,
-                    'url' => $url,
-                )
-            );
         }
 
         return $results;
     }
 
-    public static function enqueue_by_link($link, $action = 'add', $post_type = '')
+    public static function enqueue_by_link($link, $action = 'add', $post_type = '', $force_managed = false)
     {
         global $wpdb;
         $table_name = self::table_name();
@@ -233,8 +237,10 @@ class Queue
             $link = get_home_url() . $link;
         }
 
-        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link);
-        if ($wpdb->get_var($query) !== '1') {return false;}
+        if (!$force_managed) {
+            $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link);
+            if ($wpdb->get_var($query) !== '1') {return false;}
+        }
 
         // Check queue duplication
         $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $link, $action);

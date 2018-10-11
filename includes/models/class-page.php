@@ -112,11 +112,11 @@ class Page
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name WHERE id = %d LIMIT 1";
-        $row = $wpdb->get_results($wpdb->prepare($query, $id), ARRAY_A)[0];
+        $rows = $wpdb->get_results($wpdb->prepare($query, $id), ARRAY_A);
 
-        if (!$row) {return null;}
+        if (!isset($rows[0]) || !$rows[0]) {return null;}
 
-        return new self($row);
+        return new self($rows[0]);
     }
 
     public static function get_page_by_post_id($id)
@@ -125,11 +125,11 @@ class Page
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name WHERE post_id = %d LIMIT 1";
-        $row = $wpdb->get_results($wpdb->prepare($query, $id), ARRAY_A)[0];
+        $rows = $wpdb->get_results($wpdb->prepare($query, $id), ARRAY_A);
 
-        if (!$row) {return null;}
+        if (!isset($rows[0]) || !$rows[0]) {return null;}
 
-        return new self($row);
+        return new self($rows[0]);
     }
 
     public static function get_page_by_link($link)
@@ -138,11 +138,11 @@ class Page
         $table_name = self::table_name();
 
         $query = "SELECT * FROM $table_name WHERE permalink = %s LIMIT 1";
-        $row = $wpdb->get_results($wpdb->prepare($query, $link), ARRAY_A)[0];
+        $rows = $wpdb->get_results($wpdb->prepare($query, $link), ARRAY_A);
 
-        if (!$row) {return null;}
+        if (!isset($rows[0]) || !$rows[0]) {return null;}
 
-        return new self($row);
+        return new self($rows[0]);
     }
 
     public static function get_related_pages($post_id)
@@ -153,12 +153,18 @@ class Page
         $post = Page::get_page_by_post_id($post_id);
 
         if ($archive = get_post_type_archive_link($post->post_type)) {
-            $posts_to_process[] = $archive->ID;
+            $posts_to_process[] = array(
+                'type' => 'url',
+                'data' => $archive,
+            );
         }
 
         if ($parents = get_post_ancestors($post->post_id)) {
             foreach ($parents as $parent) {
-                $posts_to_process[] = $parent;
+                $posts_to_process[] = array(
+                    'type' => 'post_id',
+                    'data' => $parent,
+                );
             }
         }
 
