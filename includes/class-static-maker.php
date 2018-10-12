@@ -59,6 +59,10 @@ class Static_Maker_Class
      */
     protected $version;
 
+    public $features = [
+        'rsync' => true,
+    ];
+
     /**
      * Define the core functionality of the plugin.
      *
@@ -77,12 +81,16 @@ class Static_Maker_Class
         }
         $this->plugin_name = PLUGIN_NAME;
 
+        do_action('static_maker_before_init', $this);
+
         $this->load_dependencies();
         $this->set_locale();
         $this->define_admin_hooks();
 
         // Cron
         \Cron_Actions::set_cron_schedule();
+
+        do_action('static_maker_loaded', $this);
     }
 
     /**
@@ -153,7 +161,7 @@ class Static_Maker_Class
     private function define_admin_hooks()
     {
 
-        $plugin_admin = new Static_Maker_Admin($this->get_plugin_name(), $this->get_version());
+        $plugin_admin = new Static_Maker_Admin($this, $this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');

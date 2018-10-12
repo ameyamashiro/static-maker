@@ -23,6 +23,7 @@ namespace Static_Maker;
  */
 class Static_Maker_Admin
 {
+    private $root;
 
     /**
      * The ID of this plugin.
@@ -46,12 +47,14 @@ class Static_Maker_Admin
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
+     * @param      string    $root       Root class
      * @param      string    $plugin_name       The name of this plugin.
      * @param      string    $version    The version of this plugin.
      */
-    public function __construct($plugin_name, $version)
+    public function __construct($root, $plugin_name, $version)
     {
 
+        $this->root = $root;
         $this->plugin_name = $plugin_name;
         $this->version = $version;
 
@@ -131,6 +134,8 @@ class Static_Maker_Admin
         add_submenu_page($this->plugin_name, __('All Queue List', PLUGIN_NAME), __('Queues', PLUGIN_NAME), $cap, $slug . '_queues', array($this, 'display_plugin_queue_list_page'));
         add_submenu_page($this->plugin_name, __('Add page', PLUGIN_NAME), __('Add', PLUGIN_NAME), $cap, $slug . '_page_add', array($this, 'display_plugin_add_page'));
         add_submenu_page($this->plugin_name, __('Settings', PLUGIN_NAME), __('Settings', PLUGIN_NAME), $cap, $slug . '_settings', array($this, 'display_plugin_setup_page'));
+
+        do_action('static_maker_menu_configure', $slug);
     }
 
     /**
