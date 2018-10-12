@@ -41,6 +41,7 @@ $rsync_initial = array(
         'dir' => '',
         'rsync_options' => '',
         'before_command' => '',
+        'auth_method' => '',
     ),
 );
 global $rsync_options;
