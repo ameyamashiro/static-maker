@@ -96,8 +96,9 @@ class Page
         $instances = array();
 
         foreach ($pages as $page) {
-            $lng_code = apply_filters('wpml_post_language_details', null, $page['post_id'])['language_code'] ?? '';
-            $page['permalink'] = apply_filters('wpml_permalink', $page['permalink'], $lng_code);
+            $lang_details = apply_filters('wpml_post_language_details', null, $page['post_id']);
+            $lang_code = !is_wp_error($lang_details) ? $lang_details['language_code'] : '';
+            $page['permalink'] = apply_filters('wpml_permalink', $page['permalink'], $lang_code);
 
             $ins = new self($page);
             $instances[] = $ins;

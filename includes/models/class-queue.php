@@ -192,8 +192,9 @@ class Queue
         }
 
         $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
-        $lng_code = apply_filters('wpml_post_language_details', null, $post_id)['language_code'] ?? '';
-        $url = apply_filters('wpml_permalink', $url, $lng_code);
+        $lang_details = apply_filters('wpml_post_language_details', null, $page['post_id']);
+        $lang_code = !is_wp_error($lang_details) ? $lang_details['language_code'] : '';
+        $url = apply_filters('wpml_permalink', $url, $lang_code);
 
         $results[] = $wpdb->insert(
             $table_name,

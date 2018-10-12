@@ -33,9 +33,10 @@ class PostUtil
             );
             foreach (get_posts($opts) as $post) {
 
-                $lng_code = apply_filters('wpml_post_language_details', null, $post->ID)['language_code'] ?? '';
+                $lang_details = apply_filters('wpml_post_language_details', null, $post->ID);
+                $lang_code = !is_wp_error($lang_details) ? $lang_details['language_code'] : '';
                 $permalink = get_permalink($post->ID);
-                $permalink = apply_filters('wpml_permalink', $permalink, $lng_code);
+                $permalink = apply_filters('wpml_permalink', $permalink, $lang_code);
 
                 $info = array(
                     'ID' => $post->ID,

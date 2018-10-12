@@ -104,8 +104,16 @@ class Ajax_Admin_Actions
     {
         check_ajax_referer('add_page_by_url');
 
-        if (!isset($_POST['url']) || !filter_var($_POST['url'], FILTER_VALIDATE_URL)) {
-            wp_die('URL を正しく入力してください', '', 422);
+        if (!isset($_POST['url'])) {
+            wp_die('URL を入力してください', '', 422);
+        }
+
+        if (!filter_var($_POST['url'], FILTER_VALIDATE_URL)) {
+            $_POST['url'] = get_home_url() . $_POST['url'];
+
+            if (!filter_var($_POST['url'], FILTER_VALIDATE_URL)) {
+                wp_die('URL を正しく入力してください' . $_POST['url'], '', 422);
+            }
         }
 
         $post = new Page(array(
