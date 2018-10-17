@@ -89,23 +89,97 @@ class Static_Maker_Admin
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts()
+    public function enqueue_scripts($hook)
     {
+        $messages = [
+            'process_completed' => __('Process Completed', PLUGIN_NAME),
+            'failed_to_register' => __('Failed to register', PLUGIN_NAME),
+        ];
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Static_Maker_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Static_Maker_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
-
+        switch ($hook) {
+            case 'toplevel_page_static-maker':
+                wp_register_script('static-maker_admin-display-page-list', plugins_url('', dirname(__FILE__)) . '/admin/js/sm-admin-display-page-list.js');
+                wp_enqueue_script('static-maker_admin-display-page-list');
+                wp_localize_script('static-maker_admin-display-page-list', 'smData', [
+                    'enqueue_single_by_id' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_single_by_id'),
+                        'messages' => $messages,
+                    ],
+                    'remove_page_from_list' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'remove_page_from_list'),
+                        'messages' => $messages,
+                    ],
+                    'change_page_status' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'change_page_status'),
+                        'messages' => $messages,
+                    ],
+                    'enqueue_all_pages' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'enqueue_all_pages'),
+                        'messages' => $messages,
+                    ],
+                ]);
+                return;
+            case 'static-maker_page_static-maker_queues':
+                wp_register_script('static-maker_admin-display-queue-list', plugins_url('', dirname(__FILE__)) . '/admin/js/sm-admin-display-queue-list.js');
+                wp_enqueue_script('static-maker_admin-display-queue-list');
+                wp_localize_script('static-maker_admin-display-queue-list', 'smData', [
+                    'process_queue_all' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'process_queue_all'),
+                        'messages' => $messages,
+                    ],
+                ]);
+                return;
+            case 'static-maker_page_static-maker_page_add':
+                wp_register_script('static-maker_admin-display-add', plugins_url('', dirname(__FILE__)) . '/admin/js/sm-admin-display-add.js');
+                wp_enqueue_script('static-maker_admin-display-add');
+                wp_localize_script('static-maker_admin-display-add', 'smData', [
+                    'add_pages_by_post_type' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'add_pages_by_post_type'),
+                        'messages' => [
+                            'failed_to_register' => __('Failed to register', PLUGIN_NAME),
+                        ],
+                    ],
+                    'add_page_by_url' => [
+                        'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'add_page_by_url'),
+                        'messages' => $messages,
+                    ],
+                ]);
+                return;
+            case 'static-maker_page_static-maker_settings':
+                $options = get_option($this->plugin_name);
+                $rsync_initial = array(
+                    array(
+                        'host' => '',
+                        'user' => '',
+                        'ssh_key' => '',
+                        'dir' => '',
+                        'rsync_options' => '',
+                        'before_command' => '',
+                        'auth_method' => '',
+                    ),
+                );
+                $rsync_options = isset($options['rsync']) ? $options['rsync'] : $rsync_initial;
+                $rsync_vars = [];
+                foreach ($rsync_options as $i => $rsync) {
+                    array_push($rsync_vars, [
+                        '{{HOST}}' => $rsync['host'],
+                        '{{USER}}' => $rsync['user'],
+                        '{{SSH_KEY}}' => \Static_Maker\CryptoUtil::decrypt($rsync['ssh_key'], true),
+                        '{{DIR}}' => $rsync['user'],
+                        '{{RSYNC_OPTIONS}}' => $rsync['rsync_options'],
+                        '{{BEFORE_COMMAND}}' => $rsync['before_command'],
+                        '{{SSH_AUTH}}' => $rsync['auth_method'] === 'ssh' ? 'checked' : '',
+                        '{{PASS_AUTH}}' => $rsync['auth_method'] === 'pass' ? 'checked' : '',
+                    ]);
+                }
+                wp_register_script('static-maker_admin-display-setup', plugins_url('', dirname(__FILE__)) . '/admin/js/sm-admin-display-setup.js');
+                wp_enqueue_script('static-maker_admin-display-setup');
+                wp_localize_script('static-maker_admin-display-setup', 'smData', [
+                    'rsync' => $rsync_vars,
+                ]);
+                return;
+        }
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/static-maker-admin.js', array('jquery'), $this->version, false);
-
     }
 
     /**
@@ -223,7 +297,7 @@ class Static_Maker_Admin
 
                 $d['host'] = $rsync['host'];
                 $d['user'] = $rsync['user'];
-                $d['auth_method'] = $rsync['auth_method'];
+                $d['auth_method'] = isset($rsync['auth_method']) ? $rsync['auth_method'] : 'ssh';
                 $d['ssh_key'] = $key;
                 $d['dir'] = $rsync['dir'];
                 $d['rsync_options'] = $rsync['rsync_options'];

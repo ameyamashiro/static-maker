@@ -32,21 +32,6 @@ $output = isset($options['output_path']) ? $options['output_path'] : '';
 $queue_limit = isset($options['queue_limit']) ? $options['queue_limit'] : '';
 $accepted_post_types = isset($options['accepted_post_types']) ? $options['accepted_post_types'] : '';
 $copy_directories = isset($options['copy_directories']) ? $options['copy_directories'] : '';
-
-$rsync_initial = array(
-    array(
-        'host' => '',
-        'user' => '',
-        'ssh_key' => '',
-        'dir' => '',
-        'rsync_options' => '',
-        'before_command' => '',
-        'auth_method' => '',
-    ),
-);
-global $rsync_options;
-$rsync_options = isset($options['rsync']) ? $options['rsync'] : $rsync_initial;
-
 $replaces = isset($options['replaces']) ? $options['replaces'] : array(array('from' => '', 'to' => ''));
 
 ?>
@@ -138,7 +123,7 @@ do_settings_sections($this->plugin_name);
                 </tr>
                 <?php if ($this->root->features['rsync']): ?>
                 <tr>
-                    <th scope="row" data-rsync-count="<?php echo count($rsync_options) ?>">rsync</th>
+                    <th scope="row">rsync</th>
                     <td class="rsync-list">
                         <!-- rsync list is inserted here -->
 
@@ -209,78 +194,3 @@ do_settings_sections($this->plugin_name);
     </script>
 
 </div>
-
-<?php
-if ($this->root->features['rsync']) {
-    add_action('admin_footer', 'Static_Maker\static_maker_javascript');
-
-    function static_maker_javascript()
-    {global $rsync_options;?>
-        <script>
-            (function($) {
-                var replaceVars = function(html, vars) {
-                    Object.keys(vars).forEach(function(key) {
-                        var reg = new RegExp(key, 'g');
-                        html = html.replace(reg, vars[key]);
-                    });
-                    return html;
-                };
-
-                var count = 0;
-                var rsyncVars = [
-                    <?php foreach ($rsync_options as $i => $rsync): ?>
-                    <?php echo $i !== 0 ? ',' : '' ?>
-                    <?php echo json_encode(array(
-        '{{HOST}}' => $rsync['host'],
-        '{{USER}}' => $rsync['user'],
-        '{{SSH_KEY}}' => CryptoUtil::decrypt($rsync['ssh_key'], true),
-        '{{DIR}}' => $rsync['dir'],
-        '{{RSYNC_OPTIONS}}' => $rsync['rsync_options'],
-        '{{BEFORE_COMMAND}}' => $rsync['before_command'],
-        '{{SSH_AUTH}}' => $rsync['auth_method'] === 'ssh' ? 'checked' : '',
-        '{{PASS_AUTH}}' => $rsync['auth_method'] === 'pass' ? 'checked' : '',
-    )
-    ); ?>
-                    <?php endforeach;?>
-                ];
-
-                rsyncVars.forEach(function(rsyncOpts) {
-                    var html = $('#rsync-template').html();
-                    html = html.replace(/{{COUNT}}/g, count);
-                    html = replaceVars(html, rsyncOpts);
-                    var $html = $(html);
-                    count++;
-
-                    var $source = $('[data-sm-source="rsync"]').last();
-                    if ($source.length) {
-                        $html.insertAfter($source);
-                    } else {
-                        $('.rsync-list').prepend($html);
-                    }
-                });
-
-                $('.add-target').on('click', function(e) {
-                    var target = $(this).data('sm-target');
-                    var $source = $('[data-sm-source="' + target + '"]').last();
-                    var html = $('#rsync-template').html();
-                    html = html.replace(/{{COUNT}}/g, count);
-                    html = replaceVars(html, Object.keys(rsyncVars[0]).reduce(function(a, c) { a[c] = ''; return a; }, {}));
-                    var $html = $(html);
-                    count++;
-
-                    if ($source.length) {
-                        $html.insertAfter($source);
-                    } else {
-                        $('.rsync-list').prepend($html);
-                    }
-                });
-
-                $('.remove-target').on('click', function() {
-                    var target = $(this).data('sm-target');
-                    count--;
-                    $('[data-sm-source="' + target + '"]').last().remove();
-                });
-            }) (jQuery);
-        </script>
-    <?php };
-}

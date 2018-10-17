@@ -104,28 +104,3 @@ $current_page_num = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
     </div>
 
 </div>
-
-<?php
-add_action('admin_footer', 'Static_Maker\static_maker_javascript');
-
-function static_maker_javascript()
-{?>
-    <script>
-        jQuery('.process-all').on('click', function(e) {
-            e.preventDefault();
-
-            var url = '<?php echo wp_nonce_url(admin_url('admin-ajax.php'), 'process_queue_all') ?>';
-
-            jQuery.ajax({
-                type: 'post',
-                url: url,
-                data: {
-                    action: 'static-maker-process_queue_all'
-                },
-                success: function(res) {
-                    alert('<?php echo _e('Process Completed', PLUGIN_NAME) ?>');
-                }
-            });
-        });
-    </script>
-<?php }
