@@ -179,7 +179,6 @@ class Static_Maker_Admin
                 ]);
                 return;
         }
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/static-maker-admin.js', array('jquery'), $this->version, false);
     }
 
     /**
