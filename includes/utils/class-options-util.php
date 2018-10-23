@@ -9,7 +9,8 @@ class OptionsUtil
         return get_option(PLUGIN_NAME);
     }
 
-    public static function replace_vars($string) {
+    public static function replace_vars($string)
+    {
         $string = preg_replace('/\{\{ROOT\}\}/', get_home_path(), $string);
         $string = preg_replace('/\{\{WP_ROOT\}\}/', ABSPATH, $string);
         $string = preg_replace('/\{\{OUTPUT_DIR\}\}/', FileUtil::get_output_path() . '/', $string);
@@ -17,7 +18,7 @@ class OptionsUtil
         return $string;
     }
 
-    public static function get_copy_directories() 
+    public static function get_copy_directories()
     {
         $option = get_option(PLUGIN_NAME)['copy_directories'];
         if (!$option) {
@@ -43,7 +44,11 @@ class OptionsUtil
                 break;
             case 'array':
             default:
-                $types = explode(',', $options);
+                if (!$options) {
+                    $types = array();
+                } else {
+                    $types = explode(',', $options);
+                }
 
         }
         return $types;
