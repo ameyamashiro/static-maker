@@ -180,7 +180,7 @@ class Queue
         $post_ids = array($post_id);
 
         $results = array();
-        $post = get_post($post_id);
+        $post = get_post($post_id, ARRAY_A);
 
         $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
         if ($wpdb->get_var($query) !== '1') {return [false];}
@@ -192,7 +192,7 @@ class Queue
         }
 
         $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
-        $lang_details = apply_filters('wpml_post_language_details', null, $page['post_id']);
+        $lang_details = apply_filters('wpml_post_language_details', null, $post['ID']);
         $lang_code = !is_wp_error($lang_details) ? $lang_details['language_code'] : '';
         $url = apply_filters('wpml_permalink', $url, $lang_code);
 
@@ -202,7 +202,7 @@ class Queue
                 'post_id' => $post_id,
                 'created' => current_time('mysql'),
                 'type' => $action,
-                'post_type' => $post->post_type,
+                'post_type' => $post['post_type'],
                 'url' => $url,
             )
         );
