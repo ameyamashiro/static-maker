@@ -226,7 +226,7 @@ class Queue
         return $results;
     }
 
-    public static function enqueue_by_link($link, $action = 'add', $post_type = '', $force_managed = false)
+    public static function enqueue_by_link($link, $action = 'add', $post_type = '', $without_managed = false)
     {
         global $wpdb;
         $table_name = self::table_name();
@@ -240,7 +240,7 @@ class Queue
             $link = get_home_url() . $link;
         }
 
-        if (!$force_managed) {
+        if (!$without_managed) {
             $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link);
             if ($wpdb->get_var($query) !== '1') {return false;}
         }
