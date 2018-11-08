@@ -195,6 +195,7 @@ class Queue
         $lang_details = apply_filters('wpml_post_language_details', null, $post['ID']);
         $lang_code = !is_wp_error($lang_details) ? $lang_details['language_code'] : '';
         $url = apply_filters('wpml_permalink', $url, $lang_code);
+        $url = substr($url, -1) === '/' ? $url : $url . '/';
 
         $results[] = $wpdb->insert(
             $table_name,
@@ -232,6 +233,7 @@ class Queue
         $page_table_name = Page::table_name();
 
         $link = preg_replace('/__trashed(\/?)$/', '$1', $link);
+        $link = substr($link, -1) === '/' ? $link : $link . '/';
 
         // append get_home_url() result if the url is not started with http
         if (substr($link, 0, 4) !== 'http') {
