@@ -113,6 +113,10 @@ class FileUtil
         $context = stream_context_create($req_opts);
         $resp = file_get_contents($url, false, $context);
 
+        if (WP_DEBUG) {
+            LogUtil::write_with_trace('URL: ' . $url . ', Request Status: ' . $http_response_header[0]);
+        }
+
         if ($resp === false) {
             // explode( ' ', $http_response_header[ 0 ])[ 1 ]  // status code;
             return false;
@@ -140,7 +144,13 @@ class FileUtil
             }
         }
 
-        return file_put_contents($export_path . $subdir . $file_name, $content);
+        $ret = file_put_contents($export_path . $subdir . $file_name, $content);
+
+        if (WP_DEBUG && !$ret) {
+            LogUtil::write_with_trace('FileName: ' . $file_name . ', Desc: failed file put content');
+        }
+
+        return $ret;
     }
 
     public static function get_output_path()
