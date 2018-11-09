@@ -5,7 +5,17 @@ class LogUtil
 {
     public static function get_log_path()
     {
-        return wp_upload_dir()['basedir'] . '/static-maker.log';
+        $path = wp_upload_dir()['basedir'] . '/static-maker.log';
+        $realpath = realpath($path);
+        if ($realpath) {
+            return $realpath;
+        }
+        return $path;
+    }
+
+    public static function get_log_url()
+    {
+        return str_replace(untrailingslashit(get_home_path()), '', self::get_log_path());
     }
 
     public static function write_with_trace($content)
