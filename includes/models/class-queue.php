@@ -321,8 +321,14 @@ class Queue
     {
         if ($this->data['type'] === 'add') {
             if (FileUtil::export_single_file($this->data['url']) !== false) {
+                if (WP_DEBUG) {
+                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Success Add Type');
+                }
                 $this->mark_as_completed();
             } else {
+                if (WP_DEBUG) {
+                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Failed Add Type');
+                }
                 $this->mark_as_failed();
             }
         } else if ($this->data['type'] === 'remove') {
@@ -330,7 +336,14 @@ class Queue
                 $this->mark_as_completed();
 
                 Page::get_page_by_link($this->data['url'])->delete();
+
+                if (WP_DEBUG) {
+                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Success Remove Type');
+                }
             } else {
+                if (WP_DEBUG) {
+                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Failed Remove Type');
+                }
                 $this->mark_as_failed();
             }
         } else {

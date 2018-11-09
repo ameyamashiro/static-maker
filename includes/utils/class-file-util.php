@@ -37,9 +37,19 @@ class FileUtil
     public static function export_single_file($url, $replace_domain = true, $to = null)
     {
         $path = self::get_default_export_file_path($url);
-        if (!$path) {return false;}
+        if (!$path) {
+            if (WP_DEBUG) {
+                LogUtil::write_with_trace('get_default_export_file_path returns falsy value');
+            }
+            return false;
+        }
 
-        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {return false;}
+        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
+            if (WP_DEBUG) {
+                LogUtil::write_with_trace('url is invalid');
+            }
+            return false;
+        }
         $options = get_option(PLUGIN_NAME);
         $alter_url = isset($options['host']) ? $options['host'] : '';
         $url_parsed = parse_url($url);
@@ -52,6 +62,9 @@ class FileUtil
         $content = self::file_get_content($url);
 
         if ($content === false) {
+            if (WP_DEBUG) {
+                LogUtil::write_with_trace('content is falsy value');
+            }
             return false;
         }
 
@@ -73,6 +86,10 @@ class FileUtil
         // attempt to remove parent directory to avoid generating garbage files.
         if ($result) {
             rmdir(static::get_output_path() . $path);
+        } else {
+            if (WP_DEBUG) {
+                LogUtil::write_with_trace('content is falsy value');
+            }
         }
 
         return $result;

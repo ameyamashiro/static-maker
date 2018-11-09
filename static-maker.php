@@ -51,6 +51,7 @@ require plugin_dir_path(__FILE__) . 'includes/utils/class-post-util.php';
 require plugin_dir_path(__FILE__) . 'includes/utils/class-crypto-util.php';
 require plugin_dir_path(__FILE__) . 'includes/utils/class-rsync-util.php';
 require plugin_dir_path(__FILE__) . 'includes/utils/class-options-util.php';
+require plugin_dir_path(__FILE__) . 'includes/utils/class-log-util.php';
 
 require plugin_dir_path(__FILE__) . 'includes/class-ajax-admin-actions.php';
 require plugin_dir_path(__FILE__) . 'includes/class-post-actions.php';
