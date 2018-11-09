@@ -6,18 +6,18 @@ jQuery(function() {
     var $target = jQuery(e.target);
     var postId = $target.data("post-id");
 
-    var data = {
+    var sendData = {
       action: "static-maker-enqueue_single_by_id"
     };
 
     if (postId) {
-      data.post_id = postId;
+      sendData.post_id = postId;
     } else {
-      data.id = $target.data("id");
+      sendData.id = $target.data("id");
     }
 
     jQuery
-      .post(url, data, function(res, status) {
+      .post(url, sendData, function(res, status) {
         if (status === "success") {
           alert(data.messages.process_completed);
         } else {
@@ -36,20 +36,20 @@ jQuery(function() {
     var $target = jQuery(e.target);
     var postId = $target.data("post-id");
 
-    var data = {
+    var sendData = {
       action: "static-maker-enqueue_single_by_id"
     };
 
     if (postId) {
-      data.post_id = postId;
+      sendData.post_id = postId;
     } else {
-      data.id = $target.data("id");
+      sendData.id = $target.data("id");
     }
 
-    data["action-type"] = "remove";
+    sendData["action-type"] = "remove";
 
     jQuery
-      .post(url, data, function(res, status) {
+      .post(url, sendData, function(res, status) {
         if (status === "success") {
           alert(data.messages.process_completed);
         } else {
@@ -67,14 +67,14 @@ jQuery(function() {
     var url = data.url;
     var $target = jQuery(e.target);
 
-    var data = {
+    var sendData = {
       action: "static-maker-remove_page_from_list"
     };
 
-    data.id = $target.data("id");
+    sendData.id = $target.data("id");
 
     jQuery
-      .post(url, data, function() {
+      .post(url, sendData, function() {
         location.reload();
       })
       .fail(function() {
@@ -88,15 +88,15 @@ jQuery(function() {
     var url = data.url;
     var $target = jQuery(e.target);
 
-    var data = {
+    var sendData = {
       action: "static-maker-change-page-status"
     };
 
-    data["action-type"] = $target.data("action");
-    data.id = $target.data("id");
+    sendData["action-type"] = $target.data("action");
+    sendData.id = $target.data("id");
 
     jQuery
-      .post(url, data, function() {
+      .post(url, sendData, function() {
         location.reload();
       })
       .fail(function() {
