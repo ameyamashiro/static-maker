@@ -157,10 +157,9 @@ class FileUtil
     {
         $export_path = get_home_path() . 'static-maker/';
         $options = get_option(PLUGIN_NAME);
-        $output_path = isset($options['output_path']) ? $options['output_path'] : '';
 
-        if (!empty($output_path)) {
-            $export_path = \get_home_path() . $output_path;
+        if (isset($options['output_path']) && !$options['output_path']) {
+            $export_path = $options['output_path'];
         }
 
         if (!static::create_dir($export_path)) {
