@@ -92,8 +92,8 @@ do_settings_sections($this->plugin_name);
                 <tr>
                     <th scope="row"><label for="<?php echo $this->plugin_name ?>-output-path"><?php _e('Output Directory', PLUGIN_NAME)?></label></th>
                     <td>
-                        /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo str_replace(get_home_path(), '', wp_upload_dir()['basedir']) ?>/static-maker" value="<?php echo $output ?>">
-                        <p class="description"><?php _e('Default Value', PLUGIN_NAME)?>: /<?php echo str_replace(get_home_path(), '', wp_upload_dir()['basedir']) ?>/static-maker</p>
+                        /<input type="text" id="<?php echo $this->plugin_name ?>-output-path" name="<?php echo $this->plugin_name ?>[output_path]" class="regular-text" placeholder="<?php echo get_home_path() ?>static-maker" value="<?php echo $output ?>">
+                        <p class="description"><?php _e('Default Value', PLUGIN_NAME)?>: <?php echo get_home_path() ?>static-maker</p>
                     </td>
                 </tr>
                 <tr>

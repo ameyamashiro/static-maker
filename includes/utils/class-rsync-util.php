@@ -51,7 +51,8 @@ class RsyncUtil
         return $output;
     }
 
-    public static function sync_local($from, $to) {
+    public static function sync_local($from, $to)
+    {
         $from = substr($from, -1) === '/' ?: "$from/**";
         $from = str_replace(get_home_path(), '', $from);
 
