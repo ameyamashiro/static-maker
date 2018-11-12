@@ -147,7 +147,7 @@ class FileUtil
         $ret = file_put_contents($export_path . $subdir . $file_name, $content);
 
         if (WP_DEBUG && !$ret) {
-            LogUtil::write_with_trace('FileName: ' . $file_name . ', Desc: failed file put content');
+            LogUtil::write_with_trace('FileName: ' . $file_name . ', Desc: failed file put content ' . $export_path);
         }
 
         return $ret;
@@ -155,7 +155,7 @@ class FileUtil
 
     public static function get_output_path()
     {
-        $export_path = get_home_path() . 'static-maker/';
+        $export_path = trailingslashit(get_home_path()) . 'static-maker/';
         $options = get_option(PLUGIN_NAME);
 
         if (isset($options['output_path']) && !$options['output_path']) {
