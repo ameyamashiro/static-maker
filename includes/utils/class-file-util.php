@@ -158,7 +158,7 @@ class FileUtil
         $export_path = trailingslashit(get_home_path()) . 'static-maker/';
         $options = get_option(PLUGIN_NAME);
 
-        if (isset($options['output_path']) && !$options['output_path']) {
+        if (isset($options['output_path']) && $options['output_path']) {
             $export_path = $options['output_path'];
         }
 
