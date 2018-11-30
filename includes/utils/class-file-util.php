@@ -37,17 +37,17 @@ class FileUtil
     public static function export_single_file($url, $replace_domain = true, $to = null)
     {
         $path = self::get_default_export_file_path($url);
+        $log_data = array(
+            'path' => $path,
+            'url' => $url,
+        );
         if (!$path) {
-            if (WP_DEBUG) {
-                LogUtil::write_with_trace('get_default_export_file_path returns falsy value');
-            }
+            LogUtil::get_instance()->log->error(__('export_single_file: get_default_export_file_path returns falsy value', PLUGIN_NAME), $log_data);
             return false;
         }
 
         if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
-            if (WP_DEBUG) {
-                LogUtil::write_with_trace('url is invalid');
-            }
+            LogUtil::get_instance()->log->error(__('export_single_file: url is invalid', PLUGIN_NAME), $log_data);
             return false;
         }
         $options = get_option(PLUGIN_NAME);
@@ -61,10 +61,10 @@ class FileUtil
 
         $content = self::file_get_content($url);
 
-        if ($content === false) {
-            if (WP_DEBUG) {
-                LogUtil::write_with_trace('content is falsy value');
-            }
+        if (!$content) {
+            $log_data['url_replaced'] = $url;
+            $log_data['content'] = $content;
+            LogUtil::get_instance()->log->error(__('export_single_file: content is falsy value', PLUGIN_NAME), $log_data);
             return false;
         }
 
@@ -83,13 +83,22 @@ class FileUtil
 
         $result = unlink(static::get_output_path() . $file);
 
+        $log_data = array(
+            'url_parsed' => $url_parsed,
+            'path' => $path,
+            'result' => $result,
+        );
+
         // attempt to remove parent directory to avoid generating garbage files.
         if ($result) {
-            rmdir(static::get_output_path() . $path);
-        } else {
-            if (WP_DEBUG) {
-                LogUtil::write_with_trace('content is falsy value');
+            LogUtil::get_instance()->log->info(__('remove_single_file', PLUGIN_NAME), $log_data);
+            if (!rmdir(static::get_output_path() . $path)) {
+                LogUtil::get_instance()->log->error(__('remove_single_file: failed to rmdir', PLUGIN_NAME), array_merge($log_data, array(
+                    'rmdir' => static::get_output_path() . $path,
+                )));
             }
+        } else {
+            LogUtil::get_instance()->log->error(__('remove_single_file: failed to remove a file', PLUGIN_NAME), $log_data);
         }
 
         return $result;
@@ -113,9 +122,12 @@ class FileUtil
         $context = stream_context_create($req_opts);
         $resp = file_get_contents($url, false, $context);
 
-        if (WP_DEBUG) {
-            LogUtil::write_with_trace('URL: ' . $url . ', Request Status: ' . $http_response_header[0]);
-        }
+        $log_data = array(
+            'url' => $url,
+            'request_status' => $http_response_header[0],
+        );
+
+        LogUtil::get_instance()->log->info(__('file_get_content', PLUGIN_NAME), $log_data);
 
         if ($resp === false) {
             // explode( ' ', $http_response_header[ 0 ])[ 1 ]  // status code;
@@ -146,8 +158,17 @@ class FileUtil
 
         $ret = file_put_contents($export_path . $subdir . $file_name, $content);
 
-        if (WP_DEBUG && !$ret) {
-            LogUtil::write_with_trace('FileName: ' . $file_name . ', Desc: failed file put content ' . $export_path);
+        $log_data = array(
+            'url' => $url,
+            'file_name' => $file_name,
+            'export_path' => $export_path,
+            'ret' => $ret,
+        );
+
+        if ($ret) {
+            LogUtil::get_instance()->log->info(__('file_put_content', PLUGIN_NAME), $log_data);
+        } else {
+            LogUtil::get_instance()->log->error(__('file_put_content', PLUGIN_NAME), $log_data);
         }
 
         return $ret;
@@ -158,7 +179,7 @@ class FileUtil
         $export_path = trailingslashit(get_home_path()) . 'static-maker/';
         $options = get_option(PLUGIN_NAME);
 
-        if (isset($options['output_path']) && !$options['output_path']) {
+        if (isset($options['output_path']) && $options['output_path']) {
             $export_path = $options['output_path'];
         }
 

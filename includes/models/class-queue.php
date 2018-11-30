@@ -112,9 +112,21 @@ class Queue
         $results = array();
         $url = preg_replace('/__trashed(\/?)$/', '$1', $page->permalink);
 
+        $insert_data = array(
+            'post_id' => $post_id,
+            'created' => current_time('mysql'),
+            'type' => $action,
+            'post_type' => $page->post_type,
+            'url' => $url,
+        );
+
         // Process specified static maker id
         $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE id=%d AND active=1)", $id);
-        if ($wpdb->get_var($query) !== '1') {return false;}
+        if ($wpdb->get_var($query) !== '1') {
+            LogUtil::get_instance()->log->info(__('enqueue_by_id: skipped (disabled)', PLUGIN_NAME), $insert_data);
+            $results[] = false;
+            return $results;
+        }
 
         // Check queue duplication
         if ($post_id) {
@@ -123,20 +135,17 @@ class Queue
             $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $url, $action);
         }
         if ($wpdb->get_var($query)) {
+            LogUtil::get_instance()->log->info(__('enqueue_by_id: skipped (duplicated)', PLUGIN_NAME), $insert_data);
             $results[] = false;
             return $results;
         }
 
-        $results[] = $wpdb->insert(
-            $table_name,
-            array(
-                'post_id' => $post_id,
-                'created' => current_time('mysql'),
-                'type' => $action,
-                'post_type' => $page->post_type,
-                'url' => $url,
-            )
-        );
+        $result = $wpdb->insert($table_name, $insert_data);
+        $results[] = $result;
+        $insert_data['query'] = $query;
+        $insert_data['result'] = $result;
+
+        LogUtil::get_instance()->log->info(__('enqueue_by_id', PLUGIN_NAME), $insert_data);
 
         // Process related if it has
         $post_ids = array();
@@ -149,23 +158,29 @@ class Queue
             $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
             if ($wpdb->get_var($query) !== '1') {continue;}
 
+            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
+
+            $insert_data = array(
+                'post_id' => $post_id,
+                'created' => current_time('mysql'),
+                'type' => 'add',
+                'post_type' => $post->post_type,
+                'url' => $url,
+            );
+
             // Check queue duplication
             $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
             if ($wpdb->get_var($query)) {
+                LogUtil::get_instance()->log->info(__('enqueue_by_id: skipped (duplicated): related posts', PLUGIN_NAME), $insert_data);
                 continue;
             }
 
-            $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
-            $results[] = $wpdb->insert(
-                $table_name,
-                array(
-                    'post_id' => $post_id,
-                    'created' => current_time('mysql'),
-                    'type' => 'add',
-                    'post_type' => $post->post_type,
-                    'url' => $url,
-                )
-            );
+            $result = $wpdb->insert($table_name, $insert_data);
+            $results[] = $result;
+            $insert_data['query'] = $query;
+            $insert_data['result'] = $result;
+
+            LogUtil::get_instance()->log->info(__('enqueue_by_id: related posts', PLUGIN_NAME), $insert_data);
         }
 
         return $results;
@@ -182,31 +197,40 @@ class Queue
         $results = array();
         $post = get_post($post_id, ARRAY_A);
 
-        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
-        if ($wpdb->get_var($query) !== '1') {return [false];}
-
-        // Check queue duplication
-        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
-        if ($wpdb->get_var($query)) {
-            return [false];
-        }
-
         $url = preg_replace('/__trashed(\/?)$/', '$1', get_permalink($post_id));
         $lang_details = apply_filters('wpml_post_language_details', null, $post['ID']);
         $lang_code = !is_wp_error($lang_details) ? $lang_details['language_code'] : '';
         $url = apply_filters('wpml_permalink', $url, $lang_code);
         $url = substr($url, -1) === '/' ? $url : $url . '/';
 
-        $results[] = $wpdb->insert(
-            $table_name,
-            array(
-                'post_id' => $post_id,
-                'created' => current_time('mysql'),
-                'type' => $action,
-                'post_type' => $post['post_type'],
-                'url' => $url,
-            )
+        $insert_data = array(
+            'post_id' => $post_id,
+            'created' => current_time('mysql'),
+            'type' => $action,
+            'post_type' => $post['post_type'],
+            'url' => $url,
         );
+
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE post_id=%d AND active=1)", $post_id);
+        if ($wpdb->get_var($query) !== '1') {
+            LogUtil::get_instance()->log->info(__('enqueue_by_post_id: skipped (disabled)', PLUGIN_NAME), $insert_data);
+            $results[] = false;
+            return $results;
+        }
+
+        // Check queue duplication
+        $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE post_id=%d AND type=\"%s\" AND status=\"waiting\")", $post_id, $action);
+        if ($wpdb->get_var($query)) {
+            LogUtil::get_instance()->log->info(__('enqueue_by_post_id: skipped (duplicated)', PLUGIN_NAME), $insert_data);
+            $results[] = false;
+            return $results;
+        }
+
+        $result = $wpdb->insert($table_name, $insert_data);
+        $results[] = $result;
+        $insert_data['query'] = $query;
+        $insert_data['result'] = $result;
+        LogUtil::get_instance()->log->info(__('enqueue_by_post_id', PLUGIN_NAME), $insert_data);
 
         // enqueue related posts or linkk if exist
         if ($parent) {
@@ -235,6 +259,14 @@ class Queue
         $link = preg_replace('/__trashed(\/?)$/', '$1', $link);
         $link = substr($link, -1) === '/' ? $link : $link . '/';
 
+        $insert_data = array(
+            'post_id' => '',
+            'created' => current_time('mysql'),
+            'type' => $action,
+            'post_type' => $post_type,
+            'url' => $link,
+        );
+
         // append get_home_url() result if the url is not started with http
         if (substr($link, 0, 4) !== 'http') {
             $link = get_home_url() . $link;
@@ -242,23 +274,33 @@ class Queue
 
         if (!$without_managed) {
             $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $page_table_name WHERE permalink=%s AND active=1)", $link);
-            if ($wpdb->get_var($query) !== '1') {return false;}
+            if ($wpdb->get_var($query) !== '1') {
+                LogUtil::get_instance()->log->info(__('enqueue_by_link: skipped (disabled)', PLUGIN_NAME), $insert_data);
+                return false;
+            }
         }
 
         // Check queue duplication
         $query = $wpdb->prepare("SELECT EXISTS(SELECT * FROM $table_name WHERE url=\"%s\" AND type=\"%s\" AND status=\"waiting\")", $link, $action);
         if ($wpdb->get_var($query)) {return false;}
 
-        return $wpdb->insert(
-            $table_name,
+        $result = $wpdb->insert($table_name, $insert_data);
+
+        $log_data = array_merge(
+            $insert_data,
             array(
-                'post_id' => '',
-                'created' => current_time('mysql'),
-                'type' => $action,
-                'post_type' => $post_type,
-                'url' => $link,
+                'without_managed' => $without_managed,
+                'query' => $query,
             )
         );
+
+        if ($result) {
+            LogUtil::get_instance()->log->info(__('enqueue_by_link', PLUGIN_NAME), $log_data);
+        } else {
+            LogUtil::get_instance()->log->error(__('enqueue_by_link', PLUGIN_NAME), $log_data);
+        }
+
+        return $result;
     }
 
     public function __construct($columns)
@@ -319,16 +361,18 @@ class Queue
 
     public function dequeue()
     {
+        $post = array(
+            'id' => $this->id,
+            'post_id' => $this->post_id,
+            'url' => $this->url,
+        );
+
         if ($this->data['type'] === 'add') {
             if (FileUtil::export_single_file($this->data['url']) !== false) {
-                if (WP_DEBUG) {
-                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Success Add Type');
-                }
+                LogUtil::get_instance()->log->info(__('dequeue: exporting type "Add"', PLUGIN_NAME), $post);
                 $this->mark_as_completed();
             } else {
-                if (WP_DEBUG) {
-                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Failed Add Type');
-                }
+                LogUtil::get_instance()->log->error(__('dequeue: exporting type "Add"', PLUGIN_NAME), $post);
                 $this->mark_as_failed();
             }
         } else if ($this->data['type'] === 'remove') {
@@ -337,13 +381,9 @@ class Queue
 
                 Page::get_page_by_link($this->data['url'])->delete();
 
-                if (WP_DEBUG) {
-                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Success Remove Type');
-                }
+                LogUtil::get_instance()->log->info(__('dequeue: exporting type "Remove"', PLUGIN_NAME), $post);
             } else {
-                if (WP_DEBUG) {
-                    LogUtil::write_with_trace('ID: ' . $this->id . ', Post ID ' . $this->post_id . ': ' . 'URL: ' . $this->url . ', Desc: Failed Remove Type');
-                }
+                LogUtil::get_instance()->log->error(__('dequeue: exporting type "Remove"', PLUGIN_NAME), $post);
                 $this->mark_as_failed();
             }
         } else {
